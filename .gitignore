@@ -40,3 +40,5 @@ Thumbs.db
 # Monorepo tools (like Turborepo, Nx, etc.)
 turbo/
 .cache/
+
+*storybook.log

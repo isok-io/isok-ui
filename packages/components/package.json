@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "keywords": [],
   "author": "",
@@ -11,5 +13,21 @@
   "description": "",
   "dependencies": {
     "lit": "^3.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-decorators": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/blocks": "^8.6.12",
+    "@storybook/builder-webpack5": "^8.6.12",
+    "@storybook/cli": "^8.6.12",
+    "@storybook/test": "^8.6.12",
+    "@storybook/web-components": "^8.6.12",
+    "@storybook/web-components-webpack5": "^8.6.12",
+    "babel-loader": "^10.0.0",
+    "storybook": "^8.6.12"
   }
 }
