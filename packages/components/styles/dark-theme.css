@@ -2,6 +2,7 @@
     --bg: #242424;
     --text: #fff;
     --text-hover: #aeaeae;
+    --subtext: #B9B9B9;
 
     --btn-bg: #D9D9D9;
     --btn-blue-bg: #9286FF;
@@ -11,4 +12,8 @@
     --btn-red-hover-bg: #d14d4f;
     --btn-outlined-hover-bg: #434343;
     --btn-text: #000000;
+
+    --border: #5E5E5E;
+
+    --ipt-bg: #363535;
 }
