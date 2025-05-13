@@ -1,6 +1,15 @@
 :root,
 .light {
     --bg: #D9D9D9;
+    --text: #000;
+
     --btn-bg: #242424;
+    --btn-blue-bg: #0B006B;
+    --btn-red-bg: #8E1919;
+    --btn-hover-bg: #434343;
+    --btn-blue-hover-bg: #0e009f;
+    --btn-red-hover-bg: #af1f1f;
+    --btn-outlined-hover-bg: #b6b6b6;
     --btn-text: #fff;
+
 }
