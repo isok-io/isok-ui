@@ -126,6 +126,7 @@ class IkInput extends LitElement {
             
             .title {
                 font-size: var(--ipt-font-size);
+                color: var(--text);
             }
         `
     ]
