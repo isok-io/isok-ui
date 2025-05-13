@@ -1,0 +1,7 @@
+html.light .docs-story {
+    background-color: var(--bg, #D9D9D9);
+}
+
+html.dark .docs-story {
+    background-color: var(--bg, #242424);
+}

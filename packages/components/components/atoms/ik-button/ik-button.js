@@ -1,8 +1,8 @@
-import {LitElement, html, css} from 'lit';
+import {css, html, LitElement} from "lit";
 
 class IkButton extends LitElement {
     static properties = {
-        text: { type: String }
+        text: { type: String },
     };
 
     constructor() {
@@ -11,19 +11,21 @@ class IkButton extends LitElement {
     }
 
     render() {
-        return html`<button>${this.text}</button>`;
+        return html`<button class="ik-button">${this.text}</button>`;
     }
 
-    static styles = css`
-        button {
-            background-color: #242424;
-            width: 220px;
-            height: 84px;
-            border-radius: 8px;
-            color: white;
-            font-size: 25px;
-        }
-    `;
+    static styles = [
+        css`
+            .ik-button {
+                background-color: var(--btn-bg, #242424);
+                color: var(--btn-text, #fff);
+                width: 220px;
+                height: 84px;
+                border-radius: 8px;
+                font-size: 25px;
+            }
+        `
+    ];
 }
 
 customElements.define('ik-button', IkButton);
