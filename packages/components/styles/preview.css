@@ -1,7 +1,10 @@
-html.light .docs-story {
-    background-color: var(--bg, #D9D9D9);
+body {
+    transition: background-color 0.3s ease;
 }
 
+html.light body,
+html.dark body,
+html.light .docs-story,
 html.dark .docs-story {
-    background-color: var(--bg, #242424);
+    background-color: var(--bg);
 }
