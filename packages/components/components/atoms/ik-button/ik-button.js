@@ -1,4 +1,5 @@
 import {css, html, LitElement} from "lit";
+import 'iconify-icon';
 
 class IkButton extends LitElement {
     static properties = {
@@ -6,6 +7,7 @@ class IkButton extends LitElement {
         width: { type: String },
         height: { type: String },
         fontSize: { type: String },
+        img: { type: String },
         icon: { type: String },
         iconSize: { type: String },
         type: { type: String },
@@ -13,18 +15,37 @@ class IkButton extends LitElement {
 
     constructor() {
         super();
-        this.text = 'Click me!';
+        this.text = undefined;
         this.width = '220px';
         this.height = '84px';
         this.fontSize = '25px';
+        this.img = undefined;
         this.icon = undefined;
         this.iconSize = '40px';
         this.type = 'full';
     }
 
-    renderIcon(){
+    renderImg(){
+        console.log(this.img)
+        if(this.img !== undefined){
+            return html`<img class="icon" src="${this.img}" alt="button-image">`
+        }
+    }
+
+    renderIcon() {
         if(this.icon !== undefined){
-            return html`<img class="icon" src="${this.icon}" alt="button-icon">`
+            return html `
+                <iconify-icon
+                        class="icon"
+                        icon="${this.icon}"
+                </iconify-icon>
+            `
+        }
+    }
+
+    renderText() {
+        if(this.text !== undefined){
+            return this.text
         }
     }
 
@@ -39,7 +60,8 @@ class IkButton extends LitElement {
                     "
             >
                 ${this.renderIcon()}
-                ${this.text}
+                ${this.renderImg()}
+                ${this.renderText()}
             </button>`;
     }
 
@@ -57,6 +79,7 @@ class IkButton extends LitElement {
                 align-items: center;
                 justify-content: center;
                 gap: 0.3em;
+                cursor: pointer;
             }
 
             .ik-button.full {
@@ -82,6 +105,12 @@ class IkButton extends LitElement {
                 color: var(--btn-text, #fff);
                 border: none;
             }
+            
+            .ik-button.icon {
+                background-color: transparent;
+                color: var(--btn-text, #fff);
+                border: none;
+            }
 
             .ik-button:hover.full {
                 background-color: var(--btn-hover-bg, #434343);
@@ -100,8 +129,14 @@ class IkButton extends LitElement {
             }
             
             .icon {
+                font-size: var(--btn-icon-size);
                 width: var(--btn-icon-size);
                 height: auto;
+                color: var(--text, #fff);;
+            }
+            
+            .icon:hover {
+                color: var(--text-hover, #232323);
             }
         `
     ];

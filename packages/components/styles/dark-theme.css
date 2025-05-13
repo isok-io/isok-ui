@@ -1,6 +1,7 @@
 .dark {
     --bg: #242424;
     --text: #fff;
+    --text-hover: #aeaeae;
 
     --btn-bg: #D9D9D9;
     --btn-blue-bg: #9286FF;

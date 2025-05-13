@@ -2,6 +2,7 @@
 .light {
     --bg: #D9D9D9;
     --text: #000;
+    --text-hover: #454545;
 
     --btn-bg: #242424;
     --btn-blue-bg: #0B006B;

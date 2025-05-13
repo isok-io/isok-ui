@@ -7,7 +7,7 @@ export default {
     argTypes: {
         type: {
             control: { type: 'select' },
-            options: ['full', 'outlined', 'blue', 'red'],
+            options: ['full', 'outlined', 'blue', 'red', 'icon'],
         },
     },
 };
@@ -18,6 +18,7 @@ const Template = (args) => {
             .width=${args.width} 
             .height=${args.height} 
             .fontSize=${args.fontSize} 
+            .img=${args.img}
             .icon=${args.icon}
             .iconSize=${args.iconSize}
             .type=${args.type}
@@ -30,18 +31,19 @@ Default.args = {
     width: 'auto',
     height: 'auto',
     fontSize: '25px',
+    img: undefined,
     icon: undefined,
     iconSize: '',
     type: 'full',
 };
 
-export const WithIcon = Template.bind({});
-WithIcon.args = {
+export const WithImg = Template.bind({});
+WithImg.args = {
     text: 'Click !',
     width: 'auto',
     height: 'auto',
     fontSize: '25px',
-    icon: 'https://www.clever-cloud.com/app/themes/Starter/assets/img/brand-assets/square-png.png',
+    img: 'https://www.clever-cloud.com/app/themes/Starter/assets/img/brand-assets/square-png.png',
     iconSize: '40px',
     type: 'full',
 };
@@ -71,4 +73,50 @@ Red.args = {
     height: 'auto',
     fontSize: '25px',
     type: 'red',
+};
+
+const TemplateIcon = (args) => {
+    return html`
+        <div style="display: flex; flex-direction: row">
+            <ik-button 
+                .text=${args.text} 
+                .width=${args.width} 
+                .height=${args.height} 
+                .fontSize=${args.fontSize} 
+                .icon=${args.icon}
+                .iconSize=${args.iconSize}
+                .type=${args.type}
+            ></ik-button>
+            <ik-button 
+                .text=${args.text} 
+                .width=${args.width} 
+                .height=${args.height} 
+                .fontSize=${args.fontSize} 
+                .icon=${args.icon2}
+                .iconSize=${args.iconSize}
+                .type=${args.type}
+            ></ik-button>
+            <ik-button 
+                .text=${args.text} 
+                .width=${args.width} 
+                .height=${args.height} 
+                .fontSize=${args.fontSize} 
+                .icon=${args.icon3}
+                .iconSize=${args.iconSize}
+                .type=${args.type}
+            ></ik-button>
+        </div>
+    `;
+};
+
+export const Icon = TemplateIcon.bind({});
+Icon.args = {
+    width: 'auto',
+    height: 'auto',
+    fontSize: '25px',
+    icon: 'material-symbols:light-mode-outline-rounded',
+    icon2: 'material-symbols:dark-mode-outline-rounded',
+    icon3: 'material-symbols:add-circle-outline-rounded',
+    iconSize: '40px',
+    type: 'icon',
 };
