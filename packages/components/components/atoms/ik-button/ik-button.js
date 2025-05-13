@@ -26,14 +26,13 @@ class IkButton extends LitElement {
     }
 
     renderImg(){
-        console.log(this.img)
-        if(this.img !== undefined){
+        if(this.img){
             return html`<img class="icon" src="${this.img}" alt="button-image">`
         }
     }
 
     renderIcon() {
-        if(this.icon !== undefined){
+        if(this.icon){
             return html `
                 <iconify-icon
                         class="icon"
@@ -44,7 +43,7 @@ class IkButton extends LitElement {
     }
 
     renderText() {
-        if(this.text !== undefined){
+        if(this.text){
             return this.text
         }
     }
