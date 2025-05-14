@@ -20,5 +20,9 @@
 
     --ipt-bg: #CECECE;
 
-    --tag-bg: #BEBEBE
+    --tag-bg: #BEBEBE;
+
+    --bar-green: #16B156;
+    --bar-yellow: #B7BD19;
+    --bar-red: #CC1518;
 }

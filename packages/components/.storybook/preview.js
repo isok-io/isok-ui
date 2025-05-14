@@ -1,6 +1,7 @@
 import '../styles/light-theme.css';
 import '../styles/dark-theme.css';
 import '../styles/preview.css';
+import '../styles/global.css'
 
 export const globalTypes = {
     theme: {
