@@ -23,8 +23,8 @@ class IkTitle extends LitElement {
             <div 
                     class="ik-title ${this.align}"
                     style="
-                        --ipt-font-size-title: ${this.fontSizeTitle};
-                        --ipt-font-size-subtitle: ${this.fontSizeSubtitle};
+                        --tle-font-size-title: ${this.fontSizeTitle};
+                        --tle-font-size-subtitle: ${this.fontSizeSubtitle};
                     "
             >
                 ${ this.title ? html`<span class="title">${this.title}</span>` : '' }
@@ -56,13 +56,13 @@ class IkTitle extends LitElement {
             }
             
             .ik-title .title {
-                font-size: var(--ipt-font-size-title);
+                font-size: var(--tle-font-size-title);
                 font-weight: bold;
                 color: var(--text)
             }
             
             .ik-title .subtitle {
-                font-size: var(--ipt-font-size-subtitle);
+                font-size: var(--tle-font-size-subtitle);
                 color: var(--subtext);
             }
         `
