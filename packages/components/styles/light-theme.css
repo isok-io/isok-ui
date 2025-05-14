@@ -5,6 +5,8 @@
     --text-hover: #454545;
     --subtext: #6B6B6B;
 
+    --text-blue: #0015FF;
+
     --btn-bg: #242424;
     --btn-blue-bg: #0B006B;
     --btn-red-bg: #8E1919;
@@ -17,4 +19,6 @@
     --border: #A7A7A7;
 
     --ipt-bg: #CECECE;
+
+    --tag-bg: #BEBEBE
 }
