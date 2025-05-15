@@ -28,7 +28,7 @@ const Template = (args) => {
             .width=${args.width}
             .height=${args.height}
             .widthBar=${args.widthBar}
-            .bar=${bars}
+            .bars=${bars}
             .showData=${args.showData}
             .dataSize=${args.dataSize}
     ></ik-diagram-bar>`;
