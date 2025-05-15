@@ -10,6 +10,9 @@ class IkFilter extends LitElement {
         widthZ1: { type: String },
         widthZ2: { type: String },
         fontSize: { type: String },
+        placeholder: { type: String },
+        valueInput: { type: String },
+        valueSelect: { type: String },
     };
 
     constructor() {
@@ -22,7 +25,12 @@ class IkFilter extends LitElement {
         this.widthZ1 = '145px';
         this.widthZ2 = '0px';
         this.fontSize = '20px';
+        this.placeholder = '';
+        this.valueInput = null;
+        this.valueSelect = null;
     }
+
+
 
     render() {
         return html`
@@ -40,11 +48,11 @@ class IkFilter extends LitElement {
                 </div>
                 <div class="ik-filter-input">
                     ${ this.type === "simple-text" || this.type === "double" ? html`
-                        <input class="ik-filter-input-text" type=${this.inputType}>
+                        <input class="ik-filter-input-text" type=${this.inputType} placeholder=${this.placeholder} value=${this.valueInput}>
                     `: ``}
                     ${ this.type === "simple-select" || this.type === "double" ? html`
                     <select class="ik-filter-input-select">
-                        ${this.selectOptions.map(opt => html`<option value="${opt.value}">${opt.label}</option>`)}
+                        ${this.selectOptions.map(opt => html`<option value="${opt.value}" ?selected=${opt.value === this.valueSelect}>${opt.label}</option>`)}
                     </select>
                     `:``}
                 </div>
