@@ -8,7 +8,6 @@ export default {
 
 const Template = (args, { globals }) => {
     const theme = globals.theme;
-    console.log(theme);
     const icon = (theme === 'dark')
         ? 'material-symbols:light-mode-outline-rounded'
         : 'material-symbols:dark-mode-outline-rounded';
