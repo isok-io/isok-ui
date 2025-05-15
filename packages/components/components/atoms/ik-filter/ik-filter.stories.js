@@ -12,7 +12,11 @@ export default {
         inputType: {
             control: { type: 'select' },
             options: ['text', 'number'],
-        }
+        },
+        valueSelect: {
+            control: { type: 'select' },
+            options: ['type', 'domain'],
+        },
     },
 };
 
@@ -26,6 +30,8 @@ const Template = (args) => {
             .widthZ1=${args.widthZ1}
             .widthZ2=${args.widthZ2}
             .fontSize=${args.fontSize}
+            .placeholder=${args.placeholder}
+            .valueSelect="${args.valueSelect}"
     ></ik-filter>`;
 };
 
@@ -42,6 +48,7 @@ Default.args = {
     widthZ1 : 'auto',
     widthZ2: 'auto',
     fontSize : '20px',
+    valueSelect: "type"
 };
 
 export const Text = Template.bind({});
@@ -64,6 +71,7 @@ Number.args = {
     widthZ1 : '3em',
     widthZ2: 'auto',
     fontSize : '20px',
+    placeholder: '0'
 };
 
 export const Double = Template.bind({});
@@ -79,4 +87,5 @@ Double.args = {
     widthZ1 : '3em',
     widthZ2: 'auto',
     fontSize : '20px',
+    placeholder: '10'
 };

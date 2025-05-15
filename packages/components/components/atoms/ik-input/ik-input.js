@@ -105,7 +105,7 @@ class IkInput extends LitElement {
             .ik-input .input, .ik-input .textarea, .ik-input .select {
                 width: var(--ipt-width);
                 height: var(--ipt-height);
-                border-radius: 8px;
+                border-radius: 5px;
                 font-size: var(--ipt-font-size);
                 padding: 0.3em;
                 background-color: var(--ipt-bg, #CECECE);
