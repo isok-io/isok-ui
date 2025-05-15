@@ -11,6 +11,7 @@ class IkButton extends LitElement {
         icon: { type: String },
         iconSize: { type: String },
         type: { type: String },
+        align: { type: String },
     };
 
     constructor() {
@@ -23,6 +24,7 @@ class IkButton extends LitElement {
         this.icon = undefined;
         this.iconSize = '40px';
         this.type = 'full';
+        this.align = 'center'
     }
 
     renderImg(){
@@ -56,6 +58,7 @@ class IkButton extends LitElement {
                         --btn-height: ${this.height};
                         --btn-font-size: ${this.fontSize};
                         --btn-icon-size: ${this.iconSize};
+                        --btn-align: ${this.align};
                     "
             >
                 ${this.renderIcon()}
@@ -76,7 +79,7 @@ class IkButton extends LitElement {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                justify-content: center;
+                justify-content: var(--btn-align);
                 gap: 0.3em;
                 cursor: pointer;
             }

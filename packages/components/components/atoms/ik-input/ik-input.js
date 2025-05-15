@@ -11,6 +11,8 @@ class IkInput extends LitElement {
         fontSize: { type: String },
         title: { type: String },
         selectOptions: { type: Array },
+        inputType: { type: String },
+        inputType2: { type: String },
     };
 
     constructor() {
@@ -23,6 +25,8 @@ class IkInput extends LitElement {
         this.fontSize = '25px';
         this.title = undefined;
         this.selectOptions = [];
+        this.inputType = 'text';
+        this.inputType2 = 'text';
     }
 
     renderTitle(){
@@ -35,6 +39,7 @@ class IkInput extends LitElement {
             return html`
                 <input class="input"
                     placeholder="${this.placeholder}"
+                    type=${this.inputType}
                 />
             `
         } else if(this.type === "textarea"){
@@ -54,9 +59,11 @@ class IkInput extends LitElement {
                 <div class="double">
                     <input
                             placeholder="${this.placeholder}"
+                            type=${this.inputType}
                     />
                     <input
                             placeholder="${this.placeholder2}"
+                            type=${this.inputType2}
                     />
                     <ik-button 
                         text="Add"

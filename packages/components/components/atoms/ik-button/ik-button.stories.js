@@ -22,6 +22,7 @@ const Template = (args) => {
             .icon=${args.icon}
             .iconSize=${args.iconSize}
             .type=${args.type}
+            .align=${args.align}
     ></ik-button>`;
 };
 
@@ -35,6 +36,7 @@ Default.args = {
     icon: undefined,
     iconSize: '',
     type: 'full',
+    align: 'center',
 };
 
 export const WithImg = Template.bind({});
@@ -119,4 +121,53 @@ Icon.args = {
     icon3: 'material-symbols:add-circle-outline-rounded',
     iconSize: '40px',
     type: 'icon',
+};
+
+const TemplateAlign = (args) => {
+    return html`
+        <div style="display: flex; flex-direction: row; gap: 2em">
+            <ik-button 
+                .text=${args.text} 
+                .width=${args.width} 
+                .height=${args.height} 
+                .fontSize=${args.fontSize} 
+                .type=${args.type}
+                .align=${args.align}
+            ></ik-button>
+            <ik-button 
+                .text=${args.text2} 
+                .width=${args.width} 
+                .height=${args.height} 
+                .fontSize=${args.fontSize} 
+                .icon=${args.icon2}
+                .iconSize=${args.iconSize}
+                .type=${args.type}
+                .align=${args.align2}
+            ></ik-button>
+            <ik-button 
+                .text=${args.text3} 
+                .width=${args.width} 
+                .height=${args.height} 
+                .fontSize=${args.fontSize} 
+                .icon=${args.icon3}
+                .iconSize=${args.iconSize}
+                .type=${args.type}
+                .align=${args.align3}
+            ></ik-button>
+        </div>
+    `;
+};
+
+export const Align = TemplateAlign.bind({});
+Align.args = {
+    text: 'Left align',
+    text2: 'Center align',
+    text3: 'Right align',
+    width: '10em',
+    height: 'auto',
+    fontSize: '25px',
+    type: 'full',
+    align: 'left',
+    align2: 'center',
+    align3: 'right',
 };

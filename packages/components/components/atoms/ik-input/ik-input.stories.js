@@ -9,6 +9,10 @@ export default {
             control: { type: 'select' },
             options: ['text', 'textarea', 'select', 'double'],
         },
+        inputType: {
+            control: { type: 'select' },
+            options: ['text', 'password', 'color', 'date', "email", "file"],
+        },
     },
 };
 
@@ -21,6 +25,7 @@ const Template = (args) => {
             .height=${args.height} 
             .fontSize=${args.fontSize}
             .title=${args.title}
+            .inputType=${args.inputType}
     ></ik-input>`;
 };
 
@@ -31,6 +36,7 @@ Default.args = {
     width: 'auto',
     height: 'auto',
     fontSize: '25px',
+    inputType: 'text',
 };
 
 export const WithTitle = Template.bind({});
