@@ -6,7 +6,7 @@ class IkDiagramBar extends LitElement {
         fontSize: { type: String },
         width: { type: String },
         height: { type: String },
-        bar : { type: Array },
+        bars : { type: Array },
         widthBar: { type: String },
         showData: { type: Boolean },
         dataSize: { type: String },
@@ -16,7 +16,7 @@ class IkDiagramBar extends LitElement {
         super();
         this.title = undefined;
         this.fontSize = '20px';
-        this.bar = []
+        this.bars = []
         this.width = '245px'
         this.height = '50px'
         this.widthBar = '7px'
@@ -46,7 +46,7 @@ class IkDiagramBar extends LitElement {
                          --dgb-width-bar: ${this.widthBar};
                      "
                 >
-                    ${this.bar.map(bar => html`
+                    ${this.bars.map(bar => html`
                         <div 
                                 class="bar ${bar.color}"
                                 @mouseenter="${() => this.handleMouseEnter(bar)}"
