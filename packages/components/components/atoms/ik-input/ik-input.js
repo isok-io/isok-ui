@@ -5,6 +5,8 @@ class IkInput extends LitElement {
     static properties = {
         placeholder: {type: String},
         placeholder2: {type: String},
+        value: {type: String},
+        value2: {type: String},
         type: {type: String},
         width: { type: String },
         height: { type: String },
@@ -19,6 +21,8 @@ class IkInput extends LitElement {
         super();
         this.placeholder = undefined;
         this.placeholder2 = undefined;
+        this.value = undefined;
+        this.value2 = undefined;
         this.type = "text";
         this.width = '660px';
         this.height = '56px';
@@ -40,37 +44,59 @@ class IkInput extends LitElement {
                 <input class="input"
                     placeholder="${this.placeholder}"
                     type=${this.inputType}
+                    value="${this.value}"
                 />
             `
         } else if(this.type === "textarea"){
             return html`
                 <textarea class="textarea"
                     placeholder="${this.placeholder}"
-                ></textarea>
+                >${this.value}</textarea>
             `
         } else if(this.type === "select"){
             return html`
                 <select class="select">
-                    ${this.selectOptions.map(opt => html`<option value="${opt.value}">${opt.label}</option>`)}
+                    ${this.selectOptions.map(opt => html`<option value="${opt.value}" ?selected=${this.value === opt.value}>${opt.label}</option>`)}
                 </select>
             `
         } else if(this.type === "double"){
             return html`
                 <div class="double">
-                    <input
-                            placeholder="${this.placeholder}"
-                            type=${this.inputType}
-                    />
-                    <input
-                            placeholder="${this.placeholder2}"
-                            type=${this.inputType2}
-                    />
-                    <ik-button 
-                        text="Add"
-                        fontSize=${this.fontSize}
-                        width="auto"
-                        height="auto"
-                    ></ik-button>
+                    <div class="grid head">
+                        <input
+                                placeholder="${this.placeholder}"
+                                type=${this.inputType}
+                                value="${this.value}"
+                        />
+                        <input
+                                placeholder="${this.placeholder2}"
+                                type=${this.inputType2}
+                                value="${this.value2}"
+                        />
+                        <ik-button 
+                            text="Add"
+                            fontSize=${this.fontSize}
+                            width="4.5em"
+                            height="auto"
+                        ></ik-button>
+                    </div>
+                    ${
+                        this.values.map(v => html`
+                            <div class="grid">
+                                <span class="key">${v.key}</span>
+                                <input
+                                    type=${this.inputType2}
+                                    value="${v.value}"
+                                />
+                                <ik-button
+                                        text="Remove"
+                                        fontSize=${this.fontSize}
+                                        width="4.5em"
+                                        height="auto"
+                                ></ik-button>
+                            </div>
+                        `)
+                    }
                 </div>
             `
         }
@@ -115,9 +141,8 @@ class IkInput extends LitElement {
 
             .ik-input .double {
                 width: var(--ipt-width);
-                height: var(--ipt-height);
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 gap: 1em;
             }
             
@@ -128,12 +153,23 @@ class IkInput extends LitElement {
                 background-color: var(--ipt-bg, #CECECE);
                 border: 2px solid var(--border);
                 color: var(--text);
-                width: 40%;
+                width: 90%;
             }
             
             .title {
                 font-size: var(--ipt-font-size);
                 color: var(--text);
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: 1fr 2fr auto;
+                gap: 0.5em;
+                align-items: center;
+            }
+            
+            .key {
+                font-size: var(--ipt-font-size);
             }
         `
     ]

@@ -2,6 +2,7 @@ import '../styles/light-theme.css';
 import '../styles/dark-theme.css';
 import '../styles/preview.css';
 import '../styles/global.css'
+import {html} from "lit";
 
 export const globalTypes = {
     theme: {
@@ -27,4 +28,9 @@ export const decorators = [
 
         return storyFn();
     },
+    (story) => html`
+        <div style="display: flex; justify-content: center; align-items: center;">
+          ${story()}
+        </div>
+    `
 ];
