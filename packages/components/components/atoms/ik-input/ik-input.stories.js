@@ -26,6 +26,7 @@ const Template = (args) => {
             .fontSize=${args.fontSize}
             .title=${args.title}
             .inputType=${args.inputType}
+            .values=${args.values}
     ></ik-input>`;
 };
 
@@ -93,4 +94,7 @@ Double.args = {
     width: 'auto',
     height: 'auto',
     fontSize: '25px',
+    values: [
+        { key: "Accept", value: "*/*" }
+    ]
 };
