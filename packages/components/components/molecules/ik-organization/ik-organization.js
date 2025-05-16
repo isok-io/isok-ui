@@ -2,7 +2,7 @@ import {css, html, LitElement} from "lit";
 import "../../atoms/ik-title/ik-title"
 import "../../atoms/ik-button/ik-button"
 
-class IkOrganisation extends LitElement {
+class IkOrganization extends LitElement {
     static properties = {
         nameOrga: {type: String},
         nbMemberOrga: {type: Number},
@@ -27,13 +27,13 @@ class IkOrganisation extends LitElement {
     render() {
         return html`
             <div 
-                    class="ik-organisation"
+                    class="ik-organization"
                     style="
                         --ogn-font-size-title: ${this.fontSizeTitle};
                         --ogn-width: ${this.width};
                     "
             >
-                <span class="title">${this.nameOrga ?? "Unnamed organisation"}</span>
+                <span class="title">${this.nameOrga ?? "Unnamed organization"}</span>
                 <ik-title title="MEMBERS" 
                           subtitle="${this.nbMemberOrga} people" 
                           .fontSizeTitle=${this.fontSizeTextTitle} 
@@ -56,7 +56,7 @@ class IkOrganisation extends LitElement {
 
     static styles = [
         css`
-            .ik-organisation {
+            .ik-organization {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
@@ -78,4 +78,4 @@ class IkOrganisation extends LitElement {
     ]
 }
 
-customElements.define('ik-organisation', IkOrganisation);
+customElements.define('ik-organization', IkOrganization);
