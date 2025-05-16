@@ -10,6 +10,8 @@ class IkButton extends LitElement {
         img: { type: String },
         icon: { type: String },
         iconSize: { type: String },
+        iconColor: { type: String },
+        iconColorHover: { type: String },
         type: { type: String },
         align: { type: String },
     };
@@ -23,6 +25,8 @@ class IkButton extends LitElement {
         this.img = undefined;
         this.icon = undefined;
         this.iconSize = '40px';
+        this.iconColor = 'var(--text)';
+        this.iconColorHover = 'var(--text-hover)';
         this.type = 'full';
         this.align = 'center'
     }
@@ -59,6 +63,8 @@ class IkButton extends LitElement {
                         --btn-font-size: ${this.fontSize};
                         --btn-icon-size: ${this.iconSize};
                         --btn-align: ${this.align};
+                        --btn-icon-color: ${this.iconColor};
+                        --btn-icon-color-hover: ${this.iconColorHover};
                     "
             >
                 ${this.renderIcon()}
@@ -134,11 +140,11 @@ class IkButton extends LitElement {
                 font-size: var(--btn-icon-size);
                 width: var(--btn-icon-size);
                 height: auto;
-                color: var(--text, #fff);;
+                color: var(--btn-icon-color, #fff);;
             }
             
             .icon:hover {
-                color: var(--text-hover, #232323);
+                color: var(--btn-icon-color-hover, #232323);
             }
         `
     ];
