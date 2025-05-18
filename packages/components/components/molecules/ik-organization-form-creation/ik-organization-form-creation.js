@@ -25,7 +25,7 @@ class IkOrganizationFormCreation extends LitElement {
             >
                 <span class="title">Create organization</span>
                 <ik-input title="Organization name" placeholder="myOrganization" height="auto"></ik-input>
-                <ik-button text="Create"></ik-button>
+                <ik-button text="Create" height="auto"></ik-button>
             </div>
         `;
     }
