@@ -17,7 +17,7 @@ class IkOrganizationFormCreation extends LitElement {
     render() {
         return html`
             <div 
-                    class="ik-organization-form-creation ${this.type}"
+                    class="ik-organization-form-creation"
                     style="
                         --ofc-font-size-title: ${this.fontSizeTitle};
                         --ofc-font-size-text: ${this.fontSizeText};
