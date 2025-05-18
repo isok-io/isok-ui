@@ -7,7 +7,7 @@ export default {
     argTypes: {
         type: {
             control: { type: 'select' },
-            options: ['text', 'textarea', 'select', 'double'],
+            options: ['text', 'textarea', 'select', 'double', 'list'],
         },
         inputType: {
             control: { type: 'select' },
@@ -96,5 +96,17 @@ Double.args = {
     fontSize: '25px',
     values: [
         { key: "Accept", value: "*/*" }
+    ]
+};
+
+export const List = Template.bind({});
+List.args = {
+    placeholder: 'Email...',
+    type: 'list',
+    width: '40em',
+    height: 'auto',
+    fontSize: '25px',
+    values: [
+        "name@gmail.com"
     ]
 };
