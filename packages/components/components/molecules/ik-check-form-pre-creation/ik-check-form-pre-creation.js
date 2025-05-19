@@ -21,8 +21,8 @@ class IkCheckFormPreCreation extends LitElement {
         return html`
             <div class="ik-check-form-creation"
                 style="
-                    --cfc-font-size-title: ${this.fontSizeTitle};
-                    --cfc-width: ${this.width};
+                    --cfpc-font-size-title: ${this.fontSizeTitle};
+                    --cfpc-width: ${this.width};
                 "
             >
                 <span class="title">New check</span>
@@ -64,14 +64,14 @@ class IkCheckFormPreCreation extends LitElement {
             .ik-check-form-creation {
                 display: flex;
                 flex-direction: column;
-                width: var(--cfc-width);
+                width: var(--cfpc-width);
                 color: var(--text);
                 align-items: center;
                 gap: 2em;
             }
             
             .title {
-                font-size: var(--cfc-font-size-title);
+                font-size: var(--cfpc-font-size-title);
                 font-family: Jura, sans-serif;
             }
             
