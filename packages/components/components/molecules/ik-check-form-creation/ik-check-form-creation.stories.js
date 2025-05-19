@@ -12,7 +12,7 @@ const Template = (args) => {
             .fontSizeTitle=${args.fontSizeTitle}
             .fontSizeText=${args.fontSizeText}
             .fontSizeTextAdvanced=${args.fontSizeTextAdvanced}
-            .width={args.width}
+            .width=${args.width}
     ></ik-check-form-creation>`;
 };
 
