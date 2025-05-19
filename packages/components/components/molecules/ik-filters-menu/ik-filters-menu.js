@@ -6,12 +6,24 @@ class IkFiltersMenu extends LitElement {
     static properties = {
         fontSize: { type: String },
         searchBarWidth: { type: String },
+        valueSelect: { type: String },
     }
 
     constructor() {
         super();
         this.fontSize = "15px"
         this.searchBarWidth = "20em"
+        this.valueSelect = "domain"
+    }
+
+    _emitChange(event, value) {
+        this.dispatchEvent(new CustomEvent(event, {
+            detail: {
+                value: value
+            },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     render() {
@@ -29,8 +41,10 @@ class IkFiltersMenu extends LitElement {
                             { value: 'domain', label: 'Domain' },
                             { value: 'type', label: 'Type' },
                         ]}
+                        @filter-change=${(e) => this._emitChange('group-change', e.detail.valueSelect)}
                         widthTitle="auto"
                         widthZ1="auto"
+                        valueSelect=${this.valueSelect}
                 ></ik-filter>
                 <ik-filter
                         type="double"
