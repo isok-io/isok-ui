@@ -12,6 +12,7 @@ const Template = (args => {
             .fontSizeOrgaTitle=${args.fontSizeOrgaTitle}
             .fontSizeOrgaTextContent=${args.fontSizeOrgaTextContent}
             .iconSize=${args.iconSize}
+            .buttonSize=${args.buttonSize}
             .orgaWidth=${args.orgaWidth}
             .organizationsList=${args.organizationsList}
     ></ik-organizations-list>`;
@@ -24,6 +25,7 @@ Default.args = {
     fontSizeOrgaTextTitle: "12px",
     fontSizeOrgaTextContent: '16px',
     iconSize: '25px',
+    buttonSize: '40px',
     orgaWidth: '30em',
     organizationsList: [
         {

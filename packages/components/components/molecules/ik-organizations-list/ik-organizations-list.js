@@ -9,6 +9,7 @@ class IkOrganizationsList extends LitElement {
         fontSizeOrgaTextTitle: {type: String},
         fontSizeOrgaTextContent: {type: String},
         iconSize: {type: String},
+        buttonSize: {type: String},
         orgaWidth: {type: String},
         organizationsList: {type: Array},
     };
@@ -20,6 +21,7 @@ class IkOrganizationsList extends LitElement {
         this.fontSizeOrgaTextTitle = '16px';
         this.fontSizeOrgaTextContent = '24px';
         this.iconSize = '32px';
+        this.buttonSize = '40px';
         this.orgaWidth = '700px';
         this.organizationsList = [];
     }
@@ -48,7 +50,7 @@ class IkOrganizationsList extends LitElement {
                         `
                     )}
                 </div>
-                <ik-button text="Create" height="auto"></ik-button>
+                <ik-button type="icon" icon="material-symbols:add-circle-outline-rounded" iconSize=${this.buttonSize}></ik-button>
             </div>
         `;
     }
