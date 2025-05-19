@@ -1,19 +1,19 @@
-import './ik-check-form-creation.js';
+import './ik-check-form-update.js';
 import {html} from "lit";
 
 export default {
-    title: 'Molecules/ik-check-form-creation',
+    title: 'Molecules/ik-check-form-update',
     tags: ['autodocs'],
 };
 
 const Template = (args) => {
-    return html`<ik-check-form-creation 
+    return html`<ik-check-form-update 
             .data=${args.data}
             .fontSizeTitle=${args.fontSizeTitle}
             .fontSizeText=${args.fontSizeText}
             .fontSizeTextAdvanced=${args.fontSizeTextAdvanced}
             .width=${args.width}
-    ></ik-check-form-creation>`;
+    ></ik-check-form-update>`;
 };
 
 export const HTTP = Template.bind({});
@@ -27,11 +27,28 @@ HTTP.args = {
         inputs: [
             {
                 type: 'text',
+                title: 'Name',
+                value: 'My check'
+            },
+            {
+                type: 'check',
+                title: 'Zone',
+                selectOptions: [
+                    { value: 'all', label: 'All' },
+                    { value: 'fr', label: 'France' },
+                ],
+                value: 'all'
+            },
+            {
+                type: 'text',
+                title: 'Interval',
+                value: '10min',
+            },
+            {
+                type: 'text',
                 title: 'URL',
-                placeholder: 'http://my-website.com',
-            }
-        ],
-        inputsAdvanced: [
+                value: 'http://my-website.com',
+            },
             {
                 type: 'select',
                 title: 'Method',
@@ -45,7 +62,8 @@ HTTP.args = {
                     { value: 'options', label: 'OPTIONS' },
                     { value: 'connect', label: 'CONNECT' },
                     { value: 'trace', label: 'TRACE' }
-                ]
+                ],
+                value: 'get'
             },
             {
                 type: 'area',
@@ -76,8 +94,27 @@ PING.args = {
         inputs: [
             {
                 type: 'text',
+                title: 'Name',
+                value: 'My check'
+            },
+            {
+                type: 'check',
+                title: 'Zone',
+                selectOptions: [
+                    { value: 'all', label: 'All' },
+                    { value: 'fr', label: 'France' },
+                ],
+                value: 'all'
+            },
+            {
+                type: 'text',
+                title: 'Interval',
+                value: '10min',
+            },
+            {
+                type: 'text',
                 title: 'IP Adress - Hostname',
-                placeholder: '153.207.6.221',
+                value: '153.207.6.221',
             }
         ],
     }
@@ -94,11 +131,28 @@ SSL.args = {
         inputs: [
             {
                 type: 'text',
+                title: 'Name',
+                value: 'My check'
+            },
+            {
+                type: 'check',
+                title: 'Zone',
+                selectOptions: [
+                    { value: 'all', label: 'All' },
+                    { value: 'fr', label: 'France' },
+                ],
+                value: 'all'
+            },
+            {
+                type: 'text',
+                title: 'Interval',
+                value: '10min',
+            },
+            {
+                type: 'text',
                 title: 'Domain name - Hostname',
-                placeholder: 'myapi.example.com',
-            }
-        ],
-        inputsAdvanced: [
+                value: 'myapi.example.com',
+            },
             {
                 type: 'text',
                 title: 'Port',
@@ -119,13 +173,32 @@ TCP.args = {
         inputs: [
             {
                 type: 'text',
+                title: 'Name',
+                value: 'My check'
+            },
+            {
+                type: 'check',
+                title: 'Zone',
+                selectOptions: [
+                    { value: 'all', label: 'All' },
+                    { value: 'fr', label: 'France' },
+                ],
+                value: 'all'
+            },
+            {
+                type: 'text',
+                title: 'Interval',
+                value: '10min',
+            },
+            {
+                type: 'text',
                 title: 'IP Adress - Hostname',
-                placeholder: '153.207.6.221',
+                value: '153.207.6.221',
             },
             {
                 type: 'text',
                 title: 'Port',
-                placeholder: '80'
+                value: '80'
             }
         ]
     }
@@ -142,13 +215,32 @@ UDP.args = {
         inputs: [
             {
                 type: 'text',
+                title: 'Name',
+                value: 'My check'
+            },
+            {
+                type: 'check',
+                title: 'Zone',
+                selectOptions: [
+                    { value: 'all', label: 'All' },
+                    { value: 'fr', label: 'France' },
+                ],
+                value: 'all'
+            },
+            {
+                type: 'text',
+                title: 'Interval',
+                value: '10min',
+            },
+            {
+                type: 'text',
                 title: 'IP Adress - Hostname',
-                placeholder: '153.207.6.221',
+                value: '153.207.6.221',
             },
             {
                 type: 'text',
                 title: 'Port',
-                placeholder: '53'
+                value: '53'
             }
         ]
     }
