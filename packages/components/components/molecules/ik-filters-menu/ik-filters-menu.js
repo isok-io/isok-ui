@@ -14,6 +14,16 @@ class IkFiltersMenu extends LitElement {
         this.searchBarWidth = "20em"
     }
 
+    _emitChange(event, value) {
+        this.dispatchEvent(new CustomEvent(event, {
+            detail: {
+                value: value
+            },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
     render() {
         return html`
             <div class="ik-filters-menu"
@@ -29,6 +39,7 @@ class IkFiltersMenu extends LitElement {
                             { value: 'domain', label: 'Domain' },
                             { value: 'type', label: 'Type' },
                         ]}
+                        @filter-change=${(e) => this._emitChange('group-change', e.detail.valueSelect)}
                         widthTitle="auto"
                         widthZ1="auto"
                 ></ik-filter>

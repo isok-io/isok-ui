@@ -30,6 +30,36 @@ class IkFilter extends LitElement {
         this.valueSelect = null;
     }
 
+    firstUpdated() {
+        const input = this.renderRoot.querySelector('.ik-filter-input-text');
+        const select = this.renderRoot.querySelector('.ik-filter-input-select');
+
+        if (input) {
+            input.addEventListener('input', (e) => {
+                this.valueInput = e.target.value;
+                this._emitChange();
+            });
+        }
+
+        if (select) {
+            select.addEventListener('change', (e) => {
+                this.valueSelect = e.target.value;
+                this._emitChange();
+            });
+        }
+    }
+
+    _emitChange() {
+        this.dispatchEvent(new CustomEvent('filter-change', {
+            detail: {
+                valueInput: this.valueInput,
+                valueSelect: this.valueSelect
+            },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
 
 
     render() {
