@@ -35,7 +35,7 @@ Default.args = {
     ],
     iconSize: "1.7em",
     connected: true,
-    width: "100vh"
+    width: "100vw"
 };
 
 export const NoConnected = Template.bind({});
@@ -49,5 +49,5 @@ NoConnected.args = {
     ],
     iconSize: "1.7em",
     connected: false,
-    width: "100vh"
+    width: "100vw"
 };
