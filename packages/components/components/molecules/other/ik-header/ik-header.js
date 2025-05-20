@@ -24,7 +24,7 @@ class IkHeader extends LitElement {
         this.iconTheme = 'material-symbols:light-mode-outline-rounded';
         this.iconSize = "18px";
         this.connected = true;
-        this.width = "100vh";
+        this.width = "100vw";
     }
 
     render() {
@@ -52,6 +52,7 @@ class IkHeader extends LitElement {
                         icon=${this.iconTheme}
                         iconSize=${this.iconSize}
                         type='icon'
+                        @click=${() => this.dispatchEvent(new CustomEvent('change-theme', {}))}
                     ></ik-button>
                     ${ this.connected ? html`
                         <ik-button
