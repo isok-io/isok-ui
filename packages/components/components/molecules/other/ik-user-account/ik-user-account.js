@@ -8,7 +8,9 @@ class IkUserAccount extends LitElement {
         fontSizeText: {type: String},
         fontSizeSmallText: {type: String},
         modalInputWidth: {type: String},
-        showPasswordModal: {type: Boolean}
+        showPasswordModal: {type: Boolean},
+        email: {type: String},
+        width: {type: String},
     };
 
     constructor() {
@@ -18,6 +20,16 @@ class IkUserAccount extends LitElement {
         this.fontSizeSmallText = '18px';
         this.modalInputWidth = '20em'
         this.showPasswordModal = false;
+        this.email = 'name@gmail.com';
+        this.width = '20em';
+    }
+
+    _emit(eventName, data) {
+        this.dispatchEvent(new CustomEvent(eventName, {
+            detail: data,
+            bubbles: true,
+            composed: true
+        }));
     }
 
     togglePasswordModal() {
@@ -35,7 +47,7 @@ class IkUserAccount extends LitElement {
                 <ik-input inputType="password" placeholder="New password" fontSize=${this.fontSizeText} height="auto" width=${this.modalInputWidth}></ik-input>
                 <div class="modal-actions">
                     <ik-button text="Cancel" @click=${this.togglePasswordModal} fontSize=${this.fontSizeSmallText} width="auto" height="auto"></ik-button>
-                    <ik-button text="Confirm" type="blue" fontSize=${this.fontSizeSmallText} width="auto" height="auto"></ik-button>
+                    <ik-button text="Confirm" type="blue" fontSize=${this.fontSizeSmallText} width="auto" height="auto" @click=${() => this._emit('change-password',{})}></ik-button>
                 </div>
             </div>
         `;
@@ -43,18 +55,18 @@ class IkUserAccount extends LitElement {
 
     render() {
         return html`
-            <div class="ik-user-account" style="--uac-font-size-title: ${this.fontSizeTitle}; --uac-font-size-text: ${this.fontSizeText}">
+            <div class="ik-user-account" style="--uac-font-size-title: ${this.fontSizeTitle}; --uac-font-size-text: ${this.fontSizeText}; --uac-width: ${this.width}">
                 <span class="title">My account</span>
                 <div class="user-card">
-                    <ik-title title="Email" subtitle="name@gmail.com" fontSizeTitle=${this.fontSizeText} fontSizeText=${this.fontSizeText}></ik-title>
+                    <ik-title title="Email" subtitle=${this.email} fontSizeTitle=${this.fontSizeText} fontSizeText=${this.fontSizeText}></ik-title>
                     <div class="password">
                         <ik-title title="Password" subtitle="********" fontSizeTitle=${this.fontSizeText} fontSizeText=${this.fontSizeText}></ik-title>
                         <ik-button text="Modifier" width="auto" height="auto" fontSize=${this.fontSizeSmallText} @click=${this.togglePasswordModal}></ik-button>
                     </div>
-                    <ik-button class="delete-button" text="Delete account" type="red" width="auto" height="auto" fontSize=${this.fontSizeSmallText}></ik-button>
+                    <ik-button class="delete-button" text="Delete account" type="red" width="auto" height="auto" fontSize=${this.fontSizeSmallText} @click=${() => this._emit('click-delete-account',{})}></ik-button>
                 </div>
-                <ik-button type="blue" text="Manage my organizations" width="auto" height="auto" fontSize=${this.fontSizeText}></ik-button>
-                <ik-button type="red" text="Log out" height="auto" fontSize=${this.fontSizeText}></ik-button>
+                <ik-button type="blue" text="Manage my organizations" width="auto" height="auto" fontSize=${this.fontSizeText} @click=${() => this._emit('click-manage-organizations',{})}></ik-button>
+                <ik-button type="red" text="Log out" height="auto" fontSize=${this.fontSizeText} @click=${() => this._emit('click-logout',{})}></ik-button>
 
                 ${this.renderPasswordModal()}
             </div>
@@ -86,12 +98,14 @@ class IkUserAccount extends LitElement {
                 display: flex;
                 flex-direction: column;
                 gap: 2em;
+                width: var(--uac-width);
             }
 
             .password {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                justify-content: space-between;
                 gap: 1em;
             }
 

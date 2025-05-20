@@ -36,7 +36,7 @@ class IkHeader extends LitElement {
                     --hdr-width: ${this.width};
                 "
             >
-                <span class="title">IsOk</span>
+                <span class="title" @click=${() => this.dispatchEvent(new CustomEvent('click-home', {}))}>IsOk</span>
                 <div class="menu">
                     ${ this.connected ? html`
                         <ik-input
@@ -80,6 +80,7 @@ class IkHeader extends LitElement {
                 flex-direction: row;
                 justify-content: space-between;
                 width: var(--hdr-width);
+                cursor: pointer;
             }
             
             .ik-header .title {
