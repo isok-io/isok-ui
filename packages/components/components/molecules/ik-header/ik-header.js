@@ -11,6 +11,7 @@ class IkHeader extends LitElement {
         iconTheme: { type: String },
         iconSize: { type: String },
         connected: { type: Boolean },
+        width: { type: String },
     }
 
 
@@ -23,13 +24,15 @@ class IkHeader extends LitElement {
         this.iconTheme = 'material-symbols:light-mode-outline-rounded';
         this.iconSize = "18px";
         this.connected = true;
+        this.width = "100vh";
     }
 
     render() {
         return html`
             <div class="ik-header"
                 style="
-                    --hdr-font-size-title: ${this.fontSizeTitle}
+                    --hdr-font-size-title: ${this.fontSizeTitle};
+                    --hdr-width: ${this.width};
                 "
             >
                 <span class="title">IsOk</span>
@@ -71,6 +74,7 @@ class IkHeader extends LitElement {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
+                width: var(--hdr-width);
             }
             
             .ik-header .title {

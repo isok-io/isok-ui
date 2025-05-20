@@ -20,6 +20,7 @@ const Template = (args, { globals }) => {
             .iconTheme=${ icon }
             .iconSize=${ args.iconSize }
             .connected=${ args.connected }
+            .width=${ args.width }
     ></ik-header>`;
 };
 
@@ -33,7 +34,8 @@ Default.args = {
         { value: 'orga2', label: 'OtherOrganisation' },
     ],
     iconSize: "1.7em",
-    connected: true
+    connected: true,
+    width: "100vh"
 };
 
 export const NoConnected = Template.bind({});
@@ -46,5 +48,6 @@ NoConnected.args = {
         { value: 'orga2', label: 'OtherOrganisation' },
     ],
     iconSize: "1.7em",
-    connected: false
+    connected: false,
+    width: "100vh"
 };
