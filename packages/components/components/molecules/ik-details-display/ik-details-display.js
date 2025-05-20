@@ -30,7 +30,7 @@ class IkDetailsDisplay extends LitElement {
                 ${ this.data.map(item => {
                     return html`
                         <ik-title 
-                                .title=${item.title} 
+                                .title=${item.title.toUpperCase()} 
                                 .subtitle=${item.value} 
                                 align="center"
                                 .fontSizeTitle=${item.fontSizeTitle ? item.fontSizeTitle : this.fontSizeTitle}
