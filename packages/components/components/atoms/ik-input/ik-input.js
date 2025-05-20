@@ -201,6 +201,7 @@ class IkInput extends LitElement {
             
             .key {
                 font-size: var(--ipt-font-size);
+                color: var(--text);
             }
 
             .grid2 {
