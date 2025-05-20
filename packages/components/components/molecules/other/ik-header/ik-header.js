@@ -25,6 +25,7 @@ class IkHeader extends LitElement {
         this.iconSize = "18px";
         this.connected = true;
         this.width = "100vw";
+        this.valueSelect = undefined
     }
 
     render() {
@@ -38,12 +39,14 @@ class IkHeader extends LitElement {
                 <span class="title">IsOk</span>
                 <div class="menu">
                     ${ this.connected ? html`
-                        <ik-input 
+                        <ik-input
+                            class="select"
                             type="select"
                             fontSize=${this.fontSizeSelect}
                             .selectOptions=${this.optionsSelect}
                             height="auto"
                             width=${this.widthSelect}
+                            @change-input-value=${(e) => this.dispatchEvent(new CustomEvent('change-organization-value', e))}
                         ></ik-input>
                     ` : html``}
                     <ik-button 
@@ -61,6 +64,7 @@ class IkHeader extends LitElement {
                             icon="material-symbols:account-circle"
                             iconSize=${this.iconSize}
                             type='icon'
+                            @click=${() => this.dispatchEvent(new CustomEvent('click-account', {}))}
                         ></ik-button>
                     ` : html``}
                 </div>
