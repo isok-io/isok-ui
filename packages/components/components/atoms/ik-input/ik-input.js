@@ -33,6 +33,24 @@ class IkInput extends LitElement {
         this.inputType2 = 'text';
     }
 
+    firstUpdated() {
+        const input = this.renderRoot.querySelector('.ipt');
+        const button = this.renderRoot.querySelector('.bnt');
+
+        if (input) {
+            input.addEventListener('change', (e) => {
+                this.value = e.target.value;
+                this.dispatchEvent(new CustomEvent('change-input-value', {detail: {value: this.value}}))
+            });
+        }
+
+        if(button) {
+            button.addEventListener('click', (e) => {
+                this.dispatchEvent(new CustomEvent('click-add-button', {detail: {value1: this.value, value2: this.value2}}))
+            })
+        }
+    }
+
     renderTitle(){
         if(this.title){
             return html`<span class="title">${this.title}</span>`;
@@ -41,7 +59,7 @@ class IkInput extends LitElement {
     renderInput(){
         if(this.type === "text"){
             return html`
-                <input class="input"
+                <input class="ipt input"
                     placeholder="${this.placeholder}"
                     type=${this.inputType}
                     value="${this.value}"
@@ -49,13 +67,13 @@ class IkInput extends LitElement {
             `
         } else if(this.type === "textarea"){
             return html`
-                <textarea class="textarea"
+                <textarea class="ipt textarea"
                     placeholder="${this.placeholder}"
                 >${this.value}</textarea>
             `
         } else if(this.type === "select"){
             return html`
-                <select class="select">
+                <select class="ipt select">
                     ${this.selectOptions.map(opt => html`<option value="${opt.value}" ?selected=${this.value === opt.value}>${opt.label}</option>`)}
                 </select>
             `
@@ -73,7 +91,8 @@ class IkInput extends LitElement {
                                 type=${this.inputType2}
                                 value="${this.value2}"
                         />
-                        <ik-button 
+                        <ik-button
+                            class="btn"
                             text="Add"
                             fontSize=${this.fontSize}
                             width="4.5em"
@@ -108,7 +127,8 @@ class IkInput extends LitElement {
                             type=${this.inputType}
                             value="${this.value}"
                         />
-                        <ik-button 
+                        <ik-button
+                            class="btn"
                             text="Add"
                             fontSize=${this.fontSize}
                             width="4.5em"
