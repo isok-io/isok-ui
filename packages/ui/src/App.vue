@@ -8,12 +8,14 @@ export default {
     };
   },
   mounted() {
+    this.theme = localStorage.getItem('theme') || 'light';
     this.setTheme(this.theme);
   },
   methods: {
     toggleTheme() {
       this.theme = this.theme === 'light' ? 'dark' : 'light';
       this.setTheme(this.theme);
+      localStorage.setItem('theme', this.theme);
     },
     setTheme(theme) {
       document.documentElement.classList.remove('light', 'dark');
@@ -39,8 +41,9 @@ export default {
         width="97vw"
         :iconTheme="this.theme === 'dark' ? 'material-symbols:dark-mode-outline-rounded' : 'material-symbols:light-mode-outline-rounded'"
         @change-theme="toggleTheme()"
-        @click-account="console.log('click account')"
+        @click-account="$router.push('/account')"
         @change-organization-value="(e) => console.log('change-organization-value', e)"
+        @click-home="$router.push('/')"
     ></ik-header>
     <router-view />
   </div>
