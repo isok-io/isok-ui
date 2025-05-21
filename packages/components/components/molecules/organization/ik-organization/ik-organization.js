@@ -24,6 +24,13 @@ class IkOrganization extends LitElement {
         this.width = "700px";
     }
 
+    _emit(eventName) {
+        this.dispatchEvent(new CustomEvent(eventName, {
+            bubbles: true,
+            composed: true
+        }));
+    }
+
     render() {
         return html`
             <div 
@@ -43,10 +50,12 @@ class IkOrganization extends LitElement {
                     <ik-button type="icon" 
                                icon="material-symbols:settings-rounded"
                                iconSize=${this.iconSize}
+                               @click="${() => this._emit('click-settings')}"
                     ></ik-button>
                     <ik-button type="icon"
                                icon="material-symbols:logout-rounded"
                                iconSize=${this.iconSize}
+                               @click="${() => this._emit('click-leave')}"
                     ></ik-button>
                 </div>
             </div>
