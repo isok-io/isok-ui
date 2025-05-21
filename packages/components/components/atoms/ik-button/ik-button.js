@@ -1,5 +1,6 @@
 import {css, html, LitElement} from "lit";
 import 'iconify-icon';
+import {_emit} from "../../../utils/event";
 
 class IkButton extends LitElement {
     static properties = {
@@ -66,6 +67,7 @@ class IkButton extends LitElement {
                         --btn-icon-color: ${this.iconColor};
                         --btn-icon-color-hover: ${this.iconColorHover};
                     "
+                    @click=${() => _emit(this, "ik-button:click", {})}
             >
                 ${this.renderIcon()}
                 ${this.renderImg()}

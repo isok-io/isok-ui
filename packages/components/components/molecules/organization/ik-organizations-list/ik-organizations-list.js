@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-button/ik-button"
 import "../ik-organization/ik-organization"
+import {_emit} from "../../../../utils/event";
 
 class IkOrganizationsList extends LitElement {
     static properties = {
@@ -26,15 +27,6 @@ class IkOrganizationsList extends LitElement {
         this.organizationsList = [];
     }
 
-    _emit(eventName, data) {
-        console.log(data);
-        this.dispatchEvent(new CustomEvent(eventName, {
-            detail: data,
-            bubbles: true,
-            composed: true
-        }));
-    }
-
     render() {
         return html`
             <div 
@@ -55,13 +47,17 @@ class IkOrganizationsList extends LitElement {
                                     fontSizeTextContent=${this.fontSizeOrgaTextContent}
                                     iconSize=${this.iconSize}
                                     width=${this.orgaWidth}
-                                    @click-settings=${() => this._emit('click-settings-organization',{organization: organization})}
-                                    @click-leave=${() => this._emit('click-leave-organization',{organization: organization})}
+                                    @ik-organization:click-settings=${() => _emit(this, 'ik-organization-list:click-settings',{organization: organization})}
+                                    @ik-organization:click-leave=${() => _emit(this, 'ik-organization-list:click-leave',{organization: organization})}
                             ></ik-organization>
                         `
                     )}
                 </div>
-                <ik-button type="icon" icon="material-symbols:add-circle-outline-rounded" iconSize=${this.buttonSize} @click=${() => this._emit('click-add-organization',{})}></ik-button>
+                <ik-button 
+                        type="icon" 
+                        icon="material-symbols:add-circle-outline-rounded" 
+                        iconSize=${this.buttonSize} 
+                        @ik-button=${() => _emit(this,"ik-organizations-list:click-add",{})}></ik-button>
             </div>
         `;
     }

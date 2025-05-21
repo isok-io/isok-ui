@@ -2,6 +2,7 @@ import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-button/ik-button"
 import "../../../atoms/ik-title/ik-title"
 import "../../../atoms/ik-input/ik-input"
+import {_emit} from "../../../../utils/event";
 class IkUserAccount extends LitElement {
     static properties = {
         fontSizeTitle: {type: String},
@@ -21,15 +22,9 @@ class IkUserAccount extends LitElement {
         this.modalInputWidth = '20em'
         this.showPasswordModal = false;
         this.email = 'name@gmail.com';
+        this.oldPassword = '';
+        this.newPassword = '';
         this.width = '20em';
-    }
-
-    _emit(eventName, data) {
-        this.dispatchEvent(new CustomEvent(eventName, {
-            detail: data,
-            bubbles: true,
-            composed: true
-        }));
     }
 
     togglePasswordModal() {
@@ -43,11 +38,25 @@ class IkUserAccount extends LitElement {
             <div class="modal-backdrop" @click=${this.togglePasswordModal}></div>
             <div class="modal">
                 <span class="modal-title">Change password</span>
-                <ik-input inputType="password" placeholder="Old password" fontSize=${this.fontSizeText} height="auto" width=${this.modalInputWidth}></ik-input>
-                <ik-input inputType="password" placeholder="New password" fontSize=${this.fontSizeText} height="auto" width=${this.modalInputWidth}></ik-input>
+                <ik-input inputType="password" 
+                          .value=${this.oldPassword}
+                          @ik-input:change=${(e) => this.oldPassword = e.detail.value}
+                          placeholder="Old password" 
+                          fontSize=${this.fontSizeText} 
+                          height="auto" 
+                          width=${this.modalInputWidth}
+                ></ik-input>
+                <ik-input inputType="password" 
+                          .value=${this.newPassword}
+                          @ik-input:change=${(e) => this.newPassword = e.detail.value}
+                          placeholder="New password" 
+                          fontSize=${this.fontSizeText} 
+                          height="auto" 
+                          width=${this.modalInputWidth}
+                ></ik-input>
                 <div class="modal-actions">
-                    <ik-button text="Cancel" @click=${this.togglePasswordModal} fontSize=${this.fontSizeSmallText} width="auto" height="auto"></ik-button>
-                    <ik-button text="Confirm" type="blue" fontSize=${this.fontSizeSmallText} width="auto" height="auto" @click=${() => this._emit('change-password',{})}></ik-button>
+                    <ik-button text="Cancel" @ik-button:click=${this.togglePasswordModal} fontSize=${this.fontSizeSmallText} width="auto" height="auto"></ik-button>
+                    <ik-button text="Confirm" type="blue" fontSize=${this.fontSizeSmallText} width="auto" height="auto" @ik-button:click=${() => _emit(this,'ik-user-account:click-confirm',{oldPassword: this.oldPassword ,newPassword: this.newPassword })}></ik-button>
                 </div>
             </div>
         `;
@@ -63,10 +72,10 @@ class IkUserAccount extends LitElement {
                         <ik-title title="Password" subtitle="********" fontSizeTitle=${this.fontSizeText} fontSizeText=${this.fontSizeText}></ik-title>
                         <ik-button text="Modifier" width="auto" height="auto" fontSize=${this.fontSizeSmallText} @click=${this.togglePasswordModal}></ik-button>
                     </div>
-                    <ik-button class="delete-button" text="Delete account" type="red" width="auto" height="auto" fontSize=${this.fontSizeSmallText} @click=${() => this._emit('click-delete-account',{})}></ik-button>
+                    <ik-button class="delete-button" text="Delete account" type="red" width="auto" height="auto" fontSize=${this.fontSizeSmallText} @ik-button:click=${() => _emit(this, "ik-user-account:click-delete",{})}></ik-button>
                 </div>
-                <ik-button type="blue" text="Manage my organizations" width="auto" height="auto" fontSize=${this.fontSizeText} @click=${() => this._emit('click-manage-organizations',{})}></ik-button>
-                <ik-button type="red" text="Log out" height="auto" fontSize=${this.fontSizeText} @click=${() => this._emit('click-logout',{})}></ik-button>
+                <ik-button type="blue" text="Manage my organizations" width="auto" height="auto" fontSize=${this.fontSizeText} @ik-button:click=${() => _emit(this, "ik-user-account:click-organizations",{})}></ik-button>
+                <ik-button type="red" text="Log out" height="auto" fontSize=${this.fontSizeText} @ik-button:click=${() => _emit(this, "ik-user-account:click-logout",{})}></ik-button>
 
                 ${this.renderPasswordModal()}
             </div>

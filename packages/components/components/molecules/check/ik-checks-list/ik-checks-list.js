@@ -2,6 +2,7 @@ import {css, html, LitElement} from "lit";
 import "../../other/ik-filters-menu/ik-filters-menu"
 import "../ik-check-group/ik-check-group"
 import "../ik-check/ik-check"
+import {_emit} from "../../../../utils/event";
 
 class IkChecksList extends LitElement {
     static properties = {
@@ -138,6 +139,7 @@ class IkChecksList extends LitElement {
                                     responseTimeCheck="${check.responseTime.toFixed(0)}ms"
                                     .barsCheck=${check.bars}
                                     width=${this.groupByValue === "domain" ? this.smallCheckWidth : this.bigCheckWidth}
+                                    @ik-check:click-info=${() => _emit(this, "ik-check-list:click-info", check)}
                                 ></ik-check>
                             `)}
                             
@@ -145,7 +147,11 @@ class IkChecksList extends LitElement {
                     `
                     )}
                 </div>
-                <ik-button type="icon" icon="material-symbols:add-circle-outline-rounded" iconSize=${this.buttonSize}></ik-button>
+                <ik-button type="icon" 
+                           icon="material-symbols:add-circle-outline-rounded" 
+                           iconSize=${this.buttonSize}
+                           @ik-button:click=${() => _emit(this, "ik-check-list:click-add", {})}
+                ></ik-button>
             </div>
         `;
     }

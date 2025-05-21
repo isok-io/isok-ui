@@ -5,6 +5,7 @@ import ccLogo from '../../../../assets/logo/cc-logo.png';
 import githubWhiteLogo from '../../../../assets/logo/github-white-logo.png';
 import githubBlackLogo from '../../../../assets/logo/github-logo.png';
 import googleLogo from '../../../../assets/logo/google-logo.png';
+import {_emit} from "../../../../utils/event";
 
 class IkAuth extends LitElement {
     static properties = {
@@ -15,6 +16,7 @@ class IkAuth extends LitElement {
         buttonWidth: {type: String},
         buttonHeight: {type: String},
         align: {type: String},
+        methods: {type: Array},
     };
 
     constructor() {
@@ -26,19 +28,25 @@ class IkAuth extends LitElement {
         this.buttonWidth = '16em'
         this.buttonHeight = '2.8em'
         this.align = 'center'
+        this.methods = ['ep','cc', 'gh','g']
+        this.data = {
+            email: '',
+            password: '',
+        }
     }
 
     renderButtons(prefix) {
         return html`
             <div class="buttons">
-                <ik-button class="button"
+                ${this.methods.includes('ep') ? html`<ik-button class="button"
                            text="${prefix} with Email / Password"
                            width=${this.buttonWidth}
                            height=${this.buttonHeight}
                            fontSize=${this.fontSizeText}
                            align=${this.align}
-                ></ik-button>
-                <ik-button class="button"
+                           @ik-button:click="${() => _emit(this, 'ik-auth:click',{type: this.type, method: 'ep'})}"
+                ></ik-button>`: ``}
+                ${this.methods.includes('cc') ? html`<ik-button class="button"
                            text="${prefix} with Clever Cloud"
                            img=${ccLogo}
                            iconSize='40px'
@@ -46,8 +54,9 @@ class IkAuth extends LitElement {
                            height=${this.buttonHeight}
                            fontSize=${this.fontSizeText}
                            align=${this.align}
-                ></ik-button>
-                <ik-button class="button"
+                           @ik-button:click="${() => _emit(this, 'ik-auth:click',{type: this.type, method: 'cc'})}"
+                ></ik-button>`:``}
+                ${this.methods.includes('gh') ? html`<ik-button class="button"
                            text="${prefix} with GitHub"
                            img=${this.theme === 'light' ? githubWhiteLogo : githubBlackLogo}
                            iconSize='40px'
@@ -55,8 +64,9 @@ class IkAuth extends LitElement {
                            height=${this.buttonHeight}
                            fontSize=${this.fontSizeText}
                            align=${this.align}
-                ></ik-button>
-                <ik-button class="button"
+                           @ik-button:click="${() => _emit(this, 'ik-auth:click',{type: this.type, method: 'gh'})}"
+                ></ik-button>`:``}
+                ${this.methods.includes('g') ? html`<ik-button class="button"
                            text="${prefix} with Google"
                            img=${googleLogo}
                            iconSize='40px'
@@ -64,7 +74,8 @@ class IkAuth extends LitElement {
                            height=${this.buttonHeight}
                            fontSize=${this.fontSizeText}
                            align=${this.align}
-                ></ik-button>
+                           @ik-button:click="${() => _emit(this, 'ik-auth:click',{type: this.type, method: 'g'})}"
+                ></ik-button>`:``}
             </div>
         `
     }
@@ -77,6 +88,8 @@ class IkAuth extends LitElement {
                     title="Email"
                     height="auto"
                     fontSize=${this.fontSizeText}
+                    .value=${this.data.email}
+                    @ik-input:change=${(e) => this.data.email = e.detail.value}
                 ></ik-input>
                 <ik-input
                     placeholder="Password"
@@ -84,6 +97,8 @@ class IkAuth extends LitElement {
                     height="auto"
                     fontSize=${this.fontSizeText}
                     inputType="password"
+                    .value=${this.data.password}
+                    @ik-input:change=${(e) => this.data.password = e.detail.value}
                 ></ik-input>
                 <div class="buttons-form">
                     <ik-button
@@ -92,6 +107,7 @@ class IkAuth extends LitElement {
                         width="auto"
                         height="auto"
                         fontSize=${this.fontSizeText}
+                        @ik-button:click=${() => _emit(this, 'ik-auth:click-validate',{data: this.data})}
                     ></ik-button>
                     <ik-button
                         class="back-btn"
@@ -100,6 +116,7 @@ class IkAuth extends LitElement {
                         height="auto"
                         type="outlined"
                         fontSize=${this.fontSizeText}
+                        @ik-button:click=${() => _emit(this, 'ik-auth:click-back',{})}
                     ></ik-button>
                 </div>
             </div>

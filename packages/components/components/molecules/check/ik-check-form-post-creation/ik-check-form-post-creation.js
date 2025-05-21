@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-input/ik-input";
 import "../../../atoms/ik-button/ik-button";
+import {_emit} from "../../../../utils/event";
 
 class IkCheckFormPostCreation extends LitElement {
     static properties = {
@@ -17,6 +18,11 @@ class IkCheckFormPostCreation extends LitElement {
         this.fontSizeTitle = "50px";
         this.fontSizeText = "25px";
         this.width = "660px";
+        this.data = {
+            name : "",
+            zone : "all",
+            interval: ""
+        }
     }
 
     render() {
@@ -34,12 +40,15 @@ class IkCheckFormPostCreation extends LitElement {
                         title="Name"
                         placeholder="My new check"
                         height="auto"
+                        .value=${this.data.name}
                         .width=${this.width}
                         fontSize=${this.fontSizeText}
+                        @ik-input:change=${(e) => this.data.name = e.detail.value}
                     ></ik-input>
                     <ik-input
                         title="Zone"
                         type="select"
+                        .value=${this.data.zone}
                         .selectOptions = ${[
                             { value: 'all', label: 'All' },
                             { value: 'fr', label: 'France' },
@@ -47,18 +56,22 @@ class IkCheckFormPostCreation extends LitElement {
                         heigth="auto"
                         width="auto"
                         fontSize=${this.fontSizeText}
+                        @ik-input:change=${(e) => this.data.zone = e.detail.value}
                     ></ik-input>
                     <ik-input
                         title="Interval"
                         placeholder="10min"
                         height="auto"
+                        .value=${this.data.interval}
                         .width=${this.width}
                         fontSize=${this.fontSizeText}
+                        @ik-input:change=${(e) => {this.data.interval = e.detail.value}}
                     ></ik-input>
                 </div>
                 <ik-button
                     text="Create"
                     height="auto"
+                    @ik-button:click=${() => _emit(this, "ik-check-form-post-creation:click-create", this.data)}
                 ></ik-button>
             </div>
         `;

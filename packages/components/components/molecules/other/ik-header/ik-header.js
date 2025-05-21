@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-input/ik-input";
 import "../../../atoms/ik-button/ik-button";
+import {_emit} from "../../../../utils/event";
 
 class IkHeader extends LitElement {
     static properties = {
@@ -36,7 +37,7 @@ class IkHeader extends LitElement {
                     --hdr-width: ${this.width};
                 "
             >
-                <span class="title" @click=${() => this.dispatchEvent(new CustomEvent('click-home', {}))}>IsOk</span>
+                <span class="title" @click=${() => _emit(this,"ik-header:click-title")}>IsOk</span>
                 <div class="menu">
                     ${ this.connected ? html`
                         <ik-input
@@ -46,7 +47,7 @@ class IkHeader extends LitElement {
                             .selectOptions=${this.optionsSelect}
                             height="auto"
                             width=${this.widthSelect}
-                            @change-input-value=${(e) => this.dispatchEvent(new CustomEvent('change-organization-value', e))}
+                            @ik-input:change=${(e) => _emit(this, "ik-header:change-organization", e.detail)}
                         ></ik-input>
                     ` : html``}
                     <ik-button 
@@ -55,7 +56,7 @@ class IkHeader extends LitElement {
                         icon=${this.iconTheme}
                         iconSize=${this.iconSize}
                         type='icon'
-                        @click=${() => this.dispatchEvent(new CustomEvent('change-theme', {}))}
+                        @ik-button:click=${() => _emit(this, "ik-header:click-theme", {})}
                     ></ik-button>
                     ${ this.connected ? html`
                         <ik-button
@@ -64,7 +65,7 @@ class IkHeader extends LitElement {
                             icon="material-symbols:account-circle"
                             iconSize=${this.iconSize}
                             type='icon'
-                            @click=${() => this.dispatchEvent(new CustomEvent('click-account', {}))}
+                            @ik-button:click=${() => _emit(this, "ik-header:click-account", {})}
                         ></ik-button>
                     ` : html``}
                 </div>
