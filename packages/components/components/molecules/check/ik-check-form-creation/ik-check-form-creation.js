@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-input/ik-input";
 import "../../../atoms/ik-button/ik-button";
+import {_emit} from "../../../../utils/event";
 
 class IkCheckFormCreation extends LitElement {
     static properties = {
@@ -21,6 +22,31 @@ class IkCheckFormCreation extends LitElement {
         this.width = "660px";
     }
 
+    updateInputValue(targetInput, newValue) {
+        const update = (inputs) => {
+            const index = inputs.findIndex(i => i === targetInput);
+            if (index !== -1) {
+                if (Array.isArray(newValue)) {
+                    inputs[index] = {
+                        ...inputs[index],
+                        values: newValue
+                    };
+                } else {
+                    inputs[index] = {
+                        ...inputs[index],
+                        value: newValue
+                    };
+                }
+            }
+        };
+
+        update(this.data.inputs);
+        update(this.data.inputsAdvanced);
+        this.requestUpdate();
+    }
+
+
+
     openToggle() {
         this.toggleOpen = !this.toggleOpen;
         this.requestUpdate();
@@ -28,13 +54,14 @@ class IkCheckFormCreation extends LitElement {
 
     renderInputText(dataInput, fontSize){
         return html`
-            <ik-input 
-                .title=${dataInput.title}
-                .placeholder=${dataInput.placeholder}
-                .value=${dataInput.value}
-                height="auto"
-                .width=${this.width}
-                fontSize=${fontSize}
+            <ik-input
+                    .title=${dataInput.title}
+                    .placeholder=${dataInput.placeholder}
+                    .value=${dataInput.value}
+                    height="auto"
+                    .width=${this.width}
+                    fontSize=${fontSize}
+                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
             ></ik-input>
         `
     }
@@ -42,13 +69,14 @@ class IkCheckFormCreation extends LitElement {
     renderInputArea(dataInput, fontSize){
         return html`
             <ik-input
-                type="textarea"
-                .title=${dataInput.title}
-                .placeholder=${dataInput.placeholder}
-                .value=${dataInput.value}
-                height="auto"
-                .width=${this.width}
-                fontSize=${fontSize}
+                    type="textarea"
+                    .title=${dataInput.title}
+                    .placeholder=${dataInput.placeholder}
+                    .value=${dataInput.value}
+                    height="auto"
+                    .width=${this.width}
+                    fontSize=${fontSize}
+                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
             ></ik-input>
         `
     }
@@ -56,13 +84,14 @@ class IkCheckFormCreation extends LitElement {
     renderInputSelect(dataInput, fontSize){
         return html`
             <ik-input
-                .title=${dataInput.title}
-                type="select"
-                .selectOptions = ${dataInput.selectOptions}
-                .value=${dataInput.value}
-                heigth="auto"
-                width="auto"
-                fontSize=${fontSize}
+                    .title=${dataInput.title}
+                    type="select"
+                    .selectOptions=${dataInput.selectOptions}
+                    .value=${dataInput.value}
+                    height="auto"
+                    width="auto"
+                    fontSize=${fontSize}
+                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
             ></ik-input>
         `
     }
@@ -71,14 +100,15 @@ class IkCheckFormCreation extends LitElement {
         return html`
             <div class="keyValueInput">
                 <ik-input
-                    .title=${dataInput.title}
-                    type="double"
-                    .placeholder=${dataInput.placeholder}
-                    .placeholder2=${dataInput.placeholder2}
-                    .values=${dataInput.values}
-                    height="1.8em"
-                    width=${this.width}
-                    fontSize=${fontSize}
+                        .title=${dataInput.title}
+                        type="double"
+                        .placeholder=${dataInput.placeholder}
+                        .placeholder2=${dataInput.placeholder2}
+                        .values=${dataInput.values}
+                        height="1.8em"
+                        width=${this.width}
+                        fontSize=${fontSize}
+                        @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.values)}
                 ></ik-input>
             </div>
         `
@@ -139,6 +169,7 @@ class IkCheckFormCreation extends LitElement {
                 <ik-button
                     text="Next"
                     height="auto"
+                    @ik-button:click=${() => _emit(this, "ik-check-form-creation:click-next", this.data)}
                 ></ik-button>
             </div>
         `;

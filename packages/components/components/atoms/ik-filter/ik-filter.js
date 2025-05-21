@@ -1,4 +1,5 @@
 import {css, html, LitElement} from "lit";
+import {_emit} from "../../../utils/event";
 
 class IkFilter extends LitElement {
     static properties = {
@@ -26,41 +27,9 @@ class IkFilter extends LitElement {
         this.widthZ2 = '0px';
         this.fontSize = '20px';
         this.placeholder = '';
-        this.valueInput = null;
-        this.valueSelect = null;
+        this.valueInput = '';
+        this.valueSelect = '';
     }
-
-    firstUpdated() {
-        const input = this.renderRoot.querySelector('.ik-filter-input-text');
-        const select = this.renderRoot.querySelector('.ik-filter-input-select');
-
-        if (input) {
-            input.addEventListener('input', (e) => {
-                this.valueInput = e.target.value;
-                this._emitChange();
-            });
-        }
-
-        if (select) {
-            select.addEventListener('change', (e) => {
-                this.valueSelect = e.target.value;
-                this._emitChange();
-            });
-        }
-    }
-
-    _emitChange() {
-        this.dispatchEvent(new CustomEvent('filter-change', {
-            detail: {
-                valueInput: this.valueInput,
-                valueSelect: this.valueSelect
-            },
-            bubbles: true,
-            composed: true
-        }));
-    }
-
-
 
     render() {
         return html`
@@ -78,10 +47,17 @@ class IkFilter extends LitElement {
                 </div>
                 <div class="ik-filter-input">
                     ${ this.type === "simple-text" || this.type === "double" ? html`
-                        <input class="ik-filter-input-text" type=${this.inputType} placeholder=${this.placeholder} value=${this.valueInput}>
+                        <input class="ik-filter-input-text" 
+                               type=${this.inputType} 
+                               placeholder=${this.placeholder} 
+                               .value=${this.valueInput}
+                               @input=${(e) => _emit(this, "ik-filter:change-input", {value: e.target.value})}
+                        >
                     `: ``}
                     ${ this.type === "simple-select" || this.type === "double" ? html`
-                    <select class="ik-filter-input-select">
+                    <select class="ik-filter-input-select"
+                        @change=${(e) => _emit(this, "ik-filter:change-select", {value: e.target.value})}
+                    >
                         ${this.selectOptions.map(opt => html`<option value="${opt.value}" ?selected=${opt.value === this.valueSelect}>${opt.label}</option>`)}
                     </select>
                     `:``}

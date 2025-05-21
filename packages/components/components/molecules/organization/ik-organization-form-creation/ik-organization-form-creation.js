@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-button/ik-button"
 import "../../../atoms/ik-input/ik-input"
+import {_emit} from "../../../../utils/event";
 
 class IkOrganizationFormCreation extends LitElement {
     static properties = {
@@ -12,6 +13,7 @@ class IkOrganizationFormCreation extends LitElement {
         super();
         this.fontSizeTitle = '50px'
         this.fontSizeText = '25px'
+        this.nameOrga = '';
     }
 
     render() {
@@ -24,8 +26,18 @@ class IkOrganizationFormCreation extends LitElement {
                     "           
             >
                 <span class="title">Create organization</span>
-                <ik-input title="Organization name" placeholder="myOrganization" height="auto"></ik-input>
-                <ik-button text="Create" height="auto"></ik-button>
+                <ik-input 
+                        title="Organization name" 
+                        placeholder="myOrganization" 
+                        height="auto"
+                        .value=${this.nameOrga}
+                        @ik-input:change=${(e) => this.nameOrga = e.detail.value}
+                ></ik-input>
+                <ik-button 
+                        text="Create" 
+                        height="auto"
+                        @ik-button:click=${() => _emit(this, "ik-organization-form-creation:click-create", {name: this.nameOrga})}
+                ></ik-button>
             </div>
         `;
     }

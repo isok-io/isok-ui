@@ -11,6 +11,7 @@ const Template = (args) => {
             .fontSizeTitle=${args.fontSizeTitle}
             .fontSizeText=${args.fontSizeText}
             .width=${args.width}
+            .checksType=${args.checksType}
     ></ik-check-form-pre-creation>`;
 };
 
@@ -19,4 +20,5 @@ HTTP.args = {
     fontSizeTitle: "50px",
     fontSizeText: "25px",
     width: "660px",
+    checksType: ["HTTP", "PING", "SSL", "UDP", "TCP"]
 };

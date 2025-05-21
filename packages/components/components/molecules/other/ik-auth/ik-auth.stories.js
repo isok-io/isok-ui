@@ -13,6 +13,10 @@ export default {
             control: { type: 'select' },
             options: ['left', 'center'],
         },
+        methods: {
+            control: { type: 'multi-select' },
+            options: ['ep', 'cc','gh','g'],
+        },
     },
 };
 
@@ -25,6 +29,7 @@ const Template = (args, { globals }) => {
             .buttonWidth=${args.buttonWidth}
             .buttonHeight=${args.buttonHeight}
             .align=${args.align}
+            .methods=${args.methods}
     ></ik-auth>`;
 };
 
@@ -35,7 +40,8 @@ Default.args = {
     fontSizeText: "25px",
     buttonWidth: "16em",
     buttonHeight: "2.8em",
-    align: 'center'
+    align: 'center',
+    methods: ['ep','cc','gh','g']
 };
 
 export const Signup = Template.bind({});
@@ -45,7 +51,8 @@ Signup.args = {
     fontSizeText: "25px",
     buttonWidth: "16em",
     buttonHeight: "2.8em",
-    align: 'center'
+    align: 'center',
+    methods: ['ep','cc','gh','g']
 };
 
 export const LoginForm = Template.bind({});

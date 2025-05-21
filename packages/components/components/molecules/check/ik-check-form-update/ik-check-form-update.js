@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-input/ik-input";
 import "../../../atoms/ik-button/ik-button";
+import {_emit} from "../../../../utils/event";
 
 class IkCheckFormUpdate extends LitElement {
     static properties = {
@@ -21,6 +22,28 @@ class IkCheckFormUpdate extends LitElement {
         this.width = "660px";
     }
 
+    updateInputValue(targetInput, newValue) {
+        const update = (inputs) => {
+            const index = inputs.findIndex(i => i === targetInput);
+            if (index !== -1) {
+                if (Array.isArray(newValue)) {
+                    inputs[index] = {
+                        ...inputs[index],
+                        values: newValue
+                    };
+                } else {
+                    inputs[index] = {
+                        ...inputs[index],
+                        value: newValue
+                    };
+                }
+            }
+        };
+
+        update(this.data.inputs);
+        this.requestUpdate();
+    }
+
     renderInputText(dataInput, fontSize){
         return html`
             <ik-input 
@@ -30,6 +53,7 @@ class IkCheckFormUpdate extends LitElement {
                 height="auto"
                 .width=${this.width}
                 fontSize=${fontSize}
+                @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
             ></ik-input>
         `
     }
@@ -44,6 +68,7 @@ class IkCheckFormUpdate extends LitElement {
                 height="auto"
                 .width=${this.width}
                 fontSize=${fontSize}
+                @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
             ></ik-input>
         `
     }
@@ -58,6 +83,7 @@ class IkCheckFormUpdate extends LitElement {
                 heigth="auto"
                 width="auto"
                 fontSize=${fontSize}
+                @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
             ></ik-input>
         `
     }
@@ -74,6 +100,7 @@ class IkCheckFormUpdate extends LitElement {
                     height="1.8em"
                     width=${this.width}
                     fontSize=${fontSize}
+                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.values)}
                 ></ik-input>
             </div>
         `
@@ -110,6 +137,7 @@ class IkCheckFormUpdate extends LitElement {
                     type="blue"
                     text="Save"
                     height="auto"
+                    @ik-button:click=${() => _emit(this, "ik-check-form-update:click-save", this.data)}
                 ></ik-button>
             </div>
         `;

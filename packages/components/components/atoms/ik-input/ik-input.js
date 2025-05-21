@@ -1,5 +1,6 @@
 import {css, html, LitElement} from "lit";
 import '../ik-button/ik-button.js';
+import {_emit} from "../../../utils/event";
 
 class IkInput extends LitElement {
     static properties = {
@@ -7,6 +8,7 @@ class IkInput extends LitElement {
         placeholder2: {type: String},
         value: {type: String},
         value2: {type: String},
+        values: {type: Array},
         type: {type: String},
         width: { type: String },
         height: { type: String },
@@ -21,8 +23,9 @@ class IkInput extends LitElement {
         super();
         this.placeholder = undefined;
         this.placeholder2 = undefined;
-        this.value = undefined;
-        this.value2 = undefined;
+        this.value = '';
+        this.value2 = '';
+        this.values = [];
         this.type = "text";
         this.width = '660px';
         this.height = '56px';
@@ -33,22 +36,23 @@ class IkInput extends LitElement {
         this.inputType2 = 'text';
     }
 
-    firstUpdated() {
-        const input = this.renderRoot.querySelector('.ipt');
-        const button = this.renderRoot.querySelector('.bnt');
+    addValue(value) {
+        this.values = [...this.values, value];
+        this.value = '';
+        this.value2 = '';
+        _emit(this, "ik-input:change", {values: this.values});
+    }
 
-        if (input) {
-            input.addEventListener('change', (e) => {
-                this.value = e.target.value;
-                this.dispatchEvent(new CustomEvent('change-input-value', {detail: {value: this.value}}))
-            });
-        }
+    updateValue(elem, newValue) {
+        this.values = this.values.map(v =>
+            v === elem ? { ...v, value: newValue } : v
+        );
+        _emit(this, "ik-input:change", {values: this.values});
+    }
 
-        if(button) {
-            button.addEventListener('click', (e) => {
-                this.dispatchEvent(new CustomEvent('click-add-button', {detail: {value1: this.value, value2: this.value2}}))
-            })
-        }
+    removeValue(value) {
+        this.values = this.values.filter(v => v !== value);
+        _emit(this, "ik-input:change", {values: this.values});
     }
 
     renderTitle(){
@@ -62,18 +66,23 @@ class IkInput extends LitElement {
                 <input class="ipt input"
                     placeholder="${this.placeholder}"
                     type=${this.inputType}
-                    value="${this.value}"
+                    .value=${this.value}
+                    @input=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
                 />
             `
         } else if(this.type === "textarea"){
             return html`
                 <textarea class="ipt textarea"
                     placeholder="${this.placeholder}"
-                >${this.value}</textarea>
+                    .value=${this.value}
+                    @input=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
+                ></textarea>
             `
         } else if(this.type === "select"){
             return html`
-                <select class="ipt select">
+                <select class="ipt select"
+                    @change=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
+                >
                     ${this.selectOptions.map(opt => html`<option value="${opt.value}" ?selected=${this.value === opt.value}>${opt.label}</option>`)}
                 </select>
             `
@@ -84,12 +93,14 @@ class IkInput extends LitElement {
                         <input
                                 placeholder="${this.placeholder}"
                                 type=${this.inputType}
-                                value="${this.value}"
+                                .value=${this.value}
+                                @input=${(e) => this.value = e.target.value}
                         />
                         <input
                                 placeholder="${this.placeholder2}"
                                 type=${this.inputType2}
-                                value="${this.value2}"
+                                .value=${this.value2}
+                                @input=${(e) => this.value2 = e.target.value}
                         />
                         <ik-button
                             class="btn"
@@ -97,6 +108,7 @@ class IkInput extends LitElement {
                             fontSize=${this.fontSize}
                             width="4.5em"
                             height="auto"
+                            @ik-button:click=${() => this.addValue({key: this.value, value: this.value2})}
                         ></ik-button>
                     </div>
                     ${
@@ -106,12 +118,14 @@ class IkInput extends LitElement {
                                 <input
                                     type=${this.inputType2}
                                     value="${v.value}"
+                                    @input=${(e) => this.updateValue(v, e.target.value)}
                                 />
                                 <ik-button
                                         text="Remove"
                                         fontSize=${this.fontSize}
                                         width="4.5em"
                                         height="auto"
+                                        @ik-button:click=${() => this.removeValue(v)}
                                 ></ik-button>
                             </div>
                         `)
@@ -126,6 +140,7 @@ class IkInput extends LitElement {
                             placeholder="${this.placeholder}"
                             type=${this.inputType}
                             value="${this.value}"
+                            @input=${(e) => this.value = e.target.value}
                         />
                         <ik-button
                             class="btn"
@@ -133,6 +148,7 @@ class IkInput extends LitElement {
                             fontSize=${this.fontSize}
                             width="4.5em"
                             height="auto"
+                            @ik-button:click=${() => this.addValue(this.value)}
                         ></ik-button>
                     </div>
                     ${
@@ -144,6 +160,7 @@ class IkInput extends LitElement {
                                 fontSize=${this.fontSize}
                                 width="4.5em"
                                 height="auto"
+                                @ik-button:click=${() => this.removeValue(v)}
                         ></ik-button>
                     </div>
                 `)

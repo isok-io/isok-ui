@@ -1,6 +1,7 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-button/ik-button"
 import "../../../atoms/ik-input/ik-input"
+import {_emit} from "../../../../utils/event";
 
 class IkOrganizationFormUpdate extends LitElement {
     static properties = {
@@ -14,7 +15,7 @@ class IkOrganizationFormUpdate extends LitElement {
         super();
         this.fontSizeTitle = '50px'
         this.fontSizeText = '25px'
-        this.nameOrga = undefined
+        this.nameOrga = ''
         this.membersOrga = []
     }
 
@@ -28,10 +29,31 @@ class IkOrganizationFormUpdate extends LitElement {
                     "           
             >
                 <span class="title">Manage organization</span>
-                <ik-input title="Organization name" placeholder="myOrganization" height="auto" value=${this.nameOrga}></ik-input>
-                <ik-input title="Members" placeholder="new-member@gmail.com" type='list' .values=${this.membersOrga} ></ik-input>
-                <ik-button text="Save" height="auto"></ik-button>
-                <ik-button text="Delete organization" height="auto" width="auto" type="red"></ik-button>
+                <ik-input 
+                        title="Organization name"
+                        height="auto" 
+                        .value=${this.nameOrga}
+                        @ik-input:change=${(e) => this.nameOrga = e.detail.value}
+                ></ik-input>
+                <ik-input 
+                        title="Members" 
+                        placeholder="new-member@gmail.com" 
+                        type='list' 
+                        .values=${this.membersOrga}
+                        @ik-input:change=${(e) => this.membersOrga = e.detail.values}
+                ></ik-input>
+                <ik-button 
+                        text="Save" 
+                        height="auto"
+                        @ik-button:click=${() => _emit(this, "ik-organization-form-update:click-save", {name: this.nameOrga, members: this.membersOrga})}
+                ></ik-button>
+                <ik-button 
+                        text="Delete organization" 
+                        height="auto" 
+                        width="auto" 
+                        type="red"
+                        @ik-button:click=${() => _emit(this, "ik-organization-form-update:click-delete", {})}
+                ></ik-button>
             </div>
         `;
     }

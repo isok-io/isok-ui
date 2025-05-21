@@ -2,6 +2,7 @@ import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-title/ik-title"
 import "../../../atoms/ik-diagram-bar/ik-diagram-bar"
 import "../../../atoms/ik-button/ik-button"
+import {_emit} from "../../../../utils/event";
 
 class IkCheck extends LitElement {
     static properties = {
@@ -60,6 +61,7 @@ class IkCheck extends LitElement {
                         height='auto'
                         icon="material-symbols:info-outline-rounded"
                         type='icon'
+                        @ik-button:click=${() => _emit(this, "ik-check:click-info", {})}
                 ></ik-button>
             </div>
         `;

@@ -3,6 +3,7 @@ import "../../../atoms/ik-button/ik-button";
 import "../../other/ik-details-display/ik-details-display"
 import "../../../atoms/ik-diagram-bar/ik-diagram-bar"
 import { Chart, registerables } from 'chart.js';
+import {_emit} from "../../../../utils/event";
 Chart.register(...registerables);
 
 class IkCheckDetails extends LitElement {
@@ -104,7 +105,11 @@ class IkCheckDetails extends LitElement {
             >
                 <div class="title-zone">
                     <span class="title">${this.data.name}</span>
-                    <ik-button type="icon" icon="material-symbols:edit-square-outline-rounded" iconSize=${this.fontSizeText}></ik-button>
+                    <ik-button type="icon" 
+                               icon="material-symbols:edit-square-outline-rounded" 
+                               iconSize=${this.fontSizeText}
+                               @ik-button="${() => _emit(this, 'ik-check-details:click-edit', {check: this.data})}"
+                    ></ik-button>
                 </div>
                 <ik-details-display 
                         .data=${this.transformData()}
@@ -121,7 +126,13 @@ class IkCheckDetails extends LitElement {
                         height=${this.heightBars}
                 ></ik-diagram-bar>
                 <canvas id="latencyChart" width=${this.width} height="200"></canvas>
-                <ik-button type="red" width="auto" height="auto" text="Delete check" fontSize=${this.fontSizeSmallText}></k-button>
+                <ik-button type="red" 
+                           width="auto" 
+                           height="auto" 
+                           text="Delete check" 
+                           fontSize=${this.fontSizeSmallText}
+                           @ik-button:click=${() => _emit(this, "ik-check-details:click-delete", {check: this.data})}}
+                ></k-button>
             </div>
         `;
     }

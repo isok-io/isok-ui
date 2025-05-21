@@ -1,12 +1,14 @@
 import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-input/ik-input";
 import "../../../atoms/ik-button/ik-button";
+import {_emit} from "../../../../utils/event";
 
 class IkCheckFormPreCreation extends LitElement {
     static properties = {
         fontSizeTitle: { type: String },
         fontSizeText: { type: String },
         width: { type: String },
+        checksType: { type: Array },
     }
 
 
@@ -15,6 +17,7 @@ class IkCheckFormPreCreation extends LitElement {
         this.fontSizeTitle = "50px";
         this.fontSizeText = "25px";
         this.width = "660px";
+        this.checksType = ["HTTP"];
     }
 
     render() {
@@ -28,31 +31,14 @@ class IkCheckFormPreCreation extends LitElement {
                 <span class="title">New check</span>
                 
                 <div class="form">
-                    <ik-button
-                            text="HTTP"
+                    ${this.checksType.map((c) => html`
+                        <ik-button
+                            text=${c}
                             height="auto"
                             fontSize="${this.fontSizeText}"
-                    ></ik-button>
-                    <ik-button
-                            text="PING"
-                            height="auto"
-                            fontSize="${this.fontSizeText}"
-                    ></ik-button>
-                    <ik-button
-                            text="SSL"
-                            height="auto"
-                            fontSize="${this.fontSizeText}"
-                    ></ik-button>
-                    <ik-button
-                            text="TCP"
-                            height="auto"
-                            fontSize="${this.fontSizeText}"
-                    ></ik-button>
-                    <ik-button
-                            text="UDP"
-                            height="auto"
-                            fontSize="${this.fontSizeText}"
-                    ></ik-button>
+                            @ik-button:click=${() => _emit(this, "ik-check-form-pre-creation:click",{type: c})}
+                        ></ik-button>
+                    `)}
                 </div>
             </div>
         `;

@@ -28,6 +28,7 @@ HTTP.args = {
             {
                 type: 'text',
                 title: 'URL',
+                value: '',
                 placeholder: 'http://my-website.com',
             }
         ],
@@ -35,6 +36,7 @@ HTTP.args = {
             {
                 type: 'select',
                 title: 'Method',
+                value: 'get',
                 selectOptions: [
                     { value: 'get', label: 'GET' },
                     { value: 'post', label: 'POST' },
