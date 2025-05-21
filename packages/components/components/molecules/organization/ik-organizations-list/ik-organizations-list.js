@@ -26,6 +26,15 @@ class IkOrganizationsList extends LitElement {
         this.organizationsList = [];
     }
 
+    _emit(eventName, data) {
+        console.log(data);
+        this.dispatchEvent(new CustomEvent(eventName, {
+            detail: data,
+            bubbles: true,
+            composed: true
+        }));
+    }
+
     render() {
         return html`
             <div 
@@ -46,11 +55,13 @@ class IkOrganizationsList extends LitElement {
                                     fontSizeTextContent=${this.fontSizeOrgaTextContent}
                                     iconSize=${this.iconSize}
                                     width=${this.orgaWidth}
+                                    @click-settings=${() => this._emit('click-settings-organization',{organization: organization})}
+                                    @click-leave=${() => this._emit('click-leave-organization',{organization: organization})}
                             ></ik-organization>
                         `
                     )}
                 </div>
-                <ik-button type="icon" icon="material-symbols:add-circle-outline-rounded" iconSize=${this.buttonSize}></ik-button>
+                <ik-button type="icon" icon="material-symbols:add-circle-outline-rounded" iconSize=${this.buttonSize} @click=${() => this._emit('click-add-organization',{})}></ik-button>
             </div>
         `;
     }
