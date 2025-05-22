@@ -17,6 +17,7 @@ class IkInput extends LitElement {
         selectOptions: { type: Array },
         inputType: { type: String },
         inputType2: { type: String },
+        info: { type: String },
     };
 
     constructor() {
@@ -34,6 +35,7 @@ class IkInput extends LitElement {
         this.selectOptions = [];
         this.inputType = 'text';
         this.inputType2 = 'text';
+        this.info = '';
     }
 
     addValue(value) {
@@ -68,6 +70,7 @@ class IkInput extends LitElement {
                     type=${this.inputType}
                     .value=${this.value}
                     @input=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
+                    title=${this.info}
                 />
             `
         } else if(this.type === "textarea"){
@@ -76,6 +79,7 @@ class IkInput extends LitElement {
                     placeholder="${this.placeholder}"
                     .value=${this.value}
                     @input=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
+                    title=${this.info}
                 ></textarea>
             `
         } else if(this.type === "select"){
@@ -95,12 +99,14 @@ class IkInput extends LitElement {
                                 type=${this.inputType}
                                 .value=${this.value}
                                 @input=${(e) => this.value = e.target.value}
+                                title=${this.info}
                         />
                         <input
                                 placeholder="${this.placeholder2}"
                                 type=${this.inputType2}
                                 .value=${this.value2}
                                 @input=${(e) => this.value2 = e.target.value}
+                                title=${this.info}
                         />
                         <ik-button
                             class="btn"
@@ -119,6 +125,7 @@ class IkInput extends LitElement {
                                     type=${this.inputType2}
                                     value="${v.value}"
                                     @input=${(e) => this.updateValue(v, e.target.value)}
+                                    title=${this.info}
                                 />
                                 <ik-button
                                         text="Remove"
