@@ -12,6 +12,7 @@ class IkUserAccount extends LitElement {
         showPasswordModal: {type: Boolean},
         email: {type: String},
         width: {type: String},
+        errorMessage: {type: String},
     };
 
     constructor() {
@@ -25,10 +26,13 @@ class IkUserAccount extends LitElement {
         this.oldPassword = '';
         this.newPassword = '';
         this.width = '20em';
+        this.errorMessage = '';
     }
 
     togglePasswordModal() {
+        this.errorMessage = '';
         this.showPasswordModal = !this.showPasswordModal;
+        _emit(this, "ik-user-account:click-modal",{});
     }
 
     renderPasswordModal() {
@@ -45,6 +49,7 @@ class IkUserAccount extends LitElement {
                           fontSize=${this.fontSizeText} 
                           height="auto" 
                           width=${this.modalInputWidth}
+                          info="The password need 6–128 characters, with at least one uppercase letter, one lowercase letter, one number, and one special character"
                 ></ik-input>
                 <ik-input inputType="password" 
                           .value=${this.newPassword}
@@ -53,7 +58,9 @@ class IkUserAccount extends LitElement {
                           fontSize=${this.fontSizeText} 
                           height="auto" 
                           width=${this.modalInputWidth}
+                          info="The password need 6–128 characters, with at least one uppercase letter, one lowercase letter, one number, and one special character"
                 ></ik-input>
+                <div class="error-message">${this.errorMessage}</div>
                 <div class="modal-actions">
                     <ik-button text="Cancel" @ik-button:click=${this.togglePasswordModal} fontSize=${this.fontSizeSmallText} width="auto" height="auto"></ik-button>
                     <ik-button text="Confirm" type="blue" fontSize=${this.fontSizeSmallText} width="auto" height="auto" @ik-button:click=${() => _emit(this,'ik-user-account:click-confirm',{oldPassword: this.oldPassword ,newPassword: this.newPassword })}></ik-button>
@@ -157,6 +164,10 @@ class IkUserAccount extends LitElement {
                 justify-content: flex-end;
                 gap: 1em;
                 margin-top: 1em;
+            }
+            
+            .error-message {
+                color: var(--text-red);
             }
         `
     ]
