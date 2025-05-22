@@ -3,19 +3,89 @@ import '@components-lit/molecules/organization/ik-organizations-list/ik-organiza
 import '@components-lit/molecules/organization/ik-organization-form-creation/ik-organization-form-creation.js'
 import '@components-lit/molecules/organization/ik-organization-form-update/ik-organization-form-update.js'
 import '@components-lit/atoms/ik-button/ik-button.js'
+import {OrganisationsApi} from "@client/OrganisationsApi.js";
+import {UsersApi} from "@client/UsersApi.js";
+
 export default {
   data(){
     return {
       modal: undefined,
       organizations: [
-        {name: "Orga de test", members: ["m1","m2"]}
+        {id: "1", name: "Orga de test", members: ["m1","m2"]}
       ],
-      activeOrganization: {}
+      activeOrganization: {},
+      errorMessage: '',
+      organizationsApi: new OrganisationsApi(),
+      usersApi: new UsersApi()
     }
+  },
+  async mounted() {
+    // const simpleOrgaList = await this.organizationsApi.listOrgsV1()
+    // this.organizations = simpleOrgaList.map(async org => {
+    //   await this.organizationsApi.getOrgV1({organisationId: org.id})
+    // })
   },
   methods: {
     toggleModal(state){
       this.modal = state;
+      this.errorMessage = '';
+    },
+    async updateOrganization(newData) {
+      const old = this.activeOrganization;
+
+      // if (old.name !== newData.name) {
+      //   await this.organizationsApi.renameOrgV1({
+      //     organisationId: newData.id,
+      //     organisationInput: newData.name
+      //   });
+      // }
+      //
+      // const oldMembers = old.members;
+      // const newMembers = newData.members;
+      //
+      // const added = newMembers.filter(m => !oldMembers.includes(m));
+      // for (const member of added) {
+      //   await this.organizationsApi.addOrgMemberV1({
+      //     organisationId: newData.id,
+      //     body: member.email,
+      //   });
+      // }
+      //
+      // const removed = oldMembers.filter(m => !newMembers.includes(m));
+      // for (const member of removed) {
+      //   await this.organizationsApi.removeOrgMemberV1({
+      //     organisationId: newData.id,
+      //     userId: member.id
+      //   });
+      // }
+
+      this.toggleModal(undefined);
+      this.$refs.orgList.requestUpdate();
+    },
+    async deleteOrganization() {
+      const confirmed = window.confirm("Are you sure you want to delete this organization?");
+      if(confirmed) {
+        // await this.organizationsApi.deleteOrgV1({organisationId: this.activeOrganization.id});
+        this.toggleModal(undefined);
+        this.$refs.orgList.requestUpdate();
+      }
+    },
+    async leaveOrganization(organization) {
+      const confirmed = window.confirm("Are you sure you want to leave this organization?");
+      if(confirmed) {
+        // const user = await this.usersApi.getMeV1();
+        // await this.organizationsApi.removeOrgMemberV1({organisationId: organization.id, userId: user.id});
+        this.$refs.orgList.requestUpdate();
+      }
+    },
+    async addOrganization(organization) {
+      if (organization.name !== '') {
+        // await this.organizationsApi.createOrgV1({organisationInput: organization});
+        this.toggleModal(undefined);
+        this.$refs.orgList.requestUpdate();
+      } else {
+        this.errorMessage = "You need to enter a name to create an organization.";
+      }
     }
   }
 }
@@ -23,8 +93,10 @@ export default {
 
 <template>
   <ik-organizations-list
-    @click-add-organization="() => modal = 'creation'"
-    @click-settings-organization="(e) => {this.activeOrganization = e.detail.organization; modal = 'update'}"
+    ref="orgList"
+    @ik-organizations-list:click-add="() => this.modal = 'creation'"
+    @ik-organization-list:click-settings="(e) => {this.activeOrganization = e.detail.organization; this.modal = 'update'}"
+    @ik-organization-list:click-leave="(e) => this.leaveOrganization(e.detail.organization)"
     :organizationsList="this.organizations"
     fontSizeOrgaTitle="2.5em"
   ></ik-organizations-list>
@@ -32,10 +104,15 @@ export default {
     <div class="modal-backdrop" @click="() => this.toggleModal(undefined)"></div>
     <div class="modal">
       <ik-button type="icon" icon="material-symbols:close-rounded" iconSize="1.3em" style="margin: -1em" @click="() => this.toggleModal(undefined)"></ik-button>
-      <ik-organization-form-creation v-if="modal === 'creation'"></ik-organization-form-creation>
+      <ik-organization-form-creation v-if="modal === 'creation'"
+        :errorMessage="errorMessage"
+        @ik-organization-form-creation:click-create="(e) => this.addOrganization(e.detail)"
+      ></ik-organization-form-creation>
       <ik-organization-form-update v-if="modal === 'update'"
         :nameOrga="this.activeOrganization.name"
         :membersOrga="this.activeOrganization.members"
+         @ik-organization-form-update:click-save="(e) => this.updateOrganization(e.detail)"
+         @ik-organization-form-update:click-delete="() => this.deleteOrganization()"
       ></ik-organization-form-update>
     </div>
   </div>

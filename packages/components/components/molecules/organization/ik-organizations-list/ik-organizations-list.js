@@ -57,7 +57,7 @@ class IkOrganizationsList extends LitElement {
                         type="icon" 
                         icon="material-symbols:add-circle-outline-rounded" 
                         iconSize=${this.buttonSize} 
-                        @ik-button=${() => _emit(this,"ik-organizations-list:click-add",{})}></ik-button>
+                        @ik-button:click=${() => _emit(this,"ik-organizations-list:click-add",{})}></ik-button>
             </div>
         `;
     }
