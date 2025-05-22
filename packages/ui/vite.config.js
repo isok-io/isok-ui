@@ -9,7 +9,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@components-lit': path.resolve(__dirname, '../components/components')
+      '@components-lit': path.resolve(__dirname, '../components/components'),
+      '@client': path.resolve(__dirname, '../client/src/apis'),
     }
   }
 })
