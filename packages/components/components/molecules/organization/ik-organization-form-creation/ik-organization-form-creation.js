@@ -7,6 +7,7 @@ class IkOrganizationFormCreation extends LitElement {
     static properties = {
         fontSizeTitle: {type: String},
         fontSizeText: {type: String},
+        errorMessage: {type: String},
     };
 
     constructor() {
@@ -14,6 +15,7 @@ class IkOrganizationFormCreation extends LitElement {
         this.fontSizeTitle = '50px'
         this.fontSizeText = '25px'
         this.nameOrga = '';
+        this.errorMessage = '';
     }
 
     render() {
@@ -33,6 +35,7 @@ class IkOrganizationFormCreation extends LitElement {
                         .value=${this.nameOrga}
                         @ik-input:change=${(e) => this.nameOrga = e.detail.value}
                 ></ik-input>
+                <div class="error-message">${this.errorMessage}</div>
                 <ik-button 
                         text="Create" 
                         height="auto"
@@ -58,6 +61,10 @@ class IkOrganizationFormCreation extends LitElement {
                 font-size: var(--ofc-font-size-title);
                 font-family: Jura, sans-serif;
                 font-weight: bold;
+            }
+            
+            .error-message {
+                color: var(--text-red);
             }
         `
     ]
