@@ -17,6 +17,7 @@ class IkAuth extends LitElement {
         buttonHeight: {type: String},
         align: {type: String},
         methods: {type: Array},
+        errorMessage: {type: String},
     };
 
     constructor() {
@@ -33,6 +34,7 @@ class IkAuth extends LitElement {
             email: '',
             password: '',
         }
+        this.errorMessage = '';
     }
 
     renderButtons(prefix) {
@@ -98,8 +100,10 @@ class IkAuth extends LitElement {
                     fontSize=${this.fontSizeText}
                     inputType="password"
                     .value=${this.data.password}
+                    info="The password need 6–128 characters, with at least one uppercase letter, one lowercase letter, one number, and one special character"
                     @ik-input:change=${(e) => this.data.password = e.detail.value}
                 ></ik-input>
+                <div class="error-message">${this.errorMessage}</div>
                 <div class="buttons-form">
                     <ik-button
                         class="validate-btn"
@@ -130,7 +134,7 @@ class IkAuth extends LitElement {
                 <span class="title">Log In</span>
                 <div class="text">
                     <span>New to IsOk ?</span>
-                    <a class="link">Join now</a>
+                    <a class="link" @click=${() => _emit(this, 'ik-auth:click-signup',{})}>Join now</a>
                 </div>
                 ${ this.type === 'login-menu' 
                     ? this.renderButtons("Log in")
@@ -146,7 +150,7 @@ class IkAuth extends LitElement {
                 <span class="title">Sign up</span>
                 <div class="text">
                     <span>You have an account ?</span>
-                    <a class="link">Log In</a>
+                    <a class="link" @click=${() => _emit(this, 'ik-auth:click-login',{})}>Log In</a>
                 </div>
                 ${this.type === 'signup-menu'
                     ? this.renderButtons("Sign up")
@@ -226,6 +230,14 @@ class IkAuth extends LitElement {
             .back-btn {
                 grid-column: 3;
                 justify-self: end;
+            }
+            
+            .error-message {
+                color: var(--text-red);
+                width: 50%;
+                min-height: 2.8em; /* ou 2 lignes de texte, ajustable */
+                display: block;
+                line-height: 1.4em;
             }
         `
     ]

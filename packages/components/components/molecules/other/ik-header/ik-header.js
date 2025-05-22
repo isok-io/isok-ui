@@ -13,6 +13,7 @@ class IkHeader extends LitElement {
         iconSize: { type: String },
         connected: { type: Boolean },
         width: { type: String },
+        valueSelect: { type: String },
     }
 
 
@@ -47,6 +48,7 @@ class IkHeader extends LitElement {
                             .selectOptions=${this.optionsSelect}
                             height="auto"
                             width=${this.widthSelect}
+                            .value=${this.valueSelect}
                             @ik-input:change=${(e) => _emit(this, "ik-header:change-organization", e.detail)}
                         ></ik-input>
                     ` : html``}

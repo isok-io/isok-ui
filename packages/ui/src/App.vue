@@ -5,11 +5,17 @@ export default {
   data() {
     return {
       theme: 'light',
+      organizations: [
+        { value: 'orga1', label: 'MyOrganisation' },
+        { value: 'orga2', label: 'OtherOrganisation' },
+      ],
+      organizationSelect: 'org1',
     };
   },
   mounted() {
-    this.theme = localStorage.getItem('theme') || 'light';
+    this.theme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light') || 'light';
     this.setTheme(this.theme);
+    this.setOrganization(localStorage.getItem('organization') || this.organizations[0].value);
   },
   methods: {
     toggleTheme() {
@@ -20,6 +26,13 @@ export default {
     setTheme(theme) {
       document.documentElement.classList.remove('light', 'dark');
       document.documentElement.classList.add(theme);
+    },
+    setOrganization(organization) {
+      this.organizationSelect = organization;
+      localStorage.setItem('organization', organization);
+    },
+    isConnected(){
+      return !!localStorage.getItem('user-token');
     }
   }
 };
@@ -29,21 +42,19 @@ export default {
   <div class="app">
     <ik-header
         class="header"
-        :optionsSelect="[
-          { value: 'orga1', label: 'MyOrganisation' },
-          { value: 'orga2', label: 'OtherOrganisation' },
-        ]"
+        :optionsSelect="this.organizations"
         fontSizeTitle="4em"
         fontSizeSelect="1.2em"
         widthSelect="20vw"
         iconSize="1.7em"
-        connected=true
         width="97vw"
+        :valueSelect="this.organizationSelect"
         :iconTheme="this.theme === 'dark' ? 'material-symbols:dark-mode-outline-rounded' : 'material-symbols:light-mode-outline-rounded'"
-        @change-theme="toggleTheme()"
-        @click-account="$router.push('/account')"
-        @change-organization-value="(e) => console.log('change-organization-value', e)"
-        @click-home="$router.push('/')"
+        :connected="this.isConnected()"
+        @ik-header:click-theme="toggleTheme()"
+        @ik-header:click-account="$router.push('/account')"
+        @ik-header:change-organization="(e) => this.setOrganization(e.detail.value)"
+        @ik-header:click-title="$router.push('/')"
     ></ik-header>
     <router-view />
   </div>
