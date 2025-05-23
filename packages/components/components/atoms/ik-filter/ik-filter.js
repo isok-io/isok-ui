@@ -87,6 +87,11 @@ class IkFilter extends LitElement {
                 width: var(--flt-width-title);
             }
             
+            .ik-filter-title-text {
+                height: 100%;
+                font-size: var(--flt-font-size);
+            }
+            
             .ik-filter-input {
                 display: flex;
                 flex-direction: row;

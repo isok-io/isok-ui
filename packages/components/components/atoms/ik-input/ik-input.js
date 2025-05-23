@@ -65,7 +65,7 @@ class IkInput extends LitElement {
     renderInput(){
         if(this.type === "text"){
             return html`
-                <input class="ipt input"
+                <input class="input"
                     placeholder="${this.placeholder}"
                     type=${this.inputType}
                     .value=${this.value}
@@ -75,7 +75,7 @@ class IkInput extends LitElement {
             `
         } else if(this.type === "textarea"){
             return html`
-                <textarea class="ipt textarea"
+                <textarea class="textarea"
                     placeholder="${this.placeholder}"
                     .value=${this.value}
                     @input=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
@@ -84,7 +84,7 @@ class IkInput extends LitElement {
             `
         } else if(this.type === "select"){
             return html`
-                <select class="ipt select"
+                <select class="select"
                     @change=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
                 >
                     ${this.selectOptions.map(opt => html`<option value="${opt.value}" ?selected=${this.value === opt.value}>${opt.label}</option>`)}
@@ -109,7 +109,6 @@ class IkInput extends LitElement {
                                 title=${this.info}
                         />
                         <ik-button
-                            class="btn"
                             text="Add"
                             fontSize=${this.fontSize}
                             width="4.5em"
@@ -150,7 +149,6 @@ class IkInput extends LitElement {
                             @input=${(e) => this.value = e.target.value}
                         />
                         <ik-button
-                            class="btn"
                             text="Add"
                             fontSize=${this.fontSize}
                             width="4.5em"
@@ -201,6 +199,7 @@ class IkInput extends LitElement {
                 flex-direction: column;
                 gap: 0.5em;
                 font-family: Inter, sans-serif;
+                font-size: var(--ipt-font-size);
             }
             
             .ik-input .input, .ik-input .textarea, .ik-input .select {
@@ -216,6 +215,7 @@ class IkInput extends LitElement {
 
             .ik-input .double, .ik-input .list {
                 width: var(--ipt-width);
+                font-size: var(--ipt-font-size);
                 display: flex;
                 flex-direction: column;
                 gap: 1em;
