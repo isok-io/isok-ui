@@ -177,7 +177,7 @@ class IkChecksList extends LitElement {
             }
             
             .checks {
-                max-height: 70vh;
+                max-height: 60vh;
                 overflow: auto;
             }
         `

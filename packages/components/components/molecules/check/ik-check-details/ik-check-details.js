@@ -108,7 +108,7 @@ class IkCheckDetails extends LitElement {
                     <ik-button type="icon" 
                                icon="material-symbols:edit-square-outline-rounded" 
                                iconSize=${this.fontSizeText}
-                               @ik-button="${() => _emit(this, 'ik-check-details:click-edit', {check: this.data})}"
+                               @ik-button:click=${() => _emit(this, 'ik-check-details:click-edit', {check: this.data})}
                     ></ik-button>
                 </div>
                 <ik-details-display 
@@ -131,7 +131,7 @@ class IkCheckDetails extends LitElement {
                            height="auto" 
                            text="Delete check" 
                            fontSize=${this.fontSizeSmallText}
-                           @ik-button:click=${() => _emit(this, "ik-check-details:click-delete", {check: this.data})}}
+                           @ik-button:click=${() => _emit(this, "ik-check-details:click-delete", {check: this.data})}
                 ></k-button>
             </div>
         `;
