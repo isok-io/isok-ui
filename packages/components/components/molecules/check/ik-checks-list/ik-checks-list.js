@@ -110,7 +110,9 @@ class IkChecksList extends LitElement {
                         fontSize=${this.fontSizeFilterBar} 
                         searchBarWidth=${this.searchBarWidth}
                         valueSelect=${this.groupByValue}
-                        @group-change=${(e) => this.groupByValueChange(e.detail.value)}
+                        @ik-filter-menu:change-group=${(e) => this.groupByValueChange(e.detail.value)}
+                        @ik-filter-menu:change-checkin=${(e) => _emit(this, "ik-checks-list:change-checkin", e.detail)}
+                        @ik-filter-menu:change-research=${(e) => _emit(this, "ik-checks-list:change-research", e.detail)}
                 ></ik-filters-menu>
                 <div class="checks">
                     ${this.groupBy(this.groupByValue).map(checkGroup => 
@@ -175,7 +177,7 @@ class IkChecksList extends LitElement {
             }
             
             .checks {
-                max-height: 70vh;
+                max-height: 60vh;
                 overflow: auto;
             }
         `

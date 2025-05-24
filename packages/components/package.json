@@ -13,8 +13,11 @@
   "description": "",
   "dependencies": {
     "chart.js": "^4.4.9",
+    "choices.js": "^11.1.0",
     "iconify-icon": "^3.0.0",
-    "lit": "^3.3.0"
+    "lit": "^3.3.0",
+    "parse-duration": "^2.1.4",
+    "select2": "^4.1.0-rc.0"
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",

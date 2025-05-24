@@ -9,6 +9,8 @@ class IkCheckFormPostCreation extends LitElement {
         fontSizeTitle: { type: String },
         fontSizeText: { type: String },
         width: { type: String },
+        errorMessage: { type: String },
+        zoneOptions: { type: Array },
     }
 
 
@@ -19,13 +21,16 @@ class IkCheckFormPostCreation extends LitElement {
         this.fontSizeText = "25px";
         this.width = "660px";
         this.data = {
-            name : "",
-            zone : "all",
-            interval: ""
+            name : null,
+            zones : ["all"],
+            interval: null
         }
+        this.errorMessage = null;
+        this.zoneOptions = [];
     }
 
     render() {
+        this.zoneOptions.push({value: 'all', label: 'All'});
         return html`
             <div class="ik-check-form-post-creation"
                 style="
@@ -47,16 +52,13 @@ class IkCheckFormPostCreation extends LitElement {
                     ></ik-input>
                     <ik-input
                         title="Zone"
-                        type="select"
-                        .value=${this.data.zone}
-                        .selectOptions = ${[
-                            { value: 'all', label: 'All' },
-                            { value: 'fr', label: 'France' },
-                        ]}
+                        type="multiselect"
+                        .values=${this.data.zones}
+                        .selectOptions= ${this.zoneOptions}
                         heigth="auto"
                         width="auto"
                         fontSize=${this.fontSizeText}
-                        @ik-input:change=${(e) => this.data.zone = e.detail.value}
+                        @ik-input:change=${(e) => this.data.zones = e.detail.values}
                     ></ik-input>
                     <ik-input
                         title="Interval"
@@ -68,6 +70,7 @@ class IkCheckFormPostCreation extends LitElement {
                         @ik-input:change=${(e) => {this.data.interval = e.detail.value}}
                     ></ik-input>
                 </div>
+                <div class="error-message">${this.errorMessage}</div>
                 <ik-button
                     text="Create"
                     height="auto"
@@ -98,6 +101,10 @@ class IkCheckFormPostCreation extends LitElement {
                 display: flex;
                 flex-direction: column;
                 gap: 1em;
+            }
+            .error-message {
+                color: var(--text-red);
+                font-family: Inter, sans-serif;
             }
         `
     ];

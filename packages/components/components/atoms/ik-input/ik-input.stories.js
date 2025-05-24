@@ -74,9 +74,23 @@ const SelectTemplate = (args) => {
 
 export const Select = SelectTemplate.bind({});
 Select.args = {
-    placeholder: 'Email...',
+    placeholder: 'Pet...',
     type: 'select',
     width: 'auto',
+    height: 'auto',
+    fontSize: '25px',
+    selectOptions: [
+        { value: 'dog', label: 'Dog' },
+        { value: 'cat', label: 'Cat' },
+        { value: 'rabbit', label: 'Rabbit' },
+    ],
+};
+
+export const MultiSelect = SelectTemplate.bind({});
+MultiSelect.args = {
+    placeholder: 'Pets...',
+    type: 'multiselect',
+    width: '50em',
     height: 'auto',
     fontSize: '25px',
     selectOptions: [

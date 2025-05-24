@@ -2,6 +2,8 @@ import {css, html, LitElement} from "lit";
 import '../ik-button/ik-button.js';
 import {_emit} from "../../../utils/event";
 
+import Choices from 'choices.js';
+
 class IkInput extends LitElement {
     static properties = {
         placeholder: {type: String},
@@ -38,6 +40,80 @@ class IkInput extends LitElement {
         this.info = '';
     }
 
+    firstUpdated() {
+        if (this.type === "multiselect") {
+            const select = this.renderRoot.querySelector('#choices');
+            this.choicesInstance = new Choices(select, {
+                removeItemButton: true,
+                placeholder: true,
+                placeholderValue: this.placeholder,
+                searchEnabled: true,
+                itemSelectText: '',
+                position: 'auto',
+                shouldSort: false,
+                callbackOnCreateTemplates: function(template) {
+                    return {
+                        item: (classNames, data) => {
+                            return template(`
+                            <div class="choices__item ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}"
+                                data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''}
+                                ${data.disabled ? 'aria-disabled="true"' : ''}>
+                                ${data.label}
+                                <button type="button" class="button-remove" data-button aria-label="Remove item">
+                                    ✕
+                                </button>
+                            </div>
+                        `);
+                        }
+                    };
+                }
+            });
+
+            select.addEventListener('change', (e) => {
+                let selected = Array.from(select.selectedOptions).map(opt => opt.value);
+
+                if(e.detail.value === "all"){
+                    selected.filter(v => v !== 'all').forEach(v => this.choicesInstance.removeActiveItemsByValue(v))
+                    selected = ['all'];
+                } else if (selected.length === 0 || (selected.length === 1 && selected[0] === 'all')) {
+                    if (!selected.includes('all')) {
+                        this.choicesInstance.setChoiceByValue('all');
+                        selected = ['all'];
+                    }
+                } else {
+                    if (selected.includes('all')) {
+                        this.choicesInstance.removeActiveItemsByValue('all');
+                        selected = selected.filter(v => v !== 'all');
+                    }
+                }
+
+                this.values = selected;
+                _emit(this, "ik-input:change", { values: selected });
+            });
+
+
+            const container = this.renderRoot.querySelector('.choices');
+            const input = container.querySelector('input');
+
+            input.addEventListener('focus', () => {
+                container.classList.add('dropdown-open');
+            });
+
+            input.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (!container.contains(this.shadowRoot.activeElement)) {
+                        container.classList.remove('dropdown-open');
+                    }
+                }, 150);
+            });
+
+            container.addEventListener('mousedown', e => {
+                e.preventDefault();
+                input.focus();
+            });
+        }
+    }
+
     addValue(value) {
         this.values = [...this.values, value];
         this.value = '';
@@ -65,7 +141,7 @@ class IkInput extends LitElement {
     renderInput(){
         if(this.type === "text"){
             return html`
-                <input class="ipt input"
+                <input class="input"
                     placeholder="${this.placeholder}"
                     type=${this.inputType}
                     .value=${this.value}
@@ -75,7 +151,7 @@ class IkInput extends LitElement {
             `
         } else if(this.type === "textarea"){
             return html`
-                <textarea class="ipt textarea"
+                <textarea class="textarea"
                     placeholder="${this.placeholder}"
                     .value=${this.value}
                     @input=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
@@ -84,12 +160,20 @@ class IkInput extends LitElement {
             `
         } else if(this.type === "select"){
             return html`
-                <select class="ipt select"
+                <select class="select"
                     @change=${(e) => _emit(this, "ik-input:change", {value: e.target.value})}
                 >
                     ${this.selectOptions.map(opt => html`<option value="${opt.value}" ?selected=${this.value === opt.value}>${opt.label}</option>`)}
                 </select>
             `
+        } else if (this.type === "multiselect") {
+            return html`
+            <select id="choices" multiple>
+              ${this.selectOptions.map(opt => html`
+                <option value="${opt.value}" ?selected=${this.values.includes(opt.value)}>${opt.label}</option>
+              `)}
+            </select>
+          `;
         } else if(this.type === "double"){
             return html`
                 <div class="double">
@@ -109,7 +193,6 @@ class IkInput extends LitElement {
                                 title=${this.info}
                         />
                         <ik-button
-                            class="btn"
                             text="Add"
                             fontSize=${this.fontSize}
                             width="4.5em"
@@ -150,7 +233,6 @@ class IkInput extends LitElement {
                             @input=${(e) => this.value = e.target.value}
                         />
                         <ik-button
-                            class="btn"
                             text="Add"
                             fontSize=${this.fontSize}
                             width="4.5em"
@@ -201,6 +283,7 @@ class IkInput extends LitElement {
                 flex-direction: column;
                 gap: 0.5em;
                 font-family: Inter, sans-serif;
+                font-size: var(--ipt-font-size);
             }
             
             .ik-input .input, .ik-input .textarea, .ik-input .select {
@@ -216,6 +299,7 @@ class IkInput extends LitElement {
 
             .ik-input .double, .ik-input .list {
                 width: var(--ipt-width);
+                font-size: var(--ipt-font-size);
                 display: flex;
                 flex-direction: column;
                 gap: 1em;
@@ -253,6 +337,88 @@ class IkInput extends LitElement {
                 grid-template-columns: 2fr auto;
                 gap: 0.5em;
                 align-items: center;
+            }
+
+            .choices {
+                width: var(--ipt-width);
+                font-size: var(--ipt-font-size);
+            }
+
+            .choices__inner {
+                height: var(--ipt-height);
+                width: var(--ipt-width);
+                background-color: var(--ipt-bg, #CECECE);
+                border: 2px solid var(--border);
+                border-radius: 5px;
+                padding: 0.3em;
+                color: var(--text);
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+            }
+
+            .choices__input {
+                font-size: var(--ipt-font-size);
+                color: var(--text);
+                background: transparent;
+                border: none;
+            }
+
+            .choices__list--multiple {
+                display: flex;
+                flex-direction: row;
+                gap: 0.2em;
+            }
+
+            .choices__list--multiple .choices__item {
+                background-color: transparent;
+                padding: 0 5px;
+                margin: 0 3px;
+                color: var(--text);
+                border: 1px solid var(--border);
+                border-radius: 5px;
+                display: flex;
+                flex-direction: row;
+                gap: 0.4em;
+            }
+
+            .choices__list--dropdown {
+                background-color: var(--ipt-bg, #CECECE);
+                color: var(--text);
+                border: 1px solid var(--border);
+                border-radius: 5px;
+                z-index: 100;
+            }
+
+            .choices__item--selectable {
+                padding: 0.3em;
+            }
+
+            .choices__item--selectable.is-highlighted {
+                background-color: var(--tag-bg);
+            }
+
+            .button-remove {
+                background: none;
+                border: none;
+                color: var(--text);
+                font-size: 0.8em;
+                cursor: pointer;
+                padding: 0;
+                display: flex;
+                align-items: center;
+            }
+
+            .button-remove:hover {
+                color: var(--text-hover);
+            }
+
+            .choices__list--dropdown {
+                display: none;
+            }
+
+            .choices.dropdown-open .choices__list--dropdown {
+                display: block;
             }
         `
     ]

@@ -65,13 +65,14 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   transition: background-color 0.3s ease;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: scroll;
 }
 
 .header {

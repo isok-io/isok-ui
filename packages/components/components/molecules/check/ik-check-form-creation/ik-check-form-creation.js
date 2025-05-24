@@ -5,65 +5,65 @@ import {_emit} from "../../../../utils/event";
 
 class IkCheckFormCreation extends LitElement {
     static properties = {
+        schema: {type: Object},
         data: {type: Object},
         fontSizeTitle: { type: String },
         fontSizeText: { type: String },
         fontSizeTextAdvanced: { type: String },
         width: { type: String },
+        errorMessage: { type: String },
     }
 
 
     constructor() {
         super();
-        this.data = undefined;
+        this.schema = undefined;
         this.fontSizeTitle = "50px";
         this.fontSizeText = "25px";
         this.fontSizeTextAdvanced = "20px";
         this.width = "660px";
+        this.errorMessage = "";
+    }
+
+    normalizeKey(label = "") {
+        return label.trim().toLowerCase().replace(/\s+/g, "_");
     }
 
     updateInputValue(targetInput, newValue) {
-        const update = (inputs) => {
-            const index = inputs.findIndex(i => i === targetInput);
-            if (index !== -1) {
-                if (Array.isArray(newValue)) {
-                    inputs[index] = {
-                        ...inputs[index],
-                        values: newValue
-                    };
-                } else {
-                    inputs[index] = {
-                        ...inputs[index],
-                        value: newValue
-                    };
-                }
-            }
-        };
+        const type = this.schema.type;
+        const key = targetInput.title.trim().toLowerCase().replace(/\s+/g, "_");
 
-        update(this.data.inputs);
-        update(this.data.inputsAdvanced);
+        if (!this.data.kind || !this.data.kind[type]) return;
+
+        this.data.kind[type][key] = newValue;
         this.requestUpdate();
     }
-
-
 
     openToggle() {
         this.toggleOpen = !this.toggleOpen;
         this.requestUpdate();
     }
 
+    getData(key){
+        return this.data.kind[this.schema.type][this.normalizeKey(key)];
+    }
+
     renderInputText(dataInput, fontSize){
-        return html`
-            <ik-input
-                    .title=${dataInput.title}
-                    .placeholder=${dataInput.placeholder}
-                    .value=${dataInput.value}
-                    height="auto"
-                    .width=${this.width}
-                    fontSize=${fontSize}
-                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
-            ></ik-input>
-        `
+        if(dataInput.kind.variant === "Area"){
+            return this.renderInputArea(dataInput, fontSize);
+        } else {
+            return html`
+                <ik-input
+                        .title=${dataInput.title}
+                        .placeholder=${dataInput.kind.placeholder}
+                        .value=${this.getData(dataInput.title) || dataInput.kind.default_value}
+                        height="auto"
+                        .width=${this.width}
+                        fontSize=${fontSize}
+                        @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
+                ></ik-input>
+            `
+        }
     }
 
     renderInputArea(dataInput, fontSize){
@@ -71,8 +71,8 @@ class IkCheckFormCreation extends LitElement {
             <ik-input
                     type="textarea"
                     .title=${dataInput.title}
-                    .placeholder=${dataInput.placeholder}
-                    .value=${dataInput.value}
+                    .placeholder=${dataInput.kind.placeholder}
+                    .value=${dataInput.kind.default_value}
                     height="auto"
                     .width=${this.width}
                     fontSize=${fontSize}
@@ -86,8 +86,8 @@ class IkCheckFormCreation extends LitElement {
             <ik-input
                     .title=${dataInput.title}
                     type="select"
-                    .selectOptions=${dataInput.selectOptions}
-                    .value=${dataInput.value}
+                    .selectOptions=${dataInput.kind.selectOptions}
+                    .value=${dataInput.kind.default_value}
                     height="auto"
                     width="auto"
                     fontSize=${fontSize}
@@ -102,9 +102,9 @@ class IkCheckFormCreation extends LitElement {
                 <ik-input
                         .title=${dataInput.title}
                         type="double"
-                        .placeholder=${dataInput.placeholder}
-                        .placeholder2=${dataInput.placeholder2}
-                        .values=${dataInput.values}
+                        .placeholder=${dataInput.kind.keyPlaceholder}
+                        .placeholder2=${dataInput.kind.valuePlaceholder}
+                        .values="[]"
                         height="1.8em"
                         width=${this.width}
                         fontSize=${fontSize}
@@ -118,11 +118,10 @@ class IkCheckFormCreation extends LitElement {
     renderInputs(dataInputs, fontSize) {
         return html`
             ${dataInputs.map(item => {
-                switch(item.type) {
-                    case 'text': return this.renderInputText(item, fontSize);
-                    case 'area': return this.renderInputArea(item, fontSize);
-                    case 'select': return this.renderInputSelect(item, fontSize);
-                    case 'key-value': return this.renderInputKeyValue(item, fontSize);
+                switch(item.kind.type) {
+                    case 'Text': return this.renderInputText(item, fontSize);
+                    case 'Select': return this.renderInputSelect(item, fontSize);
+                    case 'KeyValue': return this.renderInputKeyValue(item, fontSize);
                 }
             })}
         `
@@ -137,14 +136,14 @@ class IkCheckFormCreation extends LitElement {
                     --cfc-width: ${this.width};
                 "
             >
-                <span class="title">New check - ${this.data.type}</span>
+                <span class="title">New check - ${this.schema.type}</span>
                 
                 <div class="form">
                     <div class="basic-inputs-zone">
-                        ${this.renderInputs(this.data.inputs, this.fontSizeText)}
+                        ${this.renderInputs(this.schema.inputs, this.fontSizeText)}
                     </div>
                     
-                    ${this.data.inputsAdvanced || this.data.inputsAdvanced?.length > 0 ? html`
+                    ${this.schema.inputs_advanced || this.schema.inputs_advanced?.length > 0 ? html`
                         <div class="toggle" @click=${this.openToggle}>
                             <span>Advanced settings</span>
                             <ik-button
@@ -162,9 +161,10 @@ class IkCheckFormCreation extends LitElement {
                     
                     ${ this.toggleOpen ? html`
                         <div class="toggle-content">
-                            ${this.renderInputs(this.data.inputsAdvanced, this.fontSizeTextAdvanced)}
+                            ${this.renderInputs(this.schema.inputs_advanced, this.fontSizeTextAdvanced)}
                         </div>
                     ` : html``}
+                    <div class="error-message">${this.errorMessage}</div>
                 </div>
                 <ik-button
                     text="Next"
@@ -217,6 +217,11 @@ class IkCheckFormCreation extends LitElement {
                 display: flex;
                 flex-direction: column;
                 gap: 1em;
+            }
+            
+            .error-message {
+                color: var(--text-red);
+                font-family: Inter, sans-serif;
             }
         `
     ];

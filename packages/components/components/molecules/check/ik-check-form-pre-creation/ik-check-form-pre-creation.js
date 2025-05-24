@@ -33,7 +33,7 @@ class IkCheckFormPreCreation extends LitElement {
                 <div class="form">
                     ${this.checksType.map((c) => html`
                         <ik-button
-                            text=${c}
+                            text=${c.toUpperCase()}
                             height="auto"
                             fontSize="${this.fontSizeText}"
                             @ik-button:click=${() => _emit(this, "ik-check-form-pre-creation:click",{type: c})}
