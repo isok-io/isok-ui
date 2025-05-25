@@ -100,7 +100,7 @@ class IkAuth extends LitElement {
                     fontSize=${this.fontSizeText}
                     inputType="password"
                     .value=${this.data.password}
-                    info="The password need 6–128 characters, with at least one uppercase letter, one lowercase letter, one number, and one special character"
+                    info="The password need 6–128 characters."
                     @ik-input:change=${(e) => this.data.password = e.detail.value}
                 ></ik-input>
                 <div class="error-message">${this.errorMessage}</div>
