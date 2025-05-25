@@ -4,128 +4,161 @@ import "@components-lit/molecules/check/ik-check-form-update/ik-check-form-updat
 import {ChecksApi} from "@client/ChecksApi.js";
 import {useRouter} from "vue-router";
 import parseDuration from "parse-duration";
+import {Configuration, RegionsApi} from "client/src/index.js";
+import {apiBase} from "../consts.js";
 
 export default {
   data(){
     return {
-      data: {},
-      data2 : {
-        name: "First check",
-        type: "Http",
-        domain: "http://domain-exemple",
-        uptime: 20,
-        responseTime: 300,
-        bars: Array.from({ length: 60 }, () => ({
-          color: ["red","yellow","green"][Math.floor(Math.random() * ["red","yellow","green"].length)],
-          data: ["Date : 03/22/1999 05:06", "Status code : 200"]
-        })),
-        latency: Array.from({ length: 20 }, () => Math.floor(Math.random() * 151) + 50),
-      },
-      checkApi: new ChecksApi(),
+      checkId: "xxx",
+      check: {},
+      checkSummary: {},
+      checkSchema: {},
+      zonesList: [],
+      data : {},
+      checkApi: new ChecksApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
+      regionsApi: new RegionsApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
       modal: false,
-      checksMeta: [],
       errorMessage: ""
     }
   },
-  mounted(){
+  async mounted() {
     this.router = useRouter();
 
-    this.data = {
-      "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+    // this.check = await this.checkApi.getCheckV1();
+    this.check = {
       "interval": 300,
       "kind": {
         "Http": {
-          "headers": [],
-          "body": "{test}",
-          "method": "POST",
-          "url": "http://domain-exemple2"
+          "body": "{}",
+          "headers": {
+            "property1": "string",
+            "property2": "string"
+          },
+          "method": "GET",
+          "url": "http://domain-exemple"
         }
       },
-      "name": "Mycheck",
-      "zones": ["all"]
-    };
+      "name": "My check",
+      "zones": [
+        "all"
+      ]
+    }
+    // this.checkSummary = await this.checkApi.getChecksSummaryV1();
+    this.checkSummary = {
+      "xxx": [
+        {
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 20
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "None"
+        },
+        {
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 2
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "Reachable"
+        },
+        {
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 4
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "Reachable"
+        },
+        {
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 50
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "ReachableUnreachable"
+        }
+      ]
+    }
 
-    // this.checksMeta = await this.checkApi.getChecksMetaV1()
-    this.checksMeta = [
-      {
-        "inputs": [
-          {
-            "kind": {
-              "default_value": null,
-              "placeholder": "https://example.com",
-              "type": "Text",
-              "variant": "Url"
-            },
-            "title": "URL"
-          }
-        ],
-        "inputs_advanced": [
-          {
-            "kind": {
-              "selectOptions": [
-                {
-                  "label": "GET",
-                  "value": "GET"
-                },
-                {
-                  "label": "POST",
-                  "value": "POST"
-                },
-                {
-                  "label": "PUT",
-                  "value": "PUT"
-                },
-                {
-                  "label": "DELETE",
-                  "value": "DELETE"
-                },
-                {
-                  "label": "PATCH",
-                  "value": "PATCH"
-                },
-                {
-                  "label": "HEAD",
-                  "value": "HEAD"
-                },
-                {
-                  "label": "OPTIONS",
-                  "value": "OPTIONS"
-                },
-                {
-                  "label": "CONNECT",
-                  "value": "CONNECT"
-                },
-                {
-                  "label": "TRACE",
-                  "value": "TRACE"
-                }
-              ],
-              "type": "Select"
-            },
-            "title": "Method"
-          },
-          {
-            "kind": {
-              "default_value": "{}",
-              "placeholder": null,
-              "type": "Text",
-              "variant": "Area"
-            },
-            "title": "Body"
-          },
-          {
-            "kind": {
-              "keyPlaceholder": "Key",
-              "type": "KeyValue",
-              "valuePlaceholder": "Value"
-            },
-            "title": "Headers"
-          }
-        ],
-        "type": "Http",
-        "version": 1
+    const checksMeta = await this.checkApi.getChecksMetaV1()
+    this.checkSchema = checksMeta.filter((check) => check.type === this.getCheckType())[0]
+
+    const regions = await this.regionsApi.getRegionsV1()
+    this.zonesList =  regions.map((item) => {
+      item.value = item.id;
+      item.label = item.name
+      return item;
+    });
+
+    const uptime = this.checkSummary[this.checkId]
+        .filter(e => e!= null)
+        .filter(e => e.status === "Reachable").length
+        /
+        this.checkSummary[this.checkId]
+        .filter(e => e!= null).length * 100
+
+    const latency = this.checkSummary[this.checkId]
+        .filter(e => e != null && e.status === "Reachable")
+        .reduce((acc, e, _, arr) => acc + e.metrics.latency / arr.length, 0);
+
+    const color = (status) => {
+      switch (status) {
+        case 'Unreachable': return "red";
+        case 'ReachableUnreachable': return "yellow";
+        case 'Reachable': return "green";
+        default: return "grey";
       }
-    ];
+    }
+    const bars = this.checkSummary[this.checkId].map(e => {
+      if (e == null) return null
+      else return {
+        color: color(e.status),
+        data: [e.start, "Status: "+e.status],
+      }
+    })
+
+    this.data = {
+      name: this.check.name,
+      type: this.getCheckType(),
+      uptime: uptime.toFixed(0)+"%",
+      latency: latency.toFixed(0)+"ms",
+      bars: bars,
+      latencyBars: this.checkSummary[this.checkId].map(e => e.metrics.latency),
+    }
+
+    this.checkSchema.inputs.map((input) => {
+      if(input.kind.type === "Text"){
+        this.data[input.title] = this.check.kind[this.getCheckType()][this.normalizeKey(input.title)]
+      }
+    })
+
+
   },
   methods: {
     deleteCheck(){
@@ -163,56 +196,7 @@ export default {
       this.modal = !this.modal;
     },
     getCheckType(){
-      return Object.entries(this.data.kind).find(([key, value]) => value !== null)?.[0];
-    },
-    getZone() {
-      // return this.regionsApi.getRegionsV1().map((item) => {
-      //   item.value = item.id;
-      //   item.label = item.name
-      //   return item;
-      // });
-      return [
-        {
-          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-          "name": "France",
-          "tags": {
-            "property1": "string",
-            "property2": "string"
-          },
-          "zones": [
-            {
-              "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-              "name": "string",
-              "tags": {
-                "property1": "string",
-                "property2": "string"
-              }
-            }
-          ]
-        },
-        {
-          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f09",
-          "name": "England",
-          "tags": {
-            "property1": "string",
-            "property2": "string"
-          },
-          "zones": [
-            {
-              "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-              "name": "string",
-              "tags": {
-                "property1": "string",
-                "property2": "string"
-              }
-            }
-          ]
-        }
-      ].map((item) => {
-        item.value = item.id;
-        item.label = item.name
-        return item;
-      })
+      return Object.entries(this.check.kind).find(([key, value]) => value !== null)?.[0];
     },
     normalizeKey(label = "") {
       return label.trim().toLowerCase().replace(/\s+/g, "_");
@@ -221,11 +205,11 @@ export default {
       const capitalize = s => s && String(s[0]).toUpperCase() + String(s).slice(1)
 
       const checkType = this.getCheckType()
-      const requiredKey = this.checksMeta.filter((check) => check.type === checkType )[0].inputs.map((input) => this.normalizeKey(input.title)).concat(['name', 'zones', 'interval'])
+      const requiredKey = this.checkSchema.inputs.map((input) => this.normalizeKey(input.title)).concat(['name', 'zones', 'interval'])
       this.errorMessage = "";
       for (const key of requiredKey) {
-        if((this.data.kind[checkType][key] === undefined || this.data.kind[checkType][key] === "")
-            && (this.data[key] === undefined || this.data[key] === "")){
+        if((this.check.kind[checkType][key] === undefined || this.check.kind[checkType][key] === "")
+            && (this.check[key] === undefined || this.check[key] === "")){
           this.errorMessage = capitalize(key)+" are required.";
         }
       }
@@ -238,7 +222,9 @@ export default {
 <template>
   <div class="check-details">
     <ik-check-details
-        :data="data2"
+        v-if="data && data.bars"
+        :data="data"
+        :widthBar="(data.bars.length * 0.8)+'em'"
         @ik-check-details:click-edit="() => this.toggleModal()"
         @ik-check-details:click-delete="() => this.deleteCheck()"
     ></ik-check-details>
@@ -247,9 +233,9 @@ export default {
       <div class="modal" v-if="modal">
         <ik-button type="icon" icon="material-symbols:close-rounded" iconSize="1.3em" style="margin: -1em" @click="() => this.toggleModal(undefined)"></ik-button>
         <ik-check-form-update
-          :schema="this.checksMeta.filter((check) => check.type === this.getCheckType())[0]"
-          :data="this.data"
-          :zones="getZone()"
+          :schema="this.checkSchema"
+          :data="this.check"
+          :zones="this.zonesList"
           :errorMessage="errorMessage"
           @ik-check-form-update:click-save="(e) => updateCheck(e.detail)"
         ></ik-check-form-update>

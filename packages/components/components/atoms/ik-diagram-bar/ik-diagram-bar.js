@@ -5,6 +5,7 @@ class IkDiagramBar extends LitElement {
         title: { type: String },
         fontSize: { type: String },
         width: { type: String },
+        widthBars: { type: String },
         height: { type: String },
         bars : { type: Array },
         widthBar: { type: String },
@@ -18,6 +19,7 @@ class IkDiagramBar extends LitElement {
         this.fontSize = '20px';
         this.bars = []
         this.width = '245px'
+        this.widthBars = '245px'
         this.height = '50px'
         this.widthBar = '7px'
         this.showData = false;
@@ -37,15 +39,16 @@ class IkDiagramBar extends LitElement {
 
     render() {
         return html`
-            <div class="ik-diagram-bar">
-                ${this.title ? html`<span class="title" style="--dgb-font-size: ${this.fontSize}; ">${this.title}</span>` : ''}
-                <div class="bars" 
-                     style="
+            <div class="ik-diagram-bar"
+                 style="
                          --dgb-width: ${this.width}; 
                          --dgb-height: ${this.height};
                          --dgb-width-bar: ${this.widthBar};
+                         --dgb-width-bars: ${this.widthBars};
                      "
-                >
+            >
+                ${this.title ? html`<span class="title" style="--dgb-font-size: ${this.fontSize}; ">${this.title}</span>` : ''}
+                <div class="bars">
                     ${this.bars.map(bar => html`
                         <div 
                                 class="bar ${bar.color}"
@@ -72,10 +75,11 @@ class IkDiagramBar extends LitElement {
                 display: flex;
                 flex-direction: column;
                 gap: 0.3em;
+                width: var(--dgb-width);
             }
             
             .bars {
-                width: var(--dgb-width);
+                width: var(--dgb-width-bars);
                 height: var(--dgb-height);
                 display: flex;
                 flex-direction: row;
@@ -95,6 +99,9 @@ class IkDiagramBar extends LitElement {
             }
             .bar.red {
                 background-color: var(--bar-red);
+            }
+            .bar.grey {
+                background-color: var(--bar-grey);
             }
             .title {
                 color: var(--text);

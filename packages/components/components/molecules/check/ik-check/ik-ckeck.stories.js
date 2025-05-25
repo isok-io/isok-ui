@@ -21,7 +21,7 @@ const Template = (args) => {
             .typeCheck=${args.typeCheck}
             .domainCheck=${args.domainCheck}
             .uptimeCheck=${args.uptimeCheck}
-            .responseTimeCheck=${args.responseTimeCheck}
+            .latencyCheck=${args.latencyCheck}
             .barsCheck=${args.barsCheck}
             .width=${args.width}
     ></ik-check>`;
@@ -35,7 +35,7 @@ Default.args = {
     nameCheck : 'My check',
     typeCheck: 'HTTP',
     uptimeCheck: "80%",
-    responseTimeCheck: "300ms",
+    latencyCheck: "300ms",
     barsCheck:
         Array.from({ length: 20 }, () => ({
             color: 'yellow',
@@ -51,7 +51,7 @@ withDomain.args = {
     nameCheck : 'My check',
     domainCheck: 'http://domain-exemple',
     uptimeCheck: "80%",
-    responseTimeCheck: "300ms",
+    latencyCheck: "300ms",
     barsCheck:
         Array.from({ length: 20 }, () => ({
             color: 'yellow',

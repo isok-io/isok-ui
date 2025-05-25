@@ -21,7 +21,7 @@ const Template = (args) => {
             .typeCheck=${args.typeCheck}
             .domainCheck=${args.domainCheck}
             .uptimeCheck=${args.uptimeCheck}
-            .responseTimeCheck=${args.responseTimeCheck}
+            .latencyCheck=${args.latencyCheck}
             .barsCheck=${args.barsCheck}
             .width=${args.width}
     >
@@ -34,7 +34,7 @@ const Template = (args) => {
             typeCheck="HTTP"
             domainCheck="http://domain-exemple"
             uptimeCheck="80%"
-            responseTimeCheck="300ms"
+            latencyCheck="300ms"
             .barsCheck=${args.barsCheck}
             width="70em"
         ></ik-check>
@@ -47,7 +47,7 @@ const Template = (args) => {
             typeCheck="HTTP"
             domainCheck="http://domain-exemple"
             uptimeCheck="80%"
-            responseTimeCheck="300ms"
+            latencyCheck="300ms"
             .barsCheck=${args.barsCheck}
             width="70em"
         ></ik-check>
@@ -62,7 +62,7 @@ Default.args = {
     nameCheck : 'My check',
     domainCheck: 'http://domain-exemple',
     uptimeCheck: "80%",
-    responseTimeCheck: "300ms",
+    latencyCheck: "300ms",
     barsCheck:
         Array.from({ length: 20 }, () => ({
             color: 'yellow',
@@ -78,7 +78,7 @@ groupByType.args = {
     fontSizeValue: "24px",
     typeCheck: 'HTTP',
     uptimeCheck: "80%",
-    responseTimeCheck: "300ms",
+    latencyCheck: "300ms",
     barsCheck:
         Array.from({ length: 20 }, () => ({
             color: 'yellow',
