@@ -12,6 +12,7 @@ class IkCheckDetails extends LitElement {
         fontSizeText: { type: String },
         fontSizeSmallText: { type: String },
         width: { type: String },
+        widthBar: { type: String },
         heightBars: { type: String },
         data: { type: Object}
     }
@@ -23,6 +24,7 @@ class IkCheckDetails extends LitElement {
         this.fontSizeText = "25px";
         this.fontSizeSmallText = "20px";
         this.width = "660px";
+        this.widthBar = "660px";
         this.heightBars = "5em";
         this.data = {
             name: undefined,
@@ -37,7 +39,7 @@ class IkCheckDetails extends LitElement {
 
     firstUpdated() {
         const ctx = this.shadowRoot.getElementById('latencyChart').getContext('2d');
-        const dataPoints = this.data?.latency?.map((latency, index) => ({
+        const dataPoints = this.data?.latencyBars?.map((latency, index) => ({
             x: index,
             y: latency
         })) || [];
@@ -88,7 +90,7 @@ class IkCheckDetails extends LitElement {
 
     transformData(){
         return Object.entries(this.data)
-            .filter(([key]) => key !== 'name' && key !== 'bars' && key !== 'latency')
+            .filter(([key]) => key !== 'name' && key !== 'bars' && key !== 'latencyBars')
             .map(([key, value]) => ({
                 title: key.replace(/([A-Z])/g, ' $1'),
                 value: value
@@ -122,7 +124,8 @@ class IkCheckDetails extends LitElement {
                         .bars=${this.data.bars}
                         .showData=${true}
                         dataSize=${this.fontSizeText}
-                        width=${this.width}
+                        width="40em"
+                        widthBars=${this.widthBar}
                         height=${this.heightBars}
                 ></ik-diagram-bar>
                 <canvas id="latencyChart" width=${this.width} height="200"></canvas>

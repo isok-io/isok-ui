@@ -14,7 +14,6 @@ class IkCheckFormUpdate extends LitElement {
         fontSizeTextAdvanced: { type: String },
         width: { type: String },
         errorMessage: { type: String },
-        firstRender: { type: Boolean },
     }
 
 
@@ -28,7 +27,6 @@ class IkCheckFormUpdate extends LitElement {
         this.fontSizeTextAdvanced = "20px";
         this.width = "660px";
         this.errorMessage = "";
-        this.firstRender = true;
     }
 
     normalizeKey(label = "") {
@@ -55,6 +53,7 @@ class IkCheckFormUpdate extends LitElement {
     }
 
     getData(key){
+        console.log(this.data.kind[this.schema.type][this.normalizeKey(key)] || this.data[this.normalizeKey(key)])
         return this.data.kind[this.schema.type][this.normalizeKey(key)] || this.data[this.normalizeKey(key)];
     }
 
@@ -154,10 +153,10 @@ class IkCheckFormUpdate extends LitElement {
     }
 
     render() {
+        console.log(this.zones)
         this.zones.push({value: 'all', label: 'All'});
-        this.data.interval = this.firstRender ? prettyMs(this.data.interval * 1000, {compact: true}) : this.data.interval;
+        this.data.interval = Number.isInteger(this.data.interval) ? prettyMs(this.data.interval * 1000, {compact: true}) : this.data.interval;
         this.data.zones = this.data.zones.includes('all') ? this.data.zones : this.data.zones.map(zone => zone.Region);
-        this.firstRender = false
         return html`
             <div class="ik-check-form-update"
                 style="
@@ -197,7 +196,7 @@ class IkCheckFormUpdate extends LitElement {
                             this.fontSizeText
                     )}
                     ${this.renderInputs(this.schema.inputs, this.fontSizeText)}
-                    ${this.renderInputs(this.schema.inputs_advanced, this.fontSizeText)}
+                    ${this.renderInputs(this.schema.inputsAdvanced, this.fontSizeText)}
                 </div>
                 <div class="error-message">${this.errorMessage}</div>
                 <ik-button
