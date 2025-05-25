@@ -69,6 +69,7 @@ export default {
       await this.fetchOrganizations()
 
       this.$refs.orgList.requestUpdate();
+      this.reloadParent();
     },
     async deleteOrganization() {
       const confirmed = window.confirm("Are you sure you want to delete this organization?");
@@ -77,6 +78,7 @@ export default {
         this.toggleModal(undefined);
         await this.fetchOrganizations()
         this.$refs.orgList.requestUpdate();
+        this.reloadParent();
       }
     },
     async leaveOrganization(organization) {
@@ -86,6 +88,7 @@ export default {
         await this.organizationsApi.removeOrgMemberV1({organisationId: organization.id, userId: user.id});
         await this.fetchOrganizations()
         this.$refs.orgList.requestUpdate();
+        this.reloadParent();
       }
     },
     async addOrganization(organization) {
@@ -94,9 +97,15 @@ export default {
         this.toggleModal(undefined);
         await this.fetchOrganizations()
         this.$refs.orgList.requestUpdate();
+        console.log(organization);
+        localStorage.setItem('organization', organization.id);
+        this.reloadParent();
       } else {
         this.errorMessage = "You need to enter a name to create an organization.";
       }
+    },
+    reloadParent() {
+      this.$emit('reload');
     }
   }
 }
