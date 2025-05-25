@@ -8,7 +8,9 @@ export default {
 
 const Template = (args) => {
     return html`<ik-check-form-update 
+            .schema=${args.schema}
             .data=${args.data}
+            .zones=${args.zones}
             .fontSizeTitle=${args.fontSizeTitle}
             .fontSizeText=${args.fontSizeText}
             .fontSizeTextAdvanced=${args.fontSizeTextAdvanced}
@@ -23,64 +25,105 @@ HTTP.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'HTTP',
-        inputs: [
-            {
-                type: 'text',
-                title: 'Name',
-                value: 'My check'
-            },
-            {
-                type: 'check',
-                title: 'Zone',
-                selectOptions: [
-                    { value: 'all', label: 'All' },
-                    { value: 'fr', label: 'France' },
-                ],
-                value: 'all'
-            },
-            {
-                type: 'text',
-                title: 'Interval',
-                value: '10min',
-            },
-            {
-                type: 'text',
-                title: 'URL',
-                value: 'http://my-website.com',
-            },
-            {
-                type: 'select',
-                title: 'Method',
-                selectOptions: [
-                    { value: 'get', label: 'GET' },
-                    { value: 'post', label: 'POST' },
-                    { value: 'put', label: 'PUT' },
-                    { value: 'delete', label: 'DELETE' },
-                    { value: 'patch', label: 'PATCH' },
-                    { value: 'head', label: 'HEAD' },
-                    { value: 'options', label: 'OPTIONS' },
-                    { value: 'connect', label: 'CONNECT' },
-                    { value: 'trace', label: 'TRACE' }
-                ],
-                value: 'get'
-            },
-            {
-                type: 'area',
-                title: 'Body',
-                value: '{}',
-            },
-            {
-                type: 'key-value',
-                title: 'Header',
-                placeholder: 'Key...',
-                placeholder2: 'Value...',
-                values: [
-                    { key: "Accept", value: "*/*" }
-                ]
+        "interval": 5,
+        "kind": {
+            "Http": {
+                "body": "{}",
+                "headers": {testKey: "testValue"},
+                "method": "get",
+                "url": "https://example.com"
             }
+        },
+        "name": "My check",
+        "zones": [
+            "all"
         ]
-    }
+    },
+    schema:
+    {
+        "inputs": [
+            {
+                "kind": {
+                    "default_value": null,
+                    "placeholder": "https://example.com",
+                    "type": "Text",
+                    "variant": "Url"
+                },
+                "title": "URL"
+            }
+        ],
+        "inputsAdvanced": [
+            {
+                "kind": {
+                    "defaultValue": {
+                        "label": "GET",
+                        "value": "GET"
+                    },
+                    "selectOptions": [
+                        {
+                            "label": "GET",
+                            "value": "GET"
+                        },
+                        {
+                            "label": "POST",
+                            "value": "POST"
+                        },
+                        {
+                            "label": "PUT",
+                            "value": "PUT"
+                        },
+                        {
+                            "label": "DELETE",
+                            "value": "DELETE"
+                        },
+                        {
+                            "label": "PATCH",
+                            "value": "PATCH"
+                        },
+                        {
+                            "label": "HEAD",
+                            "value": "HEAD"
+                        },
+                        {
+                            "label": "OPTIONS",
+                            "value": "OPTIONS"
+                        },
+                        {
+                            "label": "CONNECT",
+                            "value": "CONNECT"
+                        },
+                        {
+                            "label": "TRACE",
+                            "value": "TRACE"
+                        }
+                    ],
+                    "type": "Select"
+                },
+                "title": "Method"
+            },
+            {
+                "kind": {
+                    "default_value": null,
+                    "placeholder": "{}",
+                    "type": "Text",
+                    "variant": "Area"
+                },
+                "title": "Body"
+            },
+            {
+                "kind": {
+                    "defaultValue": {},
+                    "keyPlaceholder": "Key",
+                    "type": "KeyValue",
+                    "valuePlaceholder": "Value"
+                },
+                "title": "Headers"
+            }
+        ],
+        "type": "Http",
+        "version": 1
+    },
+    zones: [{value: "pau", label: "Pau"}, {value: "toulouse", label: "Toulouse"}],
 };
 
 export const PING = Template.bind({});
@@ -90,34 +133,31 @@ PING.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'PING',
+        interval: 10,
+        kind: {
+            Ping: {
+                ip_address__hostname: "153.207.6.221"
+            }
+        },
+        name: "My check",
+        zones: ["all"]
+    },
+    schema: {
         inputs: [
             {
-                type: 'text',
-                title: 'Name',
-                value: 'My check'
-            },
-            {
-                type: 'check',
-                title: 'Zone',
-                selectOptions: [
-                    { value: 'all', label: 'All' },
-                    { value: 'fr', label: 'France' },
-                ],
-                value: 'all'
-            },
-            {
-                type: 'text',
-                title: 'Interval',
-                value: '10min',
-            },
-            {
-                type: 'text',
-                title: 'IP Adress - Hostname',
-                value: '153.207.6.221',
+                title: "IP Address - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "153.207.6.221",
+                    default_value: null
+                }
             }
         ],
-    }
+        inputsAdvanced: [],
+        type: "Ping",
+        version: 1
+    },
+    zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],
 };
 
 export const SSL = Template.bind({});
@@ -127,39 +167,41 @@ SSL.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'SSL',
+        interval: 10,
+        kind: {
+            Ssl: {
+                domain_name__hostname: "myapi.example.com",
+                port: "443"
+            }
+        },
+        name: "My check",
+        zones: ["all"]
+    },
+    schema: {
         inputs: [
             {
-                type: 'text',
-                title: 'Name',
-                value: 'My check'
-            },
-            {
-                type: 'check',
-                title: 'Zone',
-                selectOptions: [
-                    { value: 'all', label: 'All' },
-                    { value: 'fr', label: 'France' },
-                ],
-                value: 'all'
-            },
-            {
-                type: 'text',
-                title: 'Interval',
-                value: '10min',
-            },
-            {
-                type: 'text',
-                title: 'Domain name - Hostname',
-                value: 'myapi.example.com',
-            },
-            {
-                type: 'text',
-                title: 'Port',
-                value: '443'
+                title: "Domain name - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "myapi.example.com",
+                    default_value: null
+                }
             }
-        ]
-    }
+        ],
+        inputsAdvanced: [
+            {
+                title: "Port",
+                kind: {
+                    type: "Text",
+                    placeholder: "443",
+                    default_value: "443"
+                }
+            }
+        ],
+        type: "Ssl",
+        version: 1
+    },
+    zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],
 };
 
 export const TCP = Template.bind({});
@@ -169,39 +211,40 @@ TCP.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'TCP',
+        interval: 10,
+        kind: {
+            Tcp: {
+                ip_address__hostname: "153.207.6.221",
+                port: "80"
+            }
+        },
+        name: "My check",
+        zones: ["all"]
+    },
+    schema: {
         inputs: [
             {
-                type: 'text',
-                title: 'Name',
-                value: 'My check'
+                title: "IP Address - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "153.207.6.221",
+                    default_value: null
+                }
             },
             {
-                type: 'check',
-                title: 'Zone',
-                selectOptions: [
-                    { value: 'all', label: 'All' },
-                    { value: 'fr', label: 'France' },
-                ],
-                value: 'all'
-            },
-            {
-                type: 'text',
-                title: 'Interval',
-                value: '10min',
-            },
-            {
-                type: 'text',
-                title: 'IP Adress - Hostname',
-                value: '153.207.6.221',
-            },
-            {
-                type: 'text',
-                title: 'Port',
-                value: '80'
+                title: "Port",
+                kind: {
+                    type: "Text",
+                    placeholder: "80",
+                    default_value: null
+                }
             }
-        ]
-    }
+        ],
+        inputsAdvanced: [],
+        type: "Tcp",
+        version: 1
+    },
+    zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],
 };
 
 export const UDP = Template.bind({});
@@ -211,37 +254,38 @@ UDP.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'UDP',
+        interval: 10,
+        kind: {
+            Udp: {
+                ip_address__hostname: "153.207.6.221",
+                port: "53"
+            }
+        },
+        name: "My check",
+        zones: ["all"]
+    },
+    schema: {
         inputs: [
             {
-                type: 'text',
-                title: 'Name',
-                value: 'My check'
+                title: "IP Address - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "153.207.6.221",
+                    default_value: null
+                }
             },
             {
-                type: 'check',
-                title: 'Zone',
-                selectOptions: [
-                    { value: 'all', label: 'All' },
-                    { value: 'fr', label: 'France' },
-                ],
-                value: 'all'
-            },
-            {
-                type: 'text',
-                title: 'Interval',
-                value: '10min',
-            },
-            {
-                type: 'text',
-                title: 'IP Adress - Hostname',
-                value: '153.207.6.221',
-            },
-            {
-                type: 'text',
-                title: 'Port',
-                value: '53'
+                title: "Port",
+                kind: {
+                    type: "Text",
+                    placeholder: "53",
+                    default_value: null
+                }
             }
-        ]
-    }
+        ],
+        inputsAdvanced: [],
+        type: "Udp",
+        version: 1
+    },
+    zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],
 };

@@ -12,6 +12,7 @@ const Template = (args) => {
             .fontSizeTitle=${args.fontSizeTitle}
             .fontSizeText=${args.fontSizeText}
             .width=${args.width}
+            .zoneOptions=${args.zoneOptions}
     ></ik-check-form-post-creation>`;
 };
 
@@ -20,5 +21,6 @@ HTTP.args = {
     typeCheck: "HTTP",
     fontSizeTitle: "50px",
     fontSizeText: "25px",
-    width: "660px"
+    width: "660px",
+    zoneOptions: [{value: "pau", label: "Pau"}, {value: "toulouse", label: "Toulouse"}],
 };

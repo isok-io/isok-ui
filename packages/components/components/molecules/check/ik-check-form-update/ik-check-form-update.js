@@ -30,7 +30,7 @@ class IkCheckFormUpdate extends LitElement {
     }
 
     normalizeKey(label = "") {
-        return label.trim().toLowerCase().replace(/\s+/g, "_");
+        return label.trim().toLowerCase().replace(/\s+/g, "_").replace(/-/g, "");
     }
 
     updateInputValue(targetInput, newValue) {
