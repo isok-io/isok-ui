@@ -2,73 +2,91 @@ import {css, html, LitElement} from "lit";
 import "../../../atoms/ik-input/ik-input";
 import "../../../atoms/ik-button/ik-button";
 import {_emit} from "../../../../utils/event";
+import prettyMs from 'pretty-ms';
 
 class IkCheckFormUpdate extends LitElement {
     static properties = {
+        schema: {type: Object},
         data: {type: Object},
+        zones: {type: Array},
         fontSizeTitle: { type: String },
         fontSizeText: { type: String },
         fontSizeTextAdvanced: { type: String },
         width: { type: String },
+        errorMessage: { type: String },
+        firstRender: { type: Boolean },
     }
 
 
     constructor() {
         super();
+        this.schema = {};
         this.data = undefined;
+        this.zones = [];
         this.fontSizeTitle = "50px";
         this.fontSizeText = "25px";
         this.fontSizeTextAdvanced = "20px";
         this.width = "660px";
+        this.errorMessage = "";
+        this.firstRender = true;
+    }
+
+    normalizeKey(label = "") {
+        return label.trim().toLowerCase().replace(/\s+/g, "_");
     }
 
     updateInputValue(targetInput, newValue) {
-        const update = (inputs) => {
-            const index = inputs.findIndex(i => i === targetInput);
-            if (index !== -1) {
-                if (Array.isArray(newValue)) {
-                    inputs[index] = {
-                        ...inputs[index],
-                        values: newValue
-                    };
-                } else {
-                    inputs[index] = {
-                        ...inputs[index],
-                        value: newValue
-                    };
-                }
-            }
-        };
 
-        update(this.data.inputs);
+        const type = this.schema.type;
+        const key = targetInput.title.trim().toLowerCase().replace(/\s+/g, "_");
+
+        if (!this.data.kind || !this.data.kind[type]) return;
+
+        if(key in this.data.kind[type]) {
+            this.data.kind[type][key] = newValue;
+        } else {
+            if(key === "zones" && newValue !== [ "all" ]){
+                this.data.zones = newValue.map(item => ({ Region: item }))
+            } else {
+                this.data[key] = newValue;
+            }
+        }
         this.requestUpdate();
     }
 
+    getData(key){
+        return this.data.kind[this.schema.type][this.normalizeKey(key)] || this.data[this.normalizeKey(key)];
+    }
+
     renderInputText(dataInput, fontSize){
-        return html`
-            <ik-input 
-                .title=${dataInput.title}
-                .placeholder=${dataInput.placeholder}
-                .value=${dataInput.value}
-                height="auto"
-                .width=${this.width}
-                fontSize=${fontSize}
-                @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
-            ></ik-input>
-        `
+        if(dataInput.kind.variant === "Area"){
+            return this.renderInputArea(dataInput, fontSize);
+        } else {
+            return html`
+                <ik-input
+                        .title=${dataInput.title}
+                        .placeholder=${dataInput.kind.placeholder}
+                        .value=${this.getData(dataInput.title)}
+                        height="auto"
+                        .width=${this.width}
+                        fontSize=${fontSize}
+                        @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
+                ></ik-input>
+            `
+        }
     }
 
     renderInputArea(dataInput, fontSize){
         return html`
             <ik-input
-                type="textarea"
-                .title=${dataInput.title}
-                .placeholder=${dataInput.placeholder}
-                .value=${dataInput.value}
-                height="auto"
-                .width=${this.width}
-                fontSize=${fontSize}
-                @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
+                    type="textarea"
+                    .title=${dataInput.title}
+                    .placeholder=${dataInput.kind.placeholder}
+                    .value=${this.getData(dataInput.title)}
+                    height="auto"
+                    .width=${this.width}
+                    fontSize=${fontSize}
+                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
             ></ik-input>
         `
     }
@@ -76,14 +94,29 @@ class IkCheckFormUpdate extends LitElement {
     renderInputSelect(dataInput, fontSize){
         return html`
             <ik-input
-                .title=${dataInput.title}
-                type="select"
-                .selectOptions = ${dataInput.selectOptions}
-                .value=${dataInput.value}
-                heigth="auto"
-                width="auto"
-                fontSize=${fontSize}
-                @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
+                    .title=${dataInput.title}
+                    type="select"
+                    .selectOptions=${dataInput.kind.selectOptions}
+                    .value=${this.getData(dataInput.title)}
+                    height="auto"
+                    width="auto"
+                    fontSize=${fontSize}
+                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.value)}
+            ></ik-input>
+        `
+    }
+
+    renderInputMultiselect(dataInput, fontSize){
+        return html`
+            <ik-input
+                    .title=${dataInput.title}
+                    type="multiselect"
+                    .selectOptions=${dataInput.kind.selectOptions}
+                    .values=${this.getData(dataInput.title)}
+                    height="auto"
+                    width="auto"
+                    fontSize=${fontSize}
+                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.values)}
             ></ik-input>
         `
     }
@@ -92,15 +125,15 @@ class IkCheckFormUpdate extends LitElement {
         return html`
             <div class="keyValueInput">
                 <ik-input
-                    .title=${dataInput.title}
-                    type="double"
-                    .placeholder=${dataInput.placeholder}
-                    .placeholder2=${dataInput.placeholder2}
-                    .values=${dataInput.values}
-                    height="1.8em"
-                    width=${this.width}
-                    fontSize=${fontSize}
-                    @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.values)}
+                        .title=${dataInput.title}
+                        type="double"
+                        .placeholder=${dataInput.kind.keyPlaceholder}
+                        .placeholder2=${dataInput.kind.valuePlaceholder}
+                        .values=${this.getData(dataInput.title)}
+                        height="1.8em"
+                        width=${this.width}
+                        fontSize=${fontSize}
+                        @ik-input:change=${(e) => this.updateInputValue(dataInput, e.detail.values)}
                 ></ik-input>
             </div>
         `
@@ -110,17 +143,21 @@ class IkCheckFormUpdate extends LitElement {
     renderInputs(dataInputs, fontSize) {
         return html`
             ${dataInputs.map(item => {
-            switch(item.type) {
-                case 'text': return this.renderInputText(item, fontSize);
-                case 'area': return this.renderInputArea(item, fontSize);
-                case 'select': return this.renderInputSelect(item, fontSize);
-                case 'key-value': return this.renderInputKeyValue(item, fontSize);
+            switch(item.kind.type) {
+                case 'Text': return this.renderInputText(item, fontSize);
+                case 'Select': return this.renderInputSelect(item, fontSize);
+                case 'Multiselect': return this.renderInputMultiselect(item, fontSize);
+                case 'KeyValue': return this.renderInputKeyValue(item, fontSize);
             }
         })}
         `
     }
 
     render() {
+        this.zones.push({value: 'all', label: 'All'});
+        this.data.interval = this.firstRender ? prettyMs(this.data.interval * 1000, {compact: true}) : this.data.interval;
+        this.data.zones = this.data.zones.includes('all') ? this.data.zones : this.data.zones.map(zone => zone.Region);
+        this.firstRender = false
         return html`
             <div class="ik-check-form-update"
                 style="
@@ -131,8 +168,38 @@ class IkCheckFormUpdate extends LitElement {
             >
                 <span class="title">Update check</span>
                 <div class="form">
-                    ${this.renderInputs(this.data.inputs, this.fontSizeText)}
+                    ${this.renderInputText(
+                        {
+                            "kind": {
+                                "type": "Text",
+                            },
+                            "title": "Name"
+                        },
+                        this.fontSizeText
+                    )}
+                    ${this.renderInputMultiselect(
+                            {
+                                "kind": {
+                                    "type": "Multiselect",
+                                    "selectOptions": this.zones
+                                },
+                                "title": "Zones"
+                            },
+                            this.fontSizeText
+                    )}
+                    ${this.renderInputText(
+                            {
+                                "kind": {
+                                    "type": "Text",
+                                },
+                                "title": "Interval"
+                            },
+                            this.fontSizeText
+                    )}
+                    ${this.renderInputs(this.schema.inputs, this.fontSizeText)}
+                    ${this.renderInputs(this.schema.inputs_advanced, this.fontSizeText)}
                 </div>
+                <div class="error-message">${this.errorMessage}</div>
                 <ik-button
                     type="blue"
                     text="Save"
@@ -164,6 +231,10 @@ class IkCheckFormUpdate extends LitElement {
                 display: flex;
                 flex-direction: column;
                 gap: 1em;
+            }
+            .error-message {
+                color: var(--text-red);
+                font-family: Inter, sans-serif;
             }
         `
     ];

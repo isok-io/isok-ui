@@ -17,6 +17,7 @@
     "iconify-icon": "^3.0.0",
     "lit": "^3.3.0",
     "parse-duration": "^2.1.4",
+    "pretty-ms": "^9.2.0",
     "select2": "^4.1.0-rc.0"
   },
   "devDependencies": {
