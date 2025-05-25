@@ -29,6 +29,12 @@ import {
 export interface CheckSchemaInputKindOneOf1 {
     /**
      * 
+     * @type {CheckSchemaSelectInputOption}
+     * @memberof CheckSchemaInputKindOneOf1
+     */
+    defaultValue?: CheckSchemaSelectInputOption | null;
+    /**
+     * 
      * @type {Array<CheckSchemaSelectInputOption>}
      * @memberof CheckSchemaInputKindOneOf1
      */
@@ -70,6 +76,7 @@ export function CheckSchemaInputKindOneOf1FromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
+        'defaultValue': json['defaultValue'] == null ? undefined : CheckSchemaSelectInputOptionFromJSON(json['defaultValue']),
         'selectOptions': ((json['selectOptions'] as Array<any>).map(CheckSchemaSelectInputOptionFromJSON)),
         'type': json['type'],
     };
@@ -86,6 +93,7 @@ export function CheckSchemaInputKindOneOf1ToJSONTyped(value?: CheckSchemaInputKi
 
     return {
         
+        'defaultValue': CheckSchemaSelectInputOptionToJSON(value['defaultValue']),
         'selectOptions': ((value['selectOptions'] as Array<any>).map(CheckSchemaSelectInputOptionToJSON)),
         'type': value['type'],
     };

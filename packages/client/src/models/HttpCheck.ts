@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface HttpCheck {
     /**
      * 
+     * @type {string}
+     * @memberof HttpCheck
+     */
+    body?: string | null;
+    /**
+     * 
      * @type {{ [key: string]: string; }}
      * @memberof HttpCheck
      */
@@ -59,6 +65,7 @@ export function HttpCheckFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
+        'body': json['body'] == null ? undefined : json['body'],
         'headers': json['headers'],
         'method': json['method'],
         'url': json['url'],
@@ -76,6 +83,7 @@ export function HttpCheckToJSONTyped(value?: HttpCheck | null, ignoreDiscriminat
 
     return {
         
+        'body': value['body'],
         'headers': value['headers'],
         'method': value['method'],
         'url': value['url'],

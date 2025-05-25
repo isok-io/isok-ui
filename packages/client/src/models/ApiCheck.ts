@@ -31,77 +31,95 @@ import {
 /**
  * 
  * @export
- * @interface ApiCheckInput
+ * @interface ApiCheck
  */
-export interface ApiCheckInput {
+export interface ApiCheck {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiCheck
+     */
+    id: string;
     /**
      * 
      * @type {number}
-     * @memberof ApiCheckInput
+     * @memberof ApiCheck
      */
     interval: number;
     /**
      * 
      * @type {CheckKind}
-     * @memberof ApiCheckInput
+     * @memberof ApiCheck
      */
     kind: CheckKind;
     /**
      * 
      * @type {string}
-     * @memberof ApiCheckInput
+     * @memberof ApiCheck
      */
     name: string;
     /**
      * 
+     * @type {string}
+     * @memberof ApiCheck
+     */
+    tenant: string;
+    /**
+     * 
      * @type {Array<CheckZone>}
-     * @memberof ApiCheckInput
+     * @memberof ApiCheck
      */
     zones: Array<CheckZone>;
 }
 
 /**
- * Check if a given object implements the ApiCheckInput interface.
+ * Check if a given object implements the ApiCheck interface.
  */
-export function instanceOfApiCheckInput(value: object): value is ApiCheckInput {
+export function instanceOfApiCheck(value: object): value is ApiCheck {
+    if (!('id' in value) || value['id'] === undefined) return false;
     if (!('interval' in value) || value['interval'] === undefined) return false;
     if (!('kind' in value) || value['kind'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
+    if (!('tenant' in value) || value['tenant'] === undefined) return false;
     if (!('zones' in value) || value['zones'] === undefined) return false;
     return true;
 }
 
-export function ApiCheckInputFromJSON(json: any): ApiCheckInput {
-    return ApiCheckInputFromJSONTyped(json, false);
+export function ApiCheckFromJSON(json: any): ApiCheck {
+    return ApiCheckFromJSONTyped(json, false);
 }
 
-export function ApiCheckInputFromJSONTyped(json: any, ignoreDiscriminator: boolean): ApiCheckInput {
+export function ApiCheckFromJSONTyped(json: any, ignoreDiscriminator: boolean): ApiCheck {
     if (json == null) {
         return json;
     }
     return {
         
+        'id': json['id'],
         'interval': json['interval'],
         'kind': CheckKindFromJSON(json['kind']),
         'name': json['name'],
+        'tenant': json['tenant'],
         'zones': ((json['zones'] as Array<any>).map(CheckZoneFromJSON)),
     };
 }
 
-export function ApiCheckInputToJSON(json: any): ApiCheckInput {
-    return ApiCheckInputToJSONTyped(json, false);
+export function ApiCheckToJSON(json: any): ApiCheck {
+    return ApiCheckToJSONTyped(json, false);
 }
 
-export function ApiCheckInputToJSONTyped(value?: ApiCheckInput | null, ignoreDiscriminator: boolean = false): any {
+export function ApiCheckToJSONTyped(value?: ApiCheck | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
+        'id': value['id'],
         'interval': value['interval'],
         'kind': CheckKindToJSON(value['kind']),
         'name': value['name'],
+        'tenant': value['tenant'],
         'zones': ((value['zones'] as Array<any>).map(CheckZoneToJSON)),
     };
 }
