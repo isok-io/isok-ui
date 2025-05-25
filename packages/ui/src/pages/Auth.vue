@@ -2,6 +2,8 @@
 import "@components-lit/molecules/other/ik-auth/ik-auth.js"
 import {AuthApi} from "@client/AuthApi.ts"
 import { useRouter } from 'vue-router'
+import {Configuration} from "client/src/index.js";
+import {apiBase} from "../consts.js";
 
 export default {
   data(){
@@ -9,7 +11,7 @@ export default {
       authMethods:["ep"],
       step: "",
       errorMessage: "",
-      authApi: new AuthApi(),
+      authApi: new AuthApi(new Configuration({basePath: apiBase})),
     }
   },
   mounted() {
@@ -29,7 +31,7 @@ export default {
       };
       const validatePassword = (password) => {
         return password.match(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};:'",.<>/?\\|`~]).{6,128}$/
+            /^.{6,128}$/
         );
       };
 
@@ -45,8 +47,10 @@ export default {
     },
     async login(data) {
       if (this.validData(data)) {
-        // const token = await this.authApi.authV1({creds: data})
-        const token = "qweQj4giRJSdMNzB8g1XIa6t3YtRIHPH"
+        const token = (await this.authApi.authV1({creds: data}).then(auth => {
+          console.info(`user ${auth.userId} connected`);
+          return auth;
+        })).token;
         if(token){
           localStorage.setItem("user-token", token);
           await this.router.push({path: "/"});
@@ -59,8 +63,10 @@ export default {
     },
     async signup(data) {
       if (this.validData(data)) {
-        // const token = await this.authApi.registerV1({creds: data})
-        const token = "qweQj4giRJSdMNzB8g1XIa6t3YtRIHPH"
+        const token = (await this.authApi.registerV1({creds: data}).then(auth => {
+          console.info(`user ${auth.userId} registered`);
+          return auth;
+        })).token;
         if (token) {
           localStorage.setItem("user-token", token);
           await this.router.push({path: "/"});

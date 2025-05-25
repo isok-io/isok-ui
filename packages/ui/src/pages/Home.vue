@@ -3,13 +3,15 @@ import "@components-lit/molecules/check/ik-checks-list/ik-checks-list.js"
 import {ChecksApi} from "@client/ChecksApi.js";
 import Fuse from 'fuse.js';
 import {useRouter} from "vue-router";
+import {Configuration} from "client/src/index.js";
+import {apiBase} from "../consts.js";
 
 export default {
   data(){
     return {
       checks: [],
       checksVisible: [],
-      checksApi: new ChecksApi()
+      checksApi: new ChecksApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')}))
     }
   },
   mounted() {

@@ -1,20 +1,37 @@
 <script>
 import '@components-lit/molecules/other/ik-header/ik-header.js'
+import {OrganisationsApi} from "@client";
+import {Configuration} from "client/src/index.js";
+import {apiBase} from "./consts.js";
 
 export default {
   data() {
     return {
       theme: 'light',
-      organizations: [
-        { value: 'orga1', label: 'MyOrganisation' },
-        { value: 'orga2', label: 'OtherOrganisation' },
-      ],
-      organizationSelect: 'org1',
+      organizations: [],
+      organizationSelect: '',
     };
   },
-  mounted() {
+  async mounted() {
     this.theme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light') || 'light';
     this.setTheme(this.theme);
+    if (this.isConnected()) {
+      const organizationsApi = new OrganisationsApi(new Configuration({
+        basePath: apiBase,
+        accessToken: localStorage.getItem('user-token')
+      }));
+
+      const orgs = await organizationsApi.listOrgsV1();
+      if (orgs.length === 0) {
+        const id = await organizationsApi.createOrgV1({organisationInput: {name: 'My Organisation'}});
+        orgs.push({id: id, name: 'My Organisation', tags: {}});
+      }
+
+      this.organizations = orgs.map(org => {
+        return {value: org.id, label: org.name}
+      });
+    }
+
     this.setOrganization(localStorage.getItem('organization') || this.organizations[0].value);
   },
   methods: {
