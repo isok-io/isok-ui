@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './ApiCheck';
 export * from './ApiCheckInput';
 export * from './ApiCheckResult';
-export * from './Check';
+export * from './ApiCheckStatus';
 export * from './CheckKind';
 export * from './CheckMetrics';
 export * from './CheckResultDetails';
@@ -15,12 +16,11 @@ export * from './CheckSchemaInputKindOneOf1';
 export * from './CheckSchemaInputKindOneOf2';
 export * from './CheckSchemaSelectInputOption';
 export * from './CheckSchemaTextInputVariant';
-export * from './CheckStatus';
 export * from './CheckZone';
 export * from './CheckZoneOneOf';
 export * from './CheckZoneOneOf1';
 export * from './Creds';
-export * from './Duration';
+export * from './GetChecksSummaryV1200ResponseValueInner';
 export * from './HttpCheck';
 export * from './HttpCheckResult';
 export * from './MetricsFilter';

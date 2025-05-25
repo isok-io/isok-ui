@@ -27,6 +27,13 @@ import {
     CheckResultDetailsToJSON,
     CheckResultDetailsToJSONTyped,
 } from './CheckResultDetails';
+import type { ApiCheckResult } from './ApiCheckResult';
+import {
+    ApiCheckResultFromJSON,
+    ApiCheckResultFromJSONTyped,
+    ApiCheckResultToJSON,
+    ApiCheckResultToJSONTyped,
+} from './ApiCheckResult';
 import type { CheckMetrics } from './CheckMetrics';
 import {
     CheckMetricsFromJSON,
@@ -38,43 +45,43 @@ import {
 /**
  * 
  * @export
- * @interface ApiCheckResult
+ * @interface GetChecksSummaryV1200ResponseValueInner
  */
-export interface ApiCheckResult {
+export interface GetChecksSummaryV1200ResponseValueInner {
     /**
      * 
      * @type {CheckResultDetails}
-     * @memberof ApiCheckResult
+     * @memberof GetChecksSummaryV1200ResponseValueInner
      */
     details: CheckResultDetails;
     /**
      * 
      * @type {Date}
-     * @memberof ApiCheckResult
+     * @memberof GetChecksSummaryV1200ResponseValueInner
      */
     end: Date;
     /**
      * 
      * @type {string}
-     * @memberof ApiCheckResult
+     * @memberof GetChecksSummaryV1200ResponseValueInner
      */
-    error?: string | null;
+    error?: string;
     /**
      * 
      * @type {CheckMetrics}
-     * @memberof ApiCheckResult
+     * @memberof GetChecksSummaryV1200ResponseValueInner
      */
     metrics: CheckMetrics;
     /**
      * 
      * @type {Date}
-     * @memberof ApiCheckResult
+     * @memberof GetChecksSummaryV1200ResponseValueInner
      */
     start: Date;
     /**
      * 
      * @type {ApiCheckStatus}
-     * @memberof ApiCheckResult
+     * @memberof GetChecksSummaryV1200ResponseValueInner
      */
     status: ApiCheckStatus;
 }
@@ -82,9 +89,9 @@ export interface ApiCheckResult {
 
 
 /**
- * Check if a given object implements the ApiCheckResult interface.
+ * Check if a given object implements the GetChecksSummaryV1200ResponseValueInner interface.
  */
-export function instanceOfApiCheckResult(value: object): value is ApiCheckResult {
+export function instanceOfGetChecksSummaryV1200ResponseValueInner(value: object): value is GetChecksSummaryV1200ResponseValueInner {
     if (!('details' in value) || value['details'] === undefined) return false;
     if (!('end' in value) || value['end'] === undefined) return false;
     if (!('metrics' in value) || value['metrics'] === undefined) return false;
@@ -93,11 +100,11 @@ export function instanceOfApiCheckResult(value: object): value is ApiCheckResult
     return true;
 }
 
-export function ApiCheckResultFromJSON(json: any): ApiCheckResult {
-    return ApiCheckResultFromJSONTyped(json, false);
+export function GetChecksSummaryV1200ResponseValueInnerFromJSON(json: any): GetChecksSummaryV1200ResponseValueInner {
+    return GetChecksSummaryV1200ResponseValueInnerFromJSONTyped(json, false);
 }
 
-export function ApiCheckResultFromJSONTyped(json: any, ignoreDiscriminator: boolean): ApiCheckResult {
+export function GetChecksSummaryV1200ResponseValueInnerFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetChecksSummaryV1200ResponseValueInner {
     if (json == null) {
         return json;
     }
@@ -112,11 +119,11 @@ export function ApiCheckResultFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-export function ApiCheckResultToJSON(json: any): ApiCheckResult {
-    return ApiCheckResultToJSONTyped(json, false);
+export function GetChecksSummaryV1200ResponseValueInnerToJSON(json: any): GetChecksSummaryV1200ResponseValueInner {
+    return GetChecksSummaryV1200ResponseValueInnerToJSONTyped(json, false);
 }
 
-export function ApiCheckResultToJSONTyped(value?: ApiCheckResult | null, ignoreDiscriminator: boolean = false): any {
+export function GetChecksSummaryV1200ResponseValueInnerToJSONTyped(value?: GetChecksSummaryV1200ResponseValueInner | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface CheckSchemaInputKindOneOf2 {
     /**
      * 
+     * @type {{ [key: string]: string; }}
+     * @memberof CheckSchemaInputKindOneOf2
+     */
+    defaultValue: { [key: string]: string; };
+    /**
+     * 
      * @type {string}
      * @memberof CheckSchemaInputKindOneOf2
      */
@@ -53,6 +59,7 @@ export type CheckSchemaInputKindOneOf2TypeEnum = typeof CheckSchemaInputKindOneO
  * Check if a given object implements the CheckSchemaInputKindOneOf2 interface.
  */
 export function instanceOfCheckSchemaInputKindOneOf2(value: object): value is CheckSchemaInputKindOneOf2 {
+    if (!('defaultValue' in value) || value['defaultValue'] === undefined) return false;
     if (!('type' in value) || value['type'] === undefined) return false;
     return true;
 }
@@ -67,6 +74,7 @@ export function CheckSchemaInputKindOneOf2FromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
+        'defaultValue': json['defaultValue'],
         'keyPlaceholder': json['keyPlaceholder'] == null ? undefined : json['keyPlaceholder'],
         'type': json['type'],
         'valuePlaceholder': json['valuePlaceholder'] == null ? undefined : json['valuePlaceholder'],
@@ -84,6 +92,7 @@ export function CheckSchemaInputKindOneOf2ToJSONTyped(value?: CheckSchemaInputKi
 
     return {
         
+        'defaultValue': value['defaultValue'],
         'keyPlaceholder': value['keyPlaceholder'],
         'type': value['type'],
         'valuePlaceholder': value['valuePlaceholder'],

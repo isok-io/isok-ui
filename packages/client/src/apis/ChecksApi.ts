@@ -15,20 +15,23 @@
 
 import * as runtime from '../runtime';
 import type {
+  ApiCheck,
   ApiCheckInput,
   ApiCheckResult,
-  Check,
   CheckSchema,
+  GetChecksSummaryV1200ResponseValueInner,
 } from '../models/index';
 import {
+    ApiCheckFromJSON,
+    ApiCheckToJSON,
     ApiCheckInputFromJSON,
     ApiCheckInputToJSON,
     ApiCheckResultFromJSON,
     ApiCheckResultToJSON,
-    CheckFromJSON,
-    CheckToJSON,
     CheckSchemaFromJSON,
     CheckSchemaToJSON,
+    GetChecksSummaryV1200ResponseValueInnerFromJSON,
+    GetChecksSummaryV1200ResponseValueInnerToJSON,
 } from '../models/index';
 
 export interface CreateCheckV1Request {
@@ -180,7 +183,7 @@ export class ChecksApi extends runtime.BaseAPI {
     /**
      * Get check\'s metrics
      */
-    async getCheckMetricsV1Raw(requestParameters: GetCheckMetricsV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ApiCheckResult>>> {
+    async getCheckMetricsV1Raw(requestParameters: GetCheckMetricsV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ApiCheckResult | null>>> {
         if (requestParameters['checkId'] == null) {
             throw new runtime.RequiredError(
                 'checkId',
@@ -253,7 +256,7 @@ export class ChecksApi extends runtime.BaseAPI {
     /**
      * Get check\'s metrics
      */
-    async getCheckMetricsV1(requestParameters: GetCheckMetricsV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApiCheckResult>> {
+    async getCheckMetricsV1(requestParameters: GetCheckMetricsV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApiCheckResult | null>> {
         const response = await this.getCheckMetricsV1Raw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -261,7 +264,7 @@ export class ChecksApi extends runtime.BaseAPI {
     /**
      * Get check
      */
-    async getCheckV1Raw(requestParameters: GetCheckV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Check>> {
+    async getCheckV1Raw(requestParameters: GetCheckV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApiCheck>> {
         if (requestParameters['checkId'] == null) {
             throw new runtime.RequiredError(
                 'checkId',
@@ -295,13 +298,13 @@ export class ChecksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CheckFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApiCheckFromJSON(jsonValue));
     }
 
     /**
      * Get check
      */
-    async getCheckV1(requestParameters: GetCheckV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Check> {
+    async getCheckV1(requestParameters: GetCheckV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApiCheck> {
         const response = await this.getCheckV1Raw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -335,7 +338,7 @@ export class ChecksApi extends runtime.BaseAPI {
     /**
      * Get tenant\'s checks summary
      */
-    async getChecksSummaryV1Raw(requestParameters: GetChecksSummaryV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: ApiCheckResult; }>> {
+    async getChecksSummaryV1Raw(requestParameters: GetChecksSummaryV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: Array<GetChecksSummaryV1200ResponseValueInner>; }>> {
         if (requestParameters['tenant'] == null) {
             throw new runtime.RequiredError(
                 'tenant',
@@ -395,13 +398,13 @@ export class ChecksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => runtime.mapValues(jsonValue, ApiCheckResultFromJSON));
+        return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
      * Get tenant\'s checks summary
      */
-    async getChecksSummaryV1(requestParameters: GetChecksSummaryV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: ApiCheckResult; }> {
+    async getChecksSummaryV1(requestParameters: GetChecksSummaryV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: Array<GetChecksSummaryV1200ResponseValueInner>; }> {
         const response = await this.getChecksSummaryV1Raw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -409,7 +412,7 @@ export class ChecksApi extends runtime.BaseAPI {
     /**
      * Get tenant\'s checks
      */
-    async getChecksV1Raw(requestParameters: GetChecksV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Check>> {
+    async getChecksV1Raw(requestParameters: GetChecksV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ApiCheck>>> {
         if (requestParameters['tenant'] == null) {
             throw new runtime.RequiredError(
                 'tenant',
@@ -436,13 +439,13 @@ export class ChecksApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CheckFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ApiCheckFromJSON));
     }
 
     /**
      * Get tenant\'s checks
      */
-    async getChecksV1(requestParameters: GetChecksV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Check> {
+    async getChecksV1(requestParameters: GetChecksV1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApiCheck>> {
         const response = await this.getChecksV1Raw(requestParameters, initOverrides);
         return await response.value();
     }

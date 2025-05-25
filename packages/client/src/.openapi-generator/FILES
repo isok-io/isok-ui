@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AuthApi.ts
 apis/ChecksApi.ts
 apis/DefaultApi.ts
@@ -7,9 +6,10 @@ apis/RegionsApi.ts
 apis/UsersApi.ts
 apis/index.ts
 index.ts
+models/ApiCheck.ts
 models/ApiCheckInput.ts
 models/ApiCheckResult.ts
-models/Check.ts
+models/ApiCheckStatus.ts
 models/CheckKind.ts
 models/CheckMetrics.ts
 models/CheckResultDetails.ts
@@ -22,12 +22,11 @@ models/CheckSchemaInputKindOneOf1.ts
 models/CheckSchemaInputKindOneOf2.ts
 models/CheckSchemaSelectInputOption.ts
 models/CheckSchemaTextInputVariant.ts
-models/CheckStatus.ts
 models/CheckZone.ts
 models/CheckZoneOneOf.ts
 models/CheckZoneOneOf1.ts
 models/Creds.ts
-models/Duration.ts
+models/GetChecksSummaryV1200ResponseValueInner.ts
 models/HttpCheck.ts
 models/HttpCheckResult.ts
 models/MetricsFilter.ts

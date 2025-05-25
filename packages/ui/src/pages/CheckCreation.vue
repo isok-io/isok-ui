@@ -6,6 +6,8 @@ import {ChecksApi} from "@client/ChecksApi.js";
 import {RegionsApi} from "@client/RegionsApi.js";
 import parseDuration from 'parse-duration';
 import {useRouter} from "vue-router";
+import {Configuration} from "client/src/index.js";
+import {apiBase} from "../consts.js";
 
 export default {
   data(){
@@ -13,95 +15,17 @@ export default {
       step: 1,
       checksMeta: [],
       checkType: "",
-      checkApi: new ChecksApi(),
-      regionsApi: new RegionsApi(),
+      checkApi: new ChecksApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
+      regionsApi: new RegionsApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
       dataCheck: {},
+      zones: [],
       errorMessage: "",
       router: useRouter()
     }
   },
   async mounted() {
-    // this.checksMeta = await this.checkApi.getChecksMetaV1()
-    this.checksMeta = [
-      {
-        "inputs": [
-          {
-            "kind": {
-              "default_value": null,
-              "placeholder": "https://example.com",
-              "type": "Text",
-              "variant": "Url"
-            },
-            "title": "URL"
-          }
-        ],
-        "inputs_advanced": [
-          {
-            "kind": {
-              "selectOptions": [
-                {
-                  "label": "GET",
-                  "value": "GET"
-                },
-                {
-                  "label": "POST",
-                  "value": "POST"
-                },
-                {
-                  "label": "PUT",
-                  "value": "PUT"
-                },
-                {
-                  "label": "DELETE",
-                  "value": "DELETE"
-                },
-                {
-                  "label": "PATCH",
-                  "value": "PATCH"
-                },
-                {
-                  "label": "HEAD",
-                  "value": "HEAD"
-                },
-                {
-                  "label": "OPTIONS",
-                  "value": "OPTIONS"
-                },
-                {
-                  "label": "CONNECT",
-                  "value": "CONNECT"
-                },
-                {
-                  "label": "TRACE",
-                  "value": "TRACE"
-                }
-              ],
-              "type": "Select"
-            },
-            "title": "Method"
-          },
-          {
-            "kind": {
-              "default_value": "{}",
-              "placeholder": null,
-              "type": "Text",
-              "variant": "Area"
-            },
-            "title": "Body"
-          },
-          {
-            "kind": {
-              "keyPlaceholder": "Key",
-              "type": "KeyValue",
-              "valuePlaceholder": "Value"
-            },
-            "title": "Headers"
-          }
-        ],
-        "type": "Http",
-        "version": 1
-      }
-    ];
+    this.checksMeta = await this.checkApi.getChecksMetaV1()
+    this.zones = await this.getZone()
   },
   methods: {
     nextStep(step, e){
@@ -147,15 +71,15 @@ export default {
 
         switch (kind.type) {
           case "Text":
-            kindObject[key] = kind.default_value || null;
+            kindObject[key] = kind.defaultValue || null;
             break;
 
           case "Select":
-            kindObject[key] = kind.default_value || kind.selectOptions?.[0]?.value || "";
+            kindObject[key] = kind.defaultValue.value || kind.selectOptions?.[0]?.value || "";
             break;
 
           case "KeyValue":
-            kindObject[key] = kind.default_value || {};
+            kindObject[key] = kind.defaultValue || {};
             break;
 
           default:
@@ -167,7 +91,7 @@ export default {
       const normalizeKey = (label = "") =>
           label.trim().toLowerCase().replace(/\s+/g, "_");
 
-      [...(schema.inputs || []), ...(schema.inputs_advanced || [])].forEach(parseInput);
+      [...(schema.inputs || []), ...(schema.inputsAdvanced || [])].forEach(parseInput);
 
       return result;
     },
@@ -176,7 +100,8 @@ export default {
 
       this.errorMessage = "";
       for (const [key, value] of Object.entries(values)) {
-        if(value === null){
+        console.log(key, value);
+        if(value === null && key !== "body"){
           this.errorMessage = capitalize(key)+" are required.";
         }
       }
@@ -195,64 +120,23 @@ export default {
         const msValue = parseDuration(e.detail.interval);
         if(msValue != null){
           this.dataCheck.interval = msValue / 1000;
-          // this.checkApi.createCheckV1({
-          //   tenant: localStorage.getItem('organization'),
-          //   apiCheckInput: this.dataCheck
-          // });
+          this.dataCheck.kind[Object.keys(this.dataCheck.kind)[0].toLowerCase()] = this.dataCheck.kind[Object.keys(this.dataCheck.kind)[0]];
+          this.checkApi.createCheckV1({
+            tenant: localStorage.getItem('organization'),
+            apiCheckInput: this.dataCheck
+          });
           this.router.push("/")
         } else {
           this.errorMessage = "The format of your interval is invalid (format: 10min, 20s, 3 days,...)";
         }
       }
     },
-    getZone(){
-      // return this.regionsApi.getRegionsV1().map((item) => {
-      //   item.value = item.id;
-      //   item.label = item.name
-      //   return item;
-      // });
-      return [
-        {
-          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-          "name": "France",
-          "tags": {
-            "property1": "string",
-            "property2": "string"
-          },
-          "zones": [
-            {
-              "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-              "name": "string",
-              "tags": {
-                "property1": "string",
-                "property2": "string"
-              }
-            }
-          ]
-        },
-        {
-          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f09",
-          "name": "England",
-          "tags": {
-            "property1": "string",
-            "property2": "string"
-          },
-          "zones": [
-            {
-              "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-              "name": "string",
-              "tags": {
-                "property1": "string",
-                "property2": "string"
-              }
-            }
-          ]
-        }
-      ].map((item) => {
+    async getZone(){
+      return (await this.regionsApi.getRegionsV1()).map((item) => {
         item.value = item.id;
         item.label = item.name
         return item;
-      })
+      });
     }
   }
 }
@@ -272,7 +156,7 @@ export default {
   <ik-check-form-post-creation v-if="step === 3"
      :typeCheck="this.checkType"
      :errorMessage="this.errorMessage"
-     :zoneOptions="getZone()"
+     :zoneOptions="this.zones"
      @ik-check-form-post-creation:click-create="(e) => save(e)"
   ></ik-check-form-post-creation>
   <ik-button class="back-button"

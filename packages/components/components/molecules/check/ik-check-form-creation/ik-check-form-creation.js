@@ -56,7 +56,7 @@ class IkCheckFormCreation extends LitElement {
                 <ik-input
                         .title=${dataInput.title}
                         .placeholder=${dataInput.kind.placeholder}
-                        .value=${this.getData(dataInput.title) || dataInput.kind.default_value}
+                        .value=${this.getData(dataInput.title) || dataInput.kind.defaultValue || null}
                         height="auto"
                         .width=${this.width}
                         fontSize=${fontSize}
@@ -72,7 +72,7 @@ class IkCheckFormCreation extends LitElement {
                     type="textarea"
                     .title=${dataInput.title}
                     .placeholder=${dataInput.kind.placeholder}
-                    .value=${dataInput.kind.default_value}
+                    .value=${dataInput.kind.defaultValue || null}
                     height="auto"
                     .width=${this.width}
                     fontSize=${fontSize}
@@ -87,7 +87,7 @@ class IkCheckFormCreation extends LitElement {
                     .title=${dataInput.title}
                     type="select"
                     .selectOptions=${dataInput.kind.selectOptions}
-                    .value=${dataInput.kind.default_value}
+                    .value=${dataInput.kind.defaultValue}
                     height="auto"
                     width="auto"
                     fontSize=${fontSize}
@@ -143,7 +143,7 @@ class IkCheckFormCreation extends LitElement {
                         ${this.renderInputs(this.schema.inputs, this.fontSizeText)}
                     </div>
                     
-                    ${this.schema.inputs_advanced || this.schema.inputs_advanced?.length > 0 ? html`
+                    ${this.schema.inputsAdvanced || this.schema.inputsAdvanced?.length > 0 ? html`
                         <div class="toggle" @click=${this.openToggle}>
                             <span>Advanced settings</span>
                             <ik-button
@@ -161,7 +161,7 @@ class IkCheckFormCreation extends LitElement {
                     
                     ${ this.toggleOpen ? html`
                         <div class="toggle-content">
-                            ${this.renderInputs(this.schema.inputs_advanced, this.fontSizeTextAdvanced)}
+                            ${this.renderInputs(this.schema.inputsAdvanced, this.fontSizeTextAdvanced)}
                         </div>
                     ` : html``}
                     <div class="error-message">${this.errorMessage}</div>
