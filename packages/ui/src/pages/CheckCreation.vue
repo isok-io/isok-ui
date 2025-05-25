@@ -187,7 +187,7 @@ export default {
         this.dataCheck.name = e.detail.name;
 
         if(e.detail.zones.includes('all')){
-          this.dataCheck.zones = [{"All": {}}]
+          this.dataCheck.zones = ["All"]
         } else {
           this.dataCheck.zones = e.detail.zones.map(item => ({ Region: item }));
         }
