@@ -5,72 +5,227 @@ import Fuse from 'fuse.js';
 import {useRouter} from "vue-router";
 import {Configuration} from "client/src/index.js";
 import {apiBase} from "../consts.js";
+import parseDuration from "parse-duration";
 
 export default {
   data(){
     return {
       checks: [],
+      checksSummary: {},
+      data: [],
       checksVisible: [],
-      checksApi: new ChecksApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')}))
+      checksApi: new ChecksApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
+      checkinValue: 600000
     }
   },
-  mounted() {
-    this.getChecks();
+  async mounted() {
     this.router = useRouter();
-  },
-  methods: {
-    getChecks() {
-      // const checkList = this.checksApi.getChecksV1({tenant: localStorage.getItem("organization")});
-      this.checks = [
+
+    // this.checksSummary = await this.checksApi.getChecksSummaryV1(
+    //     {
+    //       tenant: localStorage.getItem('organization'),
+    //       end: new Date(),
+    //       points: 20,
+    //       start: new Date(new Date().getTime() - this.checkinValue)
+    //     }
+    // );
+    this.checksSummary = {
+      "497f6eca-6276-4993-bfeb-53cbbbba6f08": [
         {
-          id: "1",
-          name: "First check",
-          type: "HTTP",
-          domain: "http://domain-exemple",
-          uptime: 20,
-          responseTime: 300,
-          bars: Array.from({ length: 20 }, () => ({
-            uptime: Math.floor(Math.random() * 101)
-          }))
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 20
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "None"
         },
         {
-          id: "2",
-          name: "Second check",
-          type: "HTTP",
-          domain: "http://domain-exemple",
-          uptime: 40,
-          responseTime: 300,
-          bars: Array.from({ length: 20 }, () => ({
-            uptime: Math.floor(Math.random() * 101)
-          }))
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 2
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "Reachable"
         },
         {
-          id: "3",
-          name: "Other check",
-          type: "HTTP",
-          domain: "http://domain-exemple2",
-          uptime: 20,
-          responseTime: 300,
-          bars: Array.from({ length: 20 }, () => ({
-            uptime: Math.floor(Math.random() * 101)
-          }))
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 4
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "Reachable"
         },
         {
-          id: "4",
-          name: "TCP check",
-          type: "TCP",
-          domain: "http://domain-exemple",
-          uptime: 40,
-          responseTime: 300,
-          bars: Array.from({ length: 20 }, () => ({
-            uptime: Math.floor(Math.random() * 101)
-          }))
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 50
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "ReachableUnreachable"
+        }
+      ],
+      "497f6eca-6276-4993-bfeb-53cbbbba6f09": [
+        {
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 2
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "Reachable"
+        },
+        {
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 10
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "Unreachable"
+        },
+        {
+          "details": {
+            "Http": {
+              "status_code": 0
+            }
+          },
+          "end": "2019-08-24T14:15:22Z",
+          "error": "string",
+          "metrics": {
+            "latency": 50
+          },
+          "start": "2019-08-24T14:15:22Z",
+          "status": "ReachableUnreachable"
         }
       ]
-      this.checksVisible = this.checks
-    },
+    }
+
+    // this.checks = this.checksApi.getCheckV1({tenant: localStorage.getItem('organization')})
+    this.checks = [
+      {
+        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+        "interval": 5,
+        "kind": {
+          "Http": {
+            "body": "string",
+            "headers": {
+              "property1": "string",
+              "property2": "string"
+            },
+            "method": "string",
+            "url": "http://example.com"
+          }
+        },
+        "name": "string",
+        "tenant": "93360892-48a4-4f76-a117-3304c9c61771",
+        "zones": [
+          "All"
+        ]
+      },
+      {
+        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f09",
+        "interval": 10,
+        "kind": {
+          "Http": {
+            "body": "string",
+            "headers": {
+              "property1": "string",
+              "property2": "string"
+            },
+            "method": "string",
+            "url": "http://example2.com"
+          }
+        },
+        "name": "check",
+        "tenant": "93360892-48a4-4f76-a117-3304c9c61771",
+        "zones": [
+          "All"
+        ]
+      }
+    ]
+
+    this.data = this.checks.map(check => {
+      const checkId = check.id;
+      const summary = this.checksSummary[checkId] || [];
+
+      const validEntries = summary.filter(e => e != null);
+      const reachableEntries = validEntries.filter(e => e.status === "Reachable");
+
+      const uptime = validEntries.length > 0
+          ? (reachableEntries.length / validEntries.length * 100)
+          : 0;
+
+      const latency = reachableEntries.length > 0
+          ? reachableEntries.reduce((acc, e) => acc + e.metrics.latency, 0) / reachableEntries.length
+          : 0;
+
+      const color = (status) => {
+        switch (status) {
+          case 'Unreachable': return "red";
+          case 'ReachableUnreachable': return "yellow";
+          case 'Reachable': return "green";
+          default: return "grey";
+        }
+      };
+
+      const bars = validEntries.map(e => ({
+        color: color(e.status),
+        data: [e.start, "Status: " + e.status],
+      }));
+
+      const checkType = Object.entries(check.kind).find(([key, value]) => value !== null)?.[0];
+
+      return {
+        id: checkId,
+        name: check.name,
+        type: checkType,
+        uptime: uptime,
+        latency: latency,
+        domain: checkType === "Http" ? check.kind[checkType].url : null,
+        bars: bars,
+      };
+    });
+
+    this.checksVisible = this.data
+  },
+  methods: {
+    parseDuration,
     filterChecks(searchInput) {
-      const fuse = new Fuse(this.checks, {
+      const fuse = new Fuse(this.data, {
         keys: [
           { name: 'name', weight: 0.6 },
           { name: 'domain', weight: 0.3 },
@@ -81,7 +236,7 @@ export default {
       });
 
       if (!searchInput) {
-        this.checksVisible = this.checks;
+        this.checksVisible = this.data;
       } else {
         const results = fuse.search(searchInput);
         this.checksVisible = results.map(result => result.item);
@@ -106,7 +261,7 @@ export default {
       bigCheckWidth="80em"
       smallCheckWidth="60em"
       :checks="checksVisible"
-      @ik-checks-list:change-checkin="(e) => console.log(e.detail)"
+      @ik-checks-list:change-checkin="(e) => this.checkinValue = parseDuration(e.detail.value1+e.detail.value2)"
       @ik-checks-list:change-research="(e) => this.filterChecks(e.detail.value)"
       @ik-check-list:click-info="(e) => navigate('info',e.detail)"
       @ik-check-list:click-add="() => navigate('add',{})"

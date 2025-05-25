@@ -11,7 +11,7 @@ class IkCheckGroup extends LitElement {
         typeCheck: {type: String},
         domainCheck: {type: String},
         uptimeCheck: {type: String},
-        responseTimeCheck: {type: String},
+        latencyCheck: {type: String},
         barsCheck: {type: Array},
         width: {type: String},
     }
@@ -25,7 +25,7 @@ class IkCheckGroup extends LitElement {
         this.typeCheck = undefined;
         this.domainCheck = undefined;
         this.uptimeCheck = undefined;
-        this.responseTimeCheck = undefined;
+        this.latencyCheck = undefined;
         this.barsCheck = [];
         this.width = "800px";
 
@@ -57,7 +57,7 @@ class IkCheckGroup extends LitElement {
                     ${ this.type === "groupByType" ? this.renderTitle("TYPE", this.typeCheck) : "" }
                     ${ this.type === "groupByDomain" ? this.renderTitle("DOMAIN", this.domainCheck) : "" }
                     ${ this.renderTitle("UPTIME", this.uptimeCheck) }
-                    ${ this.renderTitle("RESPONSE TIME", this.responseTimeCheck) }
+                    ${ this.renderTitle("LATENCY", this.latencyCheck) }
                     <ik-diagram-bar 
                             .bars=${this.barsCheck}
                     ></ik-diagram-bar>

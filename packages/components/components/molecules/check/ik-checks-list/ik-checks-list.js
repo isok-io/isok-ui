@@ -35,11 +35,6 @@ class IkChecksList extends LitElement {
     }
 
     groupBy(valueKey) {
-        const uptimeToColor = (uptime) => {
-            if (uptime < 50) return 'red';
-            if (uptime < 80) return 'yellow';
-            return 'green';
-        };
 
         const grouped = {};
 
@@ -50,44 +45,61 @@ class IkChecksList extends LitElement {
                     [valueKey]: key,
                     checks: [],
                     uptimeSum: 0,
-                    responseTimeSum: 0,
-                    barsUptimeLists: []
+                    latencySum: 0,
+                    barsStatusLists: []
                 };
             }
 
-            const coloredBars = check.bars.map(bar => ({
-                color: uptimeToColor(bar.uptime)
-            }));
+            const bars = check.bars.slice(0, 20).concat(
+                Array.from({ length: Math.max(0, 20 - check.bars.length) }, () => ({ color: "grey"}))
+            );
 
             const checkWithColoredBars = {
                 ...check,
-                bars: coloredBars
+                bars: bars,
             };
 
             grouped[key].checks.push(checkWithColoredBars);
             grouped[key].uptimeSum += check.uptime;
-            grouped[key].responseTimeSum += check.responseTime;
+            grouped[key].latencySum += check.latency;
 
-            check.bars.forEach((bar, index) => {
-                if (!grouped[key].barsUptimeLists[index]) {
-                    grouped[key].barsUptimeLists[index] = [];
+            bars.forEach((bar, index) => {
+                if (!grouped[key].barsStatusLists[index]) {
+                    grouped[key].barsStatusLists[index] = [];
                 }
-                grouped[key].barsUptimeLists[index].push(bar.uptime);
+                grouped[key].barsStatusLists[index].push(bar.color);
             });
         }
 
         return Object.values(grouped).map(group => {
             const count = group.checks.length;
 
-            const bars = group.barsUptimeLists.map(uptimeList => {
-                const avg = uptimeList.reduce((a, b) => a + b, 0) / uptimeList.length;
-                return { color: uptimeToColor(avg) };
+            const colorWeights = {
+                red: 3,
+                yellow: 2,
+                green: 1,
+                grey: 0
+            };
+
+            const bars = group.barsStatusLists.map(colorsList => {
+                const scores = colorsList.reduce((acc, color) => {
+                    const weight = colorWeights[color] ?? 0;
+                    acc[color] = (acc[color] || 0) + weight;
+                    return acc;
+                }, {});
+
+                const bestColor = Object.entries(scores)
+                    .sort((a, b) => b[1] - a[1])[0]?.[0] || "grey";
+
+                return {
+                    color: bestColor
+                };
             });
 
             return {
                 [valueKey]: group[valueKey],
                 uptime: group.uptimeSum / count,
-                responseTime: group.responseTimeSum / count,
+                latency: group.latencySum / count,
                 bars,
                 checks: group.checks
             };
@@ -124,7 +136,7 @@ class IkChecksList extends LitElement {
                             domainCheck=${this.groupByValue === "domain" ? checkGroup.domain : undefined}
                             typeCheck=${this.groupByValue === "type" ? checkGroup.type : undefined}
                             uptimeCheck="${checkGroup.uptime.toFixed(0)}%"
-                            responseTimeCheck="${checkGroup.responseTime.toFixed(0)}ms"
+                            latencyCheck="${checkGroup.latency.toFixed(0)}ms"
                             .barsCheck=${checkGroup.bars}
                             width=${this.groupByValue === "domain" ? this.bigCheckWidth : this.smallCheckWidth}
                         >
@@ -138,7 +150,7 @@ class IkChecksList extends LitElement {
                                     typeCheck=${this.groupByValue === "domain" ? check.type : undefined}
                                     domainCheck=${this.groupByValue === "type" ? check.domain : undefined}
                                     uptimeCheck="${check.uptime.toFixed(0)}%"
-                                    responseTimeCheck="${check.responseTime.toFixed(0)}ms"
+                                    latencyCheck="${check.latency.toFixed(0)}ms"
                                     .barsCheck=${check.bars}
                                     width=${this.groupByValue === "domain" ? this.smallCheckWidth : this.bigCheckWidth}
                                     @ik-check:click-info=${() => _emit(this, "ik-check-list:click-info", check)}
