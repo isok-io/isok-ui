@@ -26,7 +26,7 @@ class IkCheckFormCreation extends LitElement {
     }
 
     normalizeKey(label = "") {
-        return label.trim().toLowerCase().replace(/\s+/g, "_");
+        return label.trim().toLowerCase().replace(/\s+/g, "_").replace(/-/g, "");
     }
 
     updateInputValue(targetInput, newValue) {
@@ -143,7 +143,7 @@ class IkCheckFormCreation extends LitElement {
                         ${this.renderInputs(this.schema.inputs, this.fontSizeText)}
                     </div>
                     
-                    ${this.schema.inputsAdvanced || this.schema.inputsAdvanced?.length > 0 ? html`
+                    ${this.schema.inputsAdvanced && this.schema.inputsAdvanced?.length > 0 ? html`
                         <div class="toggle" @click=${this.openToggle}>
                             <span>Advanced settings</span>
                             <ik-button

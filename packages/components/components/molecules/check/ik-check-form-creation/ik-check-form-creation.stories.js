@@ -8,6 +8,7 @@ export default {
 
 const Template = (args) => {
     return html`<ik-check-form-creation 
+            .schema=${args.schema}
             .data=${args.data}
             .fontSizeTitle=${args.fontSizeTitle}
             .fontSizeText=${args.fontSizeText}
@@ -23,48 +24,104 @@ HTTP.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'HTTP',
-        inputs: [
-            {
-                type: 'text',
-                title: 'URL',
-                value: '',
-                placeholder: 'http://my-website.com',
+        "interval": 5,
+        "kind": {
+            "Http": {
+                "body": "",
+                "headers": {},
+                "method": "get",
+                "url": ""
             }
-        ],
-        inputsAdvanced: [
-            {
-                type: 'select',
-                title: 'Method',
-                value: 'get',
-                selectOptions: [
-                    { value: 'get', label: 'GET' },
-                    { value: 'post', label: 'POST' },
-                    { value: 'put', label: 'PUT' },
-                    { value: 'delete', label: 'DELETE' },
-                    { value: 'patch', label: 'PATCH' },
-                    { value: 'head', label: 'HEAD' },
-                    { value: 'options', label: 'OPTIONS' },
-                    { value: 'connect', label: 'CONNECT' },
-                    { value: 'trace', label: 'TRACE' }
-                ]
-            },
-            {
-                type: 'area',
-                title: 'Body',
-                value: '{}',
-            },
-            {
-                type: 'key-value',
-                title: 'Header',
-                placeholder: 'Key...',
-                placeholder2: 'Value...',
-                values: [
-                    { key: "Accept", value: "*/*" }
-                ]
-            }
+        },
+        "name": "",
+        "zones": [
+            "All"
         ]
-    }
+    },
+    schema:
+        {
+            "inputs": [
+                {
+                    "kind": {
+                        "default_value": null,
+                        "placeholder": "https://example.com",
+                        "type": "Text",
+                        "variant": "Url"
+                    },
+                    "title": "URL"
+                }
+            ],
+            "inputsAdvanced": [
+                {
+                    "kind": {
+                        "defaultValue": {
+                            "label": "GET",
+                            "value": "GET"
+                        },
+                        "selectOptions": [
+                            {
+                                "label": "GET",
+                                "value": "GET"
+                            },
+                            {
+                                "label": "POST",
+                                "value": "POST"
+                            },
+                            {
+                                "label": "PUT",
+                                "value": "PUT"
+                            },
+                            {
+                                "label": "DELETE",
+                                "value": "DELETE"
+                            },
+                            {
+                                "label": "PATCH",
+                                "value": "PATCH"
+                            },
+                            {
+                                "label": "HEAD",
+                                "value": "HEAD"
+                            },
+                            {
+                                "label": "OPTIONS",
+                                "value": "OPTIONS"
+                            },
+                            {
+                                "label": "CONNECT",
+                                "value": "CONNECT"
+                            },
+                            {
+                                "label": "TRACE",
+                                "value": "TRACE"
+                            }
+                        ],
+                        "type": "Select"
+                    },
+                    "title": "Method"
+                },
+                {
+                    "kind": {
+                        "default_value": null,
+                        "placeholder": "{}",
+                        "type": "Text",
+                        "variant": "Area"
+                    },
+                    "title": "Body"
+                },
+                {
+                    "kind": {
+                        "defaultValue": {},
+                        "keyPlaceholder": "Key",
+                        "type": "KeyValue",
+                        "valuePlaceholder": "Value"
+                    },
+                    "title": "Headers"
+                }
+            ],
+            "type": "Http",
+            "version": 1
+        }
 };
 
 export const PING = Template.bind({});
@@ -74,14 +131,29 @@ PING.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'PING',
+        interval: 5,
+        kind: {
+            Ping: {
+                host: ""
+            }
+        },
+        name: "",
+        zones: ["All"]
+    },
+    schema: {
+        type: "Ping",
+        version: 1,
         inputs: [
             {
-                type: 'text',
-                title: 'IP Adress - Hostname',
-                placeholder: '153.207.6.221',
+                title: "IP Address - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "153.207.6.221",
+                    default_value: null
+                }
             }
         ],
+        inputsAdvanced: []
     }
 };
 
@@ -92,19 +164,37 @@ SSL.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'SSL',
+        interval: 5,
+        kind: {
+            Ssl: {
+                host: "",
+                port: "443"
+            }
+        },
+        name: "",
+        zones: ["All"]
+    },
+    schema: {
+        type: "Ssl",
+        version: 1,
         inputs: [
             {
-                type: 'text',
-                title: 'Domain name - Hostname',
-                placeholder: 'myapi.example.com',
+                title: "Domain name - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "myapi.example.com",
+                    default_value: null
+                }
             }
         ],
         inputsAdvanced: [
             {
-                type: 'text',
-                title: 'Port',
-                value: '443'
+                title: "Port",
+                kind: {
+                    type: "Text",
+                    default_value: "443",
+                    placeholder: "443"
+                }
             }
         ]
     }
@@ -117,19 +207,38 @@ TCP.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'TCP',
+        interval: 5,
+        kind: {
+            Tcp: {
+                host: "",
+                port: "80"
+            }
+        },
+        name: "",
+        zones: ["All"]
+    },
+    schema: {
+        type: "Tcp",
+        version: 1,
         inputs: [
             {
-                type: 'text',
-                title: 'IP Adress - Hostname',
-                placeholder: '153.207.6.221',
+                title: "IP Address - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "153.207.6.221",
+                    default_value: null
+                }
             },
             {
-                type: 'text',
-                title: 'Port',
-                placeholder: '80'
+                title: "Port",
+                kind: {
+                    type: "Text",
+                    placeholder: "80",
+                    default_value: null
+                }
             }
-        ]
+        ],
+        inputsAdvanced: []
     }
 };
 
@@ -140,18 +249,37 @@ UDP.args = {
     fontSizeTextAdvanced: "20px",
     width: "660px",
     data: {
-        type: 'UDP',
+        interval: 5,
+        kind: {
+            Udp: {
+                host: "",
+                port: "53"
+            }
+        },
+        name: "",
+        zones: ["All"]
+    },
+    schema: {
+        type: "Udp",
+        version: 1,
         inputs: [
             {
-                type: 'text',
-                title: 'IP Adress - Hostname',
-                placeholder: '153.207.6.221',
+                title: "IP Address - Hostname",
+                kind: {
+                    type: "Text",
+                    placeholder: "153.207.6.221",
+                    default_value: null
+                }
             },
             {
-                type: 'text',
-                title: 'Port',
-                placeholder: '53'
+                title: "Port",
+                kind: {
+                    type: "Text",
+                    placeholder: "53",
+                    default_value: null
+                }
             }
-        ]
+        ],
+        inputsAdvanced: []
     }
 };

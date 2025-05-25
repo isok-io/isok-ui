@@ -37,9 +37,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -47,9 +47,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple",
             uptime: 40,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -57,9 +57,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple2",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -67,9 +67,9 @@ Default.args = {
             type: "TCP",
             domain: "http://domain-exemple",
             uptime: 40,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -77,9 +77,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple2",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -87,9 +87,9 @@ Default.args = {
             type: "TCP",
             domain: "http://domain-exemple3",
             uptime: 40,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -97,9 +97,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -107,9 +107,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple",
             uptime: 40,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -117,9 +117,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple2",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -127,9 +127,9 @@ Default.args = {
             type: "TCP",
             domain: "http://domain-exemple",
             uptime: 40,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -137,9 +137,9 @@ Default.args = {
             type: "HTTP",
             domain: "http://domain-exemple2",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -147,9 +147,9 @@ Default.args = {
             type: "TCP",
             domain: "http://domain-exemple3",
             uptime: 40,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         }
     ]
@@ -171,9 +171,9 @@ GroupByType.args = {
             type: "HTTP",
             domain: "http://domain-exemple",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -181,9 +181,9 @@ GroupByType.args = {
             type: "HTTP",
             domain: "http://domain-exemple",
             uptime: 40,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         },
         {
@@ -191,9 +191,9 @@ GroupByType.args = {
             type: "HTTP",
             domain: "http://domain-exemple2",
             uptime: 20,
-            responseTime: 300,
+            latency: 300,
             bars: Array.from({ length: 20 }, () => ({
-                uptime: Math.floor(Math.random() * 101)
+                color: ["green","yellow","red"][Math.floor(Math.random() * 3)]
             }))
         }
     ],
