@@ -16,20 +16,7 @@ export default {
     this.theme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light') || 'light';
     this.setTheme(this.theme);
     if (this.isConnected()) {
-      const organizationsApi = new OrganisationsApi(new Configuration({
-        basePath: apiBase,
-        accessToken: localStorage.getItem('user-token')
-      }));
-
-      const orgs = await organizationsApi.listOrgsV1();
-      if (orgs.length === 0) {
-        const id = await organizationsApi.createOrgV1({organisationInput: {name: 'My Organisation'}});
-        orgs.push({id: id, name: 'My Organisation', tags: {}});
-      }
-
-      this.organizations = orgs.map(org => {
-        return {value: org.id, label: org.name}
-      });
+      this.organizations = await this.getOrganization();
     }
 
     this.setOrganization(localStorage.getItem('organization') || this.organizations[0].value);
@@ -50,6 +37,25 @@ export default {
     },
     isConnected(){
       return !!localStorage.getItem('user-token');
+    },
+    async getOrganization() {
+      const organizationsApi = new OrganisationsApi(new Configuration({
+        basePath: apiBase,
+        accessToken: localStorage.getItem('user-token')
+      }));
+
+      const orgs = await organizationsApi.listOrgsV1();
+      if (orgs.length === 0) {
+        const id = await organizationsApi.createOrgV1({organisationInput: {name: 'My Organisation'}});
+        orgs.push({id: id, name: 'My Organisation', tags: {}});
+      }
+
+      return orgs.map(org => {
+        return {value: org.id, label: org.name}
+      });
+    },
+    async reload() {
+      this.organizations = await this.getOrganization();
     }
   }
 };
@@ -73,7 +79,7 @@ export default {
         @ik-header:change-organization="(e) => this.setOrganization(e.detail.value)"
         @ik-header:click-title="$router.push('/')"
     ></ik-header>
-    <router-view />
+    <router-view @reload="reload" />
   </div>
 </template>
 
