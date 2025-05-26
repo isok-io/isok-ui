@@ -100,7 +100,6 @@ export default {
 
       this.errorMessage = "";
       for (const [key, value] of Object.entries(values)) {
-        console.log(key, value);
         if(value === null && key !== "body"){
           this.errorMessage = capitalize(key)+" are required.";
         }
@@ -114,7 +113,7 @@ export default {
         if(e.detail.zones.includes('all')){
           this.dataCheck.zones = ["All"]
         } else {
-          this.dataCheck.zones = e.detail.zones.map(item => ({ Region: item }));
+          this.dataCheck.zones = e.detail.zones.map(item => ({ region: item }));
         }
 
         const msValue = parseDuration(e.detail.interval);
