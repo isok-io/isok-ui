@@ -47,33 +47,55 @@ export default {
     },
     async login(data) {
       if (this.validData(data)) {
-        const token = (await this.authApi.authV1({creds: data}).then(auth => {
+        try {
+          const auth = await this.authApi.authV1({ creds: data });
           console.info(`user ${auth.userId} connected`);
-          return auth;
-        })).token;
-        if(token){
-          localStorage.setItem("user-token", token);
-          await this.router.push({path: "/"});
-          localStorage.removeItem("auth-step")
-          document.location.reload();
-        } else {
-          this.errorMessage = "Invalid email or password";
+          const token = auth.token;
+
+          if (token) {
+            localStorage.setItem("user-token", token);
+            await this.router.push({ path: "/" });
+            localStorage.removeItem("auth-step");
+            document.location.reload();
+          } else {
+            this.errorMessage = "Invalid email or password";
+          }
+
+        } catch (error) {
+          if (error.response && error.response.status === 400) {
+            this.errorMessage = "Invalid email or password"; // Erreur utilisateur connue
+          } else {
+            this.errorMessage = "An unexpected error occurred. Please try again.";
+            console.error("Login error:", error);
+          }
         }
       }
     },
     async signup(data) {
       if (this.validData(data)) {
-        const token = (await this.authApi.registerV1({creds: data}).then(auth => {
+        try {
+          const auth = await this.authApi.registerV1({ creds: data });
           console.info(`user ${auth.userId} registered`);
-          return auth;
-        })).token;
-        if (token) {
-          localStorage.setItem("user-token", token);
-          await this.router.push({path: "/"});
-          localStorage.removeItem("auth-step")
-          document.location.reload();
-        } else {
-          this.errorMessage = "Error in account creation";
+          const token = auth.token;
+
+          if (token) {
+            localStorage.setItem("user-token", token);
+            await this.router.push({ path: "/" });
+            localStorage.removeItem("auth-step");
+            document.location.reload();
+          } else {
+            this.errorMessage = "Error in account creation";
+          }
+
+        } catch (error) {
+          if (error.response && error.response.status === 400) {
+            this.errorMessage = error.response.data?.message || "This email is already in use.";
+          } else if (error.response && error.response.status === 409) {
+            this.errorMessage = "An account with this email already exists.";
+          } else {
+            this.errorMessage = "An unexpected error occurred during registration.";
+            console.error("Registration error:", error);
+          }
         }
       }
     }

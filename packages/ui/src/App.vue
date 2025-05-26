@@ -17,9 +17,8 @@ export default {
     this.setTheme(this.theme);
     if (this.isConnected()) {
       this.organizations = await this.getOrganization();
+      this.setOrganization(localStorage.getItem('organization') || this.organizations[0].value);
     }
-
-    this.setOrganization(localStorage.getItem('organization') || this.organizations[0].value);
   },
   methods: {
     toggleTheme() {
