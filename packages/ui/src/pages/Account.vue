@@ -41,6 +41,7 @@ export default {
       if(token){
         if(validatePassword(data.newPassword)){
           await this.usersApi.editMeV1({patchUser: {password: data.newPassword}});
+          alert("Your password has been updated.");
           this.modalOpen = false;
         } else {
           this.errorMessage = "You need to enter a valid new password";
