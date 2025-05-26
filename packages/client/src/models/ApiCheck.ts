@@ -86,6 +86,7 @@ export function instanceOfApiCheck(value: object): value is ApiCheck {
 }
 
 export function ApiCheckFromJSON(json: any): ApiCheck {
+    console.log(json)
     return ApiCheckFromJSONTyped(json, false);
 }
 

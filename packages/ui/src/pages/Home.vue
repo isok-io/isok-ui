@@ -15,22 +15,21 @@ export default {
       data: [],
       checksVisible: [],
       checksApi: new ChecksApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
-      checkinValue: 600000
+      checkinValue: localStorage.getItem("checkinValue") || 600000
     }
   },
   async mounted() {
     this.router = useRouter();
 
-    // this.checksSummary = await this.checksApi.getChecksSummaryV1(
-    //     {
-    //       tenant: localStorage.getItem('organization'),
-    //       end: new Date(),
-    //       points: 20,
-    //       start: new Date(new Date().getTime() - this.checkinValue)
-    //     }
-    // );
-    this.checksSummary = {
-      "497f6eca-6276-4993-bfeb-53cbbbba6f08": [
+    this.checksSummary = await this.checksApi.getChecksSummaryV1(
+        {
+          tenant: localStorage.getItem('organization'),
+          end: new Date(),
+          points: 20,
+          start: new Date(new Date().getTime() - this.checkinValue)
+        }
+    );
+    this.checksSummary["497f6eca-6276-4993-bfeb-53cbbbba6f08"] = [
         {
           "details": {
             "Http": {
@@ -87,96 +86,31 @@ export default {
           "start": "2019-08-24T14:15:22Z",
           "status": "ReachableUnreachable"
         }
-      ],
-      "497f6eca-6276-4993-bfeb-53cbbbba6f09": [
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 2
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "Reachable"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 10
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "Unreachable"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 50
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "ReachableUnreachable"
-        }
       ]
-    }
 
-    // this.checks = this.checksApi.getCheckV1({tenant: localStorage.getItem('organization')})
-    this.checks = [
+    this.checks = await this.checksApi.getChecksV1({tenant: localStorage.getItem('organization')})
+    this.checks.push(
       {
         "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
         "interval": 5,
         "kind": {
-          "Http": {
+          "http": {
             "body": "string",
             "headers": {
               "property1": "string",
               "property2": "string"
             },
-            "method": "string",
+            "method": "get",
             "url": "http://example.com"
           }
         },
-        "name": "string",
+        "name": "Test check",
         "tenant": "93360892-48a4-4f76-a117-3304c9c61771",
         "zones": [
-          "All"
-        ]
-      },
-      {
-        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f09",
-        "interval": 10,
-        "kind": {
-          "Http": {
-            "body": "string",
-            "headers": {
-              "property1": "string",
-              "property2": "string"
-            },
-            "method": "string",
-            "url": "http://example2.com"
-          }
-        },
-        "name": "check",
-        "tenant": "93360892-48a4-4f76-a117-3304c9c61771",
-        "zones": [
-          "All"
+          "all"
         ]
       }
-    ]
+    )
 
     this.data = this.checks.map(check => {
       const checkId = check.id;
@@ -209,13 +143,16 @@ export default {
 
       const checkType = Object.entries(check.kind).find(([key, value]) => value !== null)?.[0];
 
+      const url = check.kind[checkType].url;
+      const displayUrl = url.length > 40 ? url.slice(0, 40) + '…' : url;
+
       return {
         id: checkId,
         name: check.name,
         type: checkType,
         uptime: uptime,
         latency: latency,
-        domain: checkType === "Http" ? check.kind[checkType].url : null,
+        domain: checkType === "http" ? displayUrl : null,
         bars: bars,
       };
     });
@@ -261,7 +198,7 @@ export default {
       bigCheckWidth="80em"
       smallCheckWidth="60em"
       :checks="checksVisible"
-      @ik-checks-list:change-checkin="(e) => this.checkinValue = parseDuration(e.detail.value1+e.detail.value2)"
+      @ik-checks-list:change-checkin="(e) => {this.checkinValue = parseDuration(e.detail.value1+e.detail.value2); localStorage.setItem('checkinValue', this.checkinValue)}"
       @ik-checks-list:change-research="(e) => this.filterChecks(e.detail.value)"
       @ik-check-list:click-info="(e) => navigate('info',e.detail)"
       @ik-check-list:click-add="() => navigate('add',{})"

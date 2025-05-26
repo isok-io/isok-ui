@@ -79,7 +79,7 @@ export default {
         @ik-header:change-organization="(e) => this.setOrganization(e.detail.value)"
         @ik-header:click-title="$router.push('/')"
     ></ik-header>
-    <router-view @reload="reload" />
+    <router-view :key="organizationSelect" @reload="reload" />
   </div>
 </template>
 
