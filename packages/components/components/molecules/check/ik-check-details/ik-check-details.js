@@ -124,7 +124,7 @@ class IkCheckDetails extends LitElement {
                         .bars=${this.data.bars}
                         .showData=${true}
                         dataSize=${this.fontSizeText}
-                        width="40em"
+                        width="auto"
                         widthBars=${this.widthBar}
                         height=${this.heightBars}
                 ></ik-diagram-bar>

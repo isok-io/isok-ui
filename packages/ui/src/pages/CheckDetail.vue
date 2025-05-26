@@ -2,7 +2,7 @@
 import "@components-lit/molecules/check/ik-check-details/ik-check-details.js"
 import "@components-lit/molecules/check/ik-check-form-update/ik-check-form-update.js"
 import {ChecksApi} from "@client/ChecksApi.js";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import parseDuration from "parse-duration";
 import {Configuration, RegionsApi} from "client/src/index.js";
 import {apiBase} from "../consts.js";
@@ -10,166 +10,232 @@ import {apiBase} from "../consts.js";
 export default {
   data(){
     return {
-      checkId: "xxx",
+      router: useRouter(),
+      route: useRoute(),
+      checkId: null,
+      checkinValue: localStorage.getItem("checkinValue") || 600000,
       check: {},
-      checkSummary: {},
+      checksSummary: {},
       checkSchema: {},
       zonesList: [],
       data : {},
       checkApi: new ChecksApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
       regionsApi: new RegionsApi(new Configuration({basePath: apiBase, accessToken: localStorage.getItem('user-token')})),
       modal: false,
-      errorMessage: ""
+      errorMessage: "",
     }
   },
-  async mounted() {
-    this.router = useRouter();
-
-    // this.check = await this.checkApi.getCheckV1();
-    this.check = {
-      "interval": 300,
-      "kind": {
-        "Http": {
-          "body": "{}",
-          "headers": {
-            "property1": "string",
-            "property2": "string"
-          },
-          "method": "GET",
-          "url": "http://domain-exemple"
-        }
-      },
-      "name": "My check",
-      "zones": [
-        "all"
-      ]
-    }
-    // this.checkSummary = await this.checkApi.getChecksSummaryV1();
-    this.checkSummary = {
-      "xxx": [
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 20
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "None"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 2
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "Reachable"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 4
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "Reachable"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 50
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "ReachableUnreachable"
-        }
-      ]
-    }
-
-    const checksMeta = await this.checkApi.getChecksMetaV1()
-    this.checkSchema = checksMeta.filter((check) => check.type === this.getCheckType())[0]
-
-    const regions = await this.regionsApi.getRegionsV1()
-    this.zonesList =  regions.map((item) => {
-      item.value = item.id;
-      item.label = item.name
-      return item;
-    });
-
-    const uptime = this.checkSummary[this.checkId]
-        .filter(e => e!= null)
-        .filter(e => e.status === "Reachable").length
-        /
-        this.checkSummary[this.checkId]
-        .filter(e => e!= null).length * 100
-
-    const latency = this.checkSummary[this.checkId]
-        .filter(e => e != null && e.status === "Reachable")
-        .reduce((acc, e, _, arr) => acc + e.metrics.latency / arr.length, 0);
-
-    const color = (status) => {
-      switch (status) {
-        case 'Unreachable': return "red";
-        case 'ReachableUnreachable': return "yellow";
-        case 'Reachable': return "green";
-        default: return "grey";
-      }
-    }
-    const bars = this.checkSummary[this.checkId].map(e => {
-      if (e == null) return null
-      else return {
-        color: color(e.status),
-        data: [e.start, "Status: "+e.status],
-      }
-    })
-
-    this.data = {
-      name: this.check.name,
-      type: this.getCheckType(),
-      uptime: uptime.toFixed(0)+"%",
-      latency: latency.toFixed(0)+"ms",
-      bars: bars,
-      latencyBars: this.checkSummary[this.checkId].map(e => e.metrics.latency),
-    }
-
-    this.checkSchema.inputs.map((input) => {
-      if(input.kind.type === "Text"){
-        this.data[input.title] = this.check.kind[this.getCheckType()][this.normalizeKey(input.title)]
-      }
-    })
-
-
-  },
+  async mounted() { await this.getCheck()},
   methods: {
+    async getCheck() {
+      {
+
+        this.router = useRouter();
+        this.checkId = this.route.params.checkId;
+
+        if(this.checkId === "497f6eca-6276-4993-bfeb-53cbbbba6f08" ){
+          this.check = {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "interval": 5,
+            "kind": {
+              "http": {
+                "body": "string",
+                "headers": {
+                  "property1": "string",
+                  "property2": "string"
+                },
+                "method": "get",
+                "url": "http://example.com"
+              }
+            },
+            "name": "Test check",
+            "tenant": "93360892-48a4-4f76-a117-3304c9c61771",
+            "zones": [
+              "all"
+            ]
+          }
+        } else {
+          this.check = await this.checkApi.getCheckV1(
+              {
+                checkId: this.checkId,
+                tenant: localStorage.getItem('organization')
+              }
+          );
+        }
+
+        this.checksSummary = await this.checkApi.getChecksSummaryV1(
+            {
+              tenant: localStorage.getItem('organization'),
+              end: new Date(),
+              points: 20,
+              start: new Date(new Date().getTime() - this.checkinValue)
+            }
+        );
+        this.checksSummary["497f6eca-6276-4993-bfeb-53cbbbba6f08"] = [
+          {
+            "details": {
+              "Http": {
+                "status_code": 0
+              }
+            },
+            "end": "2019-08-24T14:15:22Z",
+            "error": "string",
+            "metrics": {
+              "latency": 20
+            },
+            "start": "2019-08-24T14:15:22Z",
+            "status": "None"
+          },
+          {
+            "details": {
+              "Http": {
+                "status_code": 0
+              }
+            },
+            "end": "2019-08-24T14:15:22Z",
+            "error": "string",
+            "metrics": {
+              "latency": 2
+            },
+            "start": "2019-08-24T14:15:22Z",
+            "status": "Reachable"
+          },
+          {
+            "details": {
+              "Http": {
+                "status_code": 0
+              }
+            },
+            "end": "2019-08-24T14:15:22Z",
+            "error": "string",
+            "metrics": {
+              "latency": 4
+            },
+            "start": "2019-08-24T14:15:22Z",
+            "status": "Reachable"
+          },
+          {
+            "details": {
+              "Http": {
+                "status_code": 0
+              }
+            },
+            "end": "2019-08-24T14:15:22Z",
+            "error": "string",
+            "metrics": {
+              "latency": 50
+            },
+            "start": "2019-08-24T14:15:22Z",
+            "status": "ReachableUnreachable"
+          },
+          {
+            "details": {
+              "Http": {
+                "status_code": 0
+              }
+            },
+            "end": "2019-08-24T14:15:22Z",
+            "error": "string",
+            "metrics": {
+              "latency": 2
+            },
+            "start": "2019-08-24T14:15:22Z",
+            "status": "Unreachable"
+          },
+          {
+            "details": {
+              "Http": {
+                "status_code": 0
+              }
+            },
+            "end": "2019-08-24T14:15:22Z",
+            "error": "string",
+            "metrics": {
+              "latency": 4
+            },
+            "start": "2019-08-24T14:15:22Z",
+            "status": "Reachable"
+          },
+        ]
+
+        const checksMeta = await this.checkApi.getChecksMetaV1()
+        this.checkSchema = checksMeta.filter((check) => check.type.toLowerCase() === this.getCheckType().toLowerCase())[0]
+
+        const regions = await this.regionsApi.getRegionsV1()
+        this.zonesList = regions.map((item) => {
+          item.value = item.id;
+          item.label = item.name
+          return item;
+        });
+
+        let uptime = this.checksSummary[this.checkId]
+                .filter(e => e != null)
+                .filter(e => e.status === "Reachable").length
+            /
+            this.checksSummary[this.checkId]
+                .filter(e => e != null).length * 100
+
+        uptime = isNaN(uptime) ? 0 : uptime;
+
+        const latency = this.checksSummary[this.checkId]
+            .filter(e => e != null && e.status === "Reachable")
+            .reduce((acc, e, _, arr) => acc + e.metrics.latency / arr.length, 0);
+
+        const color = (status) => {
+          switch (status) {
+            case 'Unreachable':
+              return "red";
+            case 'ReachableUnreachable':
+              return "yellow";
+            case 'Reachable':
+              return "green";
+            default:
+              return "grey";
+          }
+        }
+
+        let nbBars = Math.max(50, Math.min(80, this.checkinValue / (this.check.interval * 1000)))
+
+        let bars = [];
+        bars = this.checksSummary[this.checkId].map(e => {
+          if (e == null) return ({color: "grey", data: []})
+          else return {
+            color: color(e.status),
+            data: [e.start, "Status: " + e.status],
+          }
+        });
+        bars = bars.slice(0, nbBars).concat(
+            Array.from({length: Math.max(0, nbBars - bars.length)}, () => ({color: "grey", data: []}))
+        );
+
+        this.data = {
+          name: this.check.name,
+          type: this.getCheckType(),
+          uptime: uptime.toFixed(0) + "%",
+          latency: latency.toFixed(0) + "ms",
+          bars: bars,
+          latencyBars: this.checksSummary[this.checkId].map(e => e !== null ? e.metrics.latency : 0),
+        }
+
+        this.checkSchema.inputs.map((input) => {
+          if (input.kind.type === "Text") {
+            this.data[input.title] = this.check.kind[this.getCheckType()][this.normalizeKey(input.title)]
+          }
+        })
+
+
+      }
+    },
     deleteCheck(){
       const confirmed = window.confirm("Are you sure you want to delete this check?");
       if(confirmed){
-        // this.checkApi.deleteCheck({checkId: $route.params.id, tenant: localStorage.getItem("organization")})
+        this.checkApi.deleteCheckV1({checkId: this.checkId, tenant: localStorage.getItem("organization")})
         this.router.push("/");
       }
     },
-    updateCheck(newData){
-      if(this.validate()) {
+    async updateCheck(newData) {
+      console.log(newData);
+      if (this.validate()) {
         const msValue = parseDuration(newData.interval);
         if (msValue != null) {
           newData.interval = msValue / 1000;
@@ -177,19 +243,19 @@ export default {
           this.errorMessage = "The format of your interval is invalid (format: 10min, 20s, 3 days,...)";
         }
 
-        if(newData.zones.includes('all')){
+        if (newData.zones.includes('all')) {
           newData.zones.zones = ["All"]
         } else {
-          newData.zones = newData.zones.map(item => ({ Region: item }));
+          newData.zones = newData.zones.map(item => ({region: item}));
         }
 
-        console.log(newData);
-        // this.checkApi.updateCheckV1({
-        //   checkId: this.data.id,
-        //   tenant: localStorage.getItem("organization"),
-        //   apiCheckInput: newData
-        // });
+        await this.checkApi.updateCheckV1({
+          checkId: this.checkId,
+          tenant: localStorage.getItem("organization"),
+          apiCheckInput: newData
+        });
         this.modal = false;
+        await this.getCheck();
       }
     },
     toggleModal(){
@@ -237,7 +303,7 @@ export default {
           :data="this.check"
           :zones="this.zonesList"
           :errorMessage="errorMessage"
-          @ik-check-form-update:click-save="(e) => updateCheck(e.detail)"
+          @ik-check-form-update:click-save="async (e) => await updateCheck(e.detail)"
         ></ik-check-form-update>
       </div>
     </div>

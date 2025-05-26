@@ -14,6 +14,7 @@ class IkCheckFormUpdate extends LitElement {
         fontSizeTextAdvanced: { type: String },
         width: { type: String },
         errorMessage: { type: String },
+        firstRender: { type: Boolean },
     }
 
 
@@ -27,6 +28,7 @@ class IkCheckFormUpdate extends LitElement {
         this.fontSizeTextAdvanced = "20px";
         this.width = "660px";
         this.errorMessage = "";
+        this.firstRender = true;
     }
 
     normalizeKey(label = "") {
@@ -35,7 +37,8 @@ class IkCheckFormUpdate extends LitElement {
 
     updateInputValue(targetInput, newValue) {
 
-        const type = this.schema.type;
+        console.log(this.data)
+        const type = this.schema.type.toLowerCase();
         const key = targetInput.title.trim().toLowerCase().replace(/\s+/g, "_");
 
         if (!this.data.kind || !this.data.kind[type]) return;
@@ -43,18 +46,20 @@ class IkCheckFormUpdate extends LitElement {
         if(key in this.data.kind[type]) {
             this.data.kind[type][key] = newValue;
         } else {
-            if(key === "zones" && newValue !== [ "all" ]){
-                this.data.zones = newValue.map(item => ({ Region: item }))
-            } else {
-                this.data[key] = newValue;
-            }
+            this.data[key] = newValue;
         }
+        console.log("Ici",this.data)
         this.requestUpdate();
     }
 
     getData(key){
-        console.log(this.data.kind[this.schema.type][this.normalizeKey(key)] || this.data[this.normalizeKey(key)])
-        return this.data.kind[this.schema.type][this.normalizeKey(key)] || this.data[this.normalizeKey(key)];
+        const value = this.data.kind?.[this.schema.type.toLowerCase()]?.[this.normalizeKey(key)]
+            ?? this.data?.[this.normalizeKey(key)];
+
+        const isTextInput = this.schema.inputs?.find(input => input.title === key)?.kind?.type === "Text"
+            || this.schema.inputsAdvanced?.find(input => input.title === key)?.kind?.type === "Text";
+
+        return value === undefined && isTextInput ? "" : value;
     }
 
     renderInputText(dataInput, fontSize){
@@ -142,24 +147,26 @@ class IkCheckFormUpdate extends LitElement {
     renderInputs(dataInputs, fontSize) {
         return html`
             ${dataInputs.map(item => {
-            switch(item.kind.type) {
-                case 'Text': return this.renderInputText(item, fontSize);
-                case 'Select': return this.renderInputSelect(item, fontSize);
-                case 'Multiselect': return this.renderInputMultiselect(item, fontSize);
-                case 'KeyValue': return this.renderInputKeyValue(item, fontSize);
-            }
-        })}
+                switch(item.kind.type) {
+                    case 'Text': return this.renderInputText(item, fontSize);
+                    case 'Select': return this.renderInputSelect(item, fontSize);
+                    case 'Multiselect': return this.renderInputMultiselect(item, fontSize);
+                    case 'KeyValue': return this.renderInputKeyValue(item, fontSize);
+                }
+            })}
         `
     }
 
     render() {
-        console.log(this.zones)
-        this.zones.push({value: 'all', label: 'All'});
-        this.data.interval = Number.isInteger(this.data.interval) ? prettyMs(this.data.interval * 1000, {compact: true}) : this.data.interval;
-        this.data.zones = this.data.zones.includes('all') ? this.data.zones : this.data.zones.map(zone => zone.Region);
+        if(this.firstRender) {
+            this.zones.push({value: 'all', label: 'All'});
+            this.data.interval = Number.isInteger(this.data.interval) ? prettyMs(this.data.interval * 1000, {compact: true}) : this.data.interval;
+            this.data.zones = this.data.zones.includes('all') ? this.data.zones : this.data.zones.map(zone => zone.region);
+        }
+        this.firstRender = false;
         return html`
             <div class="ik-check-form-update"
-                style="
+                 style="
                     --cfu-font-size-title: ${this.fontSizeTitle};
                     --cfu-font-size-text-advanced: ${this.fontSizeTextAdvanced};
                     --cfu-width: ${this.width};
@@ -168,13 +175,13 @@ class IkCheckFormUpdate extends LitElement {
                 <span class="title">Update check</span>
                 <div class="form">
                     ${this.renderInputText(
-                        {
-                            "kind": {
-                                "type": "Text",
+                            {
+                                "kind": {
+                                    "type": "Text",
+                                },
+                                "title": "Name"
                             },
-                            "title": "Name"
-                        },
-                        this.fontSizeText
+                            this.fontSizeText
                     )}
                     ${this.renderInputMultiselect(
                             {
@@ -200,10 +207,10 @@ class IkCheckFormUpdate extends LitElement {
                 </div>
                 <div class="error-message">${this.errorMessage}</div>
                 <ik-button
-                    type="blue"
-                    text="Save"
-                    height="auto"
-                    @ik-button:click=${() => _emit(this, "ik-check-form-update:click-save", this.data)}
+                        type="blue"
+                        text="Save"
+                        height="auto"
+                        @ik-button:click=${() => _emit(this, "ik-check-form-update:click-save", this.data)}
                 ></ik-button>
             </div>
         `;
@@ -220,12 +227,12 @@ class IkCheckFormUpdate extends LitElement {
                 align-items: center;
                 gap: 2em;
             }
-            
+
             .title {
                 font-size: var(--cfu-font-size-title);
                 font-family: Jura, sans-serif;
             }
-            
+
             .form {
                 display: flex;
                 flex-direction: column;
