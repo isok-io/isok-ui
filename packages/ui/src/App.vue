@@ -47,6 +47,7 @@ export default {
       if (orgs.length === 0) {
         const id = await organizationsApi.createOrgV1({organisationInput: {name: 'My Organisation'}});
         orgs.push({id: id, name: 'My Organisation', tags: {}});
+        localStorage.setItem('organization', id);
       }
 
       return orgs.map(org => {
