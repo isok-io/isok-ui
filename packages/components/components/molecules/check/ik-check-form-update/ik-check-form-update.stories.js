@@ -27,7 +27,7 @@ HTTP.args = {
     data: {
         "interval": 5,
         "kind": {
-            "Http": {
+            "http": {
                 "body": "{}",
                 "headers": {testKey: "testValue"},
                 "method": "get",
@@ -120,7 +120,7 @@ HTTP.args = {
                 "title": "Headers"
             }
         ],
-        "type": "Http",
+        "type": "http",
         "version": 1
     },
     zones: [{value: "pau", label: "Pau"}, {value: "toulouse", label: "Toulouse"}],
@@ -135,7 +135,7 @@ PING.args = {
     data: {
         interval: 10,
         kind: {
-            Ping: {
+            ping: {
                 ip_address__hostname: "153.207.6.221"
             }
         },
@@ -154,7 +154,7 @@ PING.args = {
             }
         ],
         inputsAdvanced: [],
-        type: "Ping",
+        type: "ping",
         version: 1
     },
     zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],
@@ -169,7 +169,7 @@ SSL.args = {
     data: {
         interval: 10,
         kind: {
-            Ssl: {
+            ssl: {
                 domain_name__hostname: "myapi.example.com",
                 port: "443"
             }
@@ -198,7 +198,7 @@ SSL.args = {
                 }
             }
         ],
-        type: "Ssl",
+        type: "ssl",
         version: 1
     },
     zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],
@@ -213,7 +213,7 @@ TCP.args = {
     data: {
         interval: 10,
         kind: {
-            Tcp: {
+            tcp: {
                 ip_address__hostname: "153.207.6.221",
                 port: "80"
             }
@@ -241,7 +241,7 @@ TCP.args = {
             }
         ],
         inputsAdvanced: [],
-        type: "Tcp",
+        type: "tcp",
         version: 1
     },
     zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],
@@ -256,7 +256,7 @@ UDP.args = {
     data: {
         interval: 10,
         kind: {
-            Udp: {
+            udp: {
                 ip_address__hostname: "153.207.6.221",
                 port: "53"
             }
@@ -284,7 +284,7 @@ UDP.args = {
             }
         ],
         inputsAdvanced: [],
-        type: "Udp",
+        type: "udp",
         version: 1
     },
     zones: [{value: "all", label: "All"}, {value: "fr", label: "France"}],

@@ -108,9 +108,10 @@ Double.args = {
     width: 'auto',
     height: 'auto',
     fontSize: '25px',
-    values: [
-        { key: "Accept", value: "*/*" }
-    ]
+    values: {
+        Accept: "*/*"
+    }
+
 };
 
 export const List = Template.bind({});
