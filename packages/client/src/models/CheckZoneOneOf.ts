@@ -44,7 +44,7 @@ export function CheckZoneOneOfFromJSONTyped(json: any, ignoreDiscriminator: bool
         return json;
     }
     return {
-
+        
         'region': json['region'],
     };
 }
@@ -59,7 +59,7 @@ export function CheckZoneOneOfToJSONTyped(value?: CheckZoneOneOf | null, ignoreD
     }
 
     return {
-
+        
         'region': value['region'],
     };
 }

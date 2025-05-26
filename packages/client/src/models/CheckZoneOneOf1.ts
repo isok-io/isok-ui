@@ -44,7 +44,7 @@ export function CheckZoneOneOf1FromJSONTyped(json: any, ignoreDiscriminator: boo
         return json;
     }
     return {
-
+        
         'zone': json['zone'],
     };
 }
