@@ -29,88 +29,8 @@ export default {
           start: new Date(new Date().getTime() - this.checkinValue)
         }
     );
-    this.checksSummary["497f6eca-6276-4993-bfeb-53cbbbba6f08"] = [
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 20
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "None"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 2
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "Reachable"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 4
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "Reachable"
-        },
-        {
-          "details": {
-            "Http": {
-              "status_code": 0
-            }
-          },
-          "end": "2019-08-24T14:15:22Z",
-          "error": "string",
-          "metrics": {
-            "latency": 50
-          },
-          "start": "2019-08-24T14:15:22Z",
-          "status": "ReachableUnreachable"
-        }
-      ]
 
     this.checks = await this.checksApi.getChecksV1({tenant: localStorage.getItem('organization')})
-    this.checks.push(
-      {
-        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-        "interval": 5,
-        "kind": {
-          "http": {
-            "body": "string",
-            "headers": {
-              "property1": "string",
-              "property2": "string"
-            },
-            "method": "get",
-            "url": "http://example.com"
-          }
-        },
-        "name": "Test check",
-        "tenant": "93360892-48a4-4f76-a117-3304c9c61771",
-        "zones": [
-          "all"
-        ]
-      }
-    )
 
     this.data = this.checks.map(check => {
       const checkId = check.id;
@@ -187,6 +107,9 @@ export default {
         case "add":
           this.router.push("/check-creation")
       }
+    },
+    changeCheckin(e) {
+      this.checkinValue = parseDuration(e.detail.value1+e.detail.value2); localStorage.setItem('checkinValue', this.checkinValue)
     }
   }
 }
@@ -198,7 +121,7 @@ export default {
       bigCheckWidth="80em"
       smallCheckWidth="60em"
       :checks="checksVisible"
-      @ik-checks-list:change-checkin="(e) => {this.checkinValue = parseDuration(e.detail.value1+e.detail.value2); localStorage.setItem('checkinValue', this.checkinValue)}"
+      @ik-checks-list:change-checkin="(e) => this.changeCheckin(e)"
       @ik-checks-list:change-research="(e) => this.filterChecks(e.detail.value)"
       @ik-check-list:click-info="(e) => navigate('info',e.detail)"
       @ik-check-list:click-add="() => navigate('add',{})"

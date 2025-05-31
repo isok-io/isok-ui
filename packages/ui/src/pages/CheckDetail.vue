@@ -33,130 +33,23 @@ export default {
         this.router = useRouter();
         this.checkId = this.route.params.checkId;
 
-        if(this.checkId === "497f6eca-6276-4993-bfeb-53cbbbba6f08" ){
-          this.check = {
-            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
-            "interval": 5,
-            "kind": {
-              "http": {
-                "body": "string",
-                "headers": {
-                  "property1": "string",
-                  "property2": "string"
-                },
-                "method": "get",
-                "url": "http://example.com"
-              }
-            },
-            "name": "Test check",
-            "tenant": "93360892-48a4-4f76-a117-3304c9c61771",
-            "zones": [
-              "all"
-            ]
-          }
-        } else {
-          this.check = await this.checkApi.getCheckV1(
-              {
-                checkId: this.checkId,
-                tenant: localStorage.getItem('organization')
-              }
-          );
-        }
-
-        this.checksSummary = await this.checkApi.getChecksSummaryV1(
+        this.check = await this.checkApi.getCheckV1(
             {
+              checkId: this.checkId,
+              tenant: localStorage.getItem('organization')
+            }
+        );
+
+        this.checksSummary = {};
+        this.checksSummary[this.checkId] = await this.checkApi.getCheckMetricsV1(
+            {
+              checkId: this.checkId,
               tenant: localStorage.getItem('organization'),
               end: new Date(),
-              points: 20,
+              points: 80,
               start: new Date(new Date().getTime() - this.checkinValue)
             }
         );
-        this.checksSummary["497f6eca-6276-4993-bfeb-53cbbbba6f08"] = [
-          {
-            "details": {
-              "Http": {
-                "status_code": 0
-              }
-            },
-            "end": "2019-08-24T14:15:22Z",
-            "error": "string",
-            "metrics": {
-              "latency": 20
-            },
-            "start": "2019-08-24T14:15:22Z",
-            "status": "None"
-          },
-          {
-            "details": {
-              "Http": {
-                "status_code": 0
-              }
-            },
-            "end": "2019-08-24T14:15:22Z",
-            "error": "string",
-            "metrics": {
-              "latency": 2
-            },
-            "start": "2019-08-24T14:15:22Z",
-            "status": "Reachable"
-          },
-          {
-            "details": {
-              "Http": {
-                "status_code": 0
-              }
-            },
-            "end": "2019-08-24T14:15:22Z",
-            "error": "string",
-            "metrics": {
-              "latency": 4
-            },
-            "start": "2019-08-24T14:15:22Z",
-            "status": "Reachable"
-          },
-          {
-            "details": {
-              "Http": {
-                "status_code": 0
-              }
-            },
-            "end": "2019-08-24T14:15:22Z",
-            "error": "string",
-            "metrics": {
-              "latency": 50
-            },
-            "start": "2019-08-24T14:15:22Z",
-            "status": "ReachableUnreachable"
-          },
-          {
-            "details": {
-              "Http": {
-                "status_code": 0
-              }
-            },
-            "end": "2019-08-24T14:15:22Z",
-            "error": "string",
-            "metrics": {
-              "latency": 2
-            },
-            "start": "2019-08-24T14:15:22Z",
-            "status": "Unreachable"
-          },
-          {
-            "details": {
-              "Http": {
-                "status_code": 0
-              }
-            },
-            "end": "2019-08-24T14:15:22Z",
-            "error": "string",
-            "metrics": {
-              "latency": 4
-            },
-            "start": "2019-08-24T14:15:22Z",
-            "status": "Reachable"
-          },
-        ]
 
         const checksMeta = await this.checkApi.getChecksMetaV1()
         this.checkSchema = checksMeta.filter((check) => check.type.toLowerCase() === this.getCheckType().toLowerCase())[0]
@@ -244,7 +137,7 @@ export default {
         }
 
         if (newData.zones.includes('all')) {
-          newData.zones.zones = ["All"]
+          newData.zones.zones = ["all"]
         } else {
           newData.zones = newData.zones.map(item => ({region: item}));
         }
