@@ -27,6 +27,13 @@ import {
     CheckResultDetailsToJSON,
     CheckResultDetailsToJSONTyped,
 } from './CheckResultDetails';
+import type { ApiCheckMetricsResult } from './ApiCheckMetricsResult';
+import {
+    ApiCheckMetricsResultFromJSON,
+    ApiCheckMetricsResultFromJSONTyped,
+    ApiCheckMetricsResultToJSON,
+    ApiCheckMetricsResultToJSONTyped,
+} from './ApiCheckMetricsResult';
 import type { ApiCheckResult } from './ApiCheckResult';
 import {
     ApiCheckResultFromJSON,
@@ -34,13 +41,6 @@ import {
     ApiCheckResultToJSON,
     ApiCheckResultToJSONTyped,
 } from './ApiCheckResult';
-import type { CheckMetrics } from './CheckMetrics';
-import {
-    CheckMetricsFromJSON,
-    CheckMetricsFromJSONTyped,
-    CheckMetricsToJSON,
-    CheckMetricsToJSONTyped,
-} from './CheckMetrics';
 
 /**
  * 
@@ -68,10 +68,10 @@ export interface GetChecksSummaryV1200ResponseValueInner {
     error?: string;
     /**
      * 
-     * @type {CheckMetrics}
+     * @type {ApiCheckMetricsResult}
      * @memberof GetChecksSummaryV1200ResponseValueInner
      */
-    metrics: CheckMetrics;
+    metrics: ApiCheckMetricsResult;
     /**
      * 
      * @type {Date}
@@ -113,7 +113,7 @@ export function GetChecksSummaryV1200ResponseValueInnerFromJSONTyped(json: any, 
         'details': CheckResultDetailsFromJSON(json['details']),
         'end': (new Date(json['end'])),
         'error': json['error'] == null ? undefined : json['error'],
-        'metrics': CheckMetricsFromJSON(json['metrics']),
+        'metrics': ApiCheckMetricsResultFromJSON(json['metrics']),
         'start': (new Date(json['start'])),
         'status': ApiCheckStatusFromJSON(json['status']),
     };
@@ -133,7 +133,7 @@ export function GetChecksSummaryV1200ResponseValueInnerToJSONTyped(value?: GetCh
         'details': CheckResultDetailsToJSON(value['details']),
         'end': ((value['end']).toISOString()),
         'error': value['error'],
-        'metrics': CheckMetricsToJSON(value['metrics']),
+        'metrics': ApiCheckMetricsResultToJSON(value['metrics']),
         'start': ((value['start']).toISOString()),
         'status': ApiCheckStatusToJSON(value['status']),
     };
