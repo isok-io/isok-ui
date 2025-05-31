@@ -8,10 +8,10 @@ apis/index.ts
 index.ts
 models/ApiCheck.ts
 models/ApiCheckInput.ts
+models/ApiCheckMetricsResult.ts
 models/ApiCheckResult.ts
 models/ApiCheckStatus.ts
 models/CheckKind.ts
-models/CheckMetrics.ts
 models/CheckResultDetails.ts
 models/CheckSchema.ts
 models/CheckSchemaCheckKind.ts

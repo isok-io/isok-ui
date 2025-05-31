@@ -27,13 +27,13 @@ import {
     CheckResultDetailsToJSON,
     CheckResultDetailsToJSONTyped,
 } from './CheckResultDetails';
-import type { CheckMetrics } from './CheckMetrics';
+import type { ApiCheckMetricsResult } from './ApiCheckMetricsResult';
 import {
-    CheckMetricsFromJSON,
-    CheckMetricsFromJSONTyped,
-    CheckMetricsToJSON,
-    CheckMetricsToJSONTyped,
-} from './CheckMetrics';
+    ApiCheckMetricsResultFromJSON,
+    ApiCheckMetricsResultFromJSONTyped,
+    ApiCheckMetricsResultToJSON,
+    ApiCheckMetricsResultToJSONTyped,
+} from './ApiCheckMetricsResult';
 
 /**
  * 
@@ -61,10 +61,10 @@ export interface ApiCheckResult {
     error?: string | null;
     /**
      * 
-     * @type {CheckMetrics}
+     * @type {ApiCheckMetricsResult}
      * @memberof ApiCheckResult
      */
-    metrics: CheckMetrics;
+    metrics: ApiCheckMetricsResult;
     /**
      * 
      * @type {Date}
@@ -106,7 +106,7 @@ export function ApiCheckResultFromJSONTyped(json: any, ignoreDiscriminator: bool
         'details': CheckResultDetailsFromJSON(json['details']),
         'end': (new Date(json['end'])),
         'error': json['error'] == null ? undefined : json['error'],
-        'metrics': CheckMetricsFromJSON(json['metrics']),
+        'metrics': ApiCheckMetricsResultFromJSON(json['metrics']),
         'start': (new Date(json['start'])),
         'status': ApiCheckStatusFromJSON(json['status']),
     };
@@ -126,7 +126,7 @@ export function ApiCheckResultToJSONTyped(value?: ApiCheckResult | null, ignoreD
         'details': CheckResultDetailsToJSON(value['details']),
         'end': ((value['end']).toISOString()),
         'error': value['error'],
-        'metrics': CheckMetricsToJSON(value['metrics']),
+        'metrics': ApiCheckMetricsResultToJSON(value['metrics']),
         'start': ((value['start']).toISOString()),
         'status': ApiCheckStatusToJSON(value['status']),
     };

@@ -2,10 +2,10 @@
 /* eslint-disable */
 export * from './ApiCheck';
 export * from './ApiCheckInput';
+export * from './ApiCheckMetricsResult';
 export * from './ApiCheckResult';
 export * from './ApiCheckStatus';
 export * from './CheckKind';
-export * from './CheckMetrics';
 export * from './CheckResultDetails';
 export * from './CheckSchema';
 export * from './CheckSchemaCheckKind';
